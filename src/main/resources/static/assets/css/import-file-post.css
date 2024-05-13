@@ -1,0 +1,53 @@
+.drop-zone {
+    border: 2px dashed #aaa;
+    padding: 20px;
+    text-align: center;
+}
+
+.drag-over {
+    background-color: #f0f0f0;
+}
+
+.file-list {
+    margin-top: 20px;
+}
+
+.file-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.create-post {
+    width: 100%;
+    height: 100%;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.custom-file-list {
+    max-height: 300px;
+    /* Chiều cao tối đa */
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Số cột và kích thước cột */
+    gap: 10px; /* Khoảng cách giữa các mục */
+    list-style: none;
+    padding: 0;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 5px; /* Có thể điều chỉnh top để điều chỉnh khoảng cách với phần tử chứa ảnh */
+    right: 5px; /* Đặt nút X ở góc phải */
+    background: #ff0000; /* Màu nền */
+    color: #fff; /* Màu chữ */
+    border: none;
+    border-radius: 50%; /* Làm cho nút có hình tròn */
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

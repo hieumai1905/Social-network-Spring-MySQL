@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="application_layout" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title th:replace="~{::page_title}"></title>
+    <link rel="stylesheet" th:href="@{/assets/css/themify-icons.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/feather.css}"/>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/images/favicon.png}"/>
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/emoji.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/lightbox.css}"/>
+</head>
+<body>
+<div class="main-wrapper">
+    <!-- navigation top-->
+    <div th:replace="~{/shared/_header::fragment-header}">
+    </div>
+    <!-- navigation top-->
+
+    <!-- navigation left -->
+    <nav th:replace="~{/shared/_siderbar::fragment-siderbar}">
+    </nav>
+    <!-- navigation left -->
+
+    <!-- main content -->
+    <div th:replace="~{::main_content}">
+    </div>
+    <!-- main content -->
+
+    <!-- right chat -->
+    <div th:replace="~{/shared/_right_chat::fragment-chat}">
+    </div>
+    <!-- right chat -->
+</div>
+<script th:src="@{/assets/js/plugin.js}"></script>
+<script th:src="@{/assets/js/lightbox.js}"></script>
+<script th:src="@{/assets/js/scripts.js}"></script>
+</body>
+</html>
