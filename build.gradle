@@ -36,6 +36,11 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.7.1'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version: '2.7.14'
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+    implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.31'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 }
 
 tasks.named('bootBuildImage') {
