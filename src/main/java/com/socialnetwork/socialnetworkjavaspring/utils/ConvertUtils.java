@@ -1,6 +1,5 @@
 package com.socialnetwork.socialnetworkjavaspring.utils;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
