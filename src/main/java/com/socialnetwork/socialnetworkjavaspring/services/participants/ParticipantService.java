@@ -14,7 +14,7 @@ public class ParticipantService implements IParticipantService {
 
     @Override
     public Optional<Participant> save(Participant object) {
-        return Optional.empty();
+        return Optional.of(participantRepository.save(object));
     }
 
     @Override

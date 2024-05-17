@@ -22,11 +22,8 @@ public class ConversationService implements IConversationService {
 
     @Override
     public Optional<Conversation> delete(Conversation object) {
-        try {
-            conversationRepository.delete(object);
-        } catch (Exception e) {
-        }
-        return Optional.empty();
+        conversationRepository.delete(object);
+        return Optional.of(object);
     }
 
     @Override
