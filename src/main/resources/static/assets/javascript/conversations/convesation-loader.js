@@ -1,14 +1,16 @@
-let conversationContainer = $('#conversations-block');
+let conversationPrivate = $('#conversations-private');
+let conversationGroup = $('#conversations-group');
 
 function displayConversations() {
-    let html = '';
+    let htmlPrivate = '';
+    let htmlGroup = '';
     const promises = conversations.map(conversation => {
         if (conversation.type === 'GROUP') {
-            html += renderConversation(conversation.conversationId, conversation.name, conversation.avatar);
+            htmlGroup += renderConversation(conversation.conversationId, conversation.name, conversation.avatar);
         } else {
             return fetchPersonalConversation(conversation)
                 .then(data => {
-                    html += renderConversation(conversation.conversationId, data.nickName, data.avatar);
+                    htmlPrivate += renderConversation(conversation.conversationId, data.nickName, data.avatar);
                 })
                 .catch(error => {
                     console.log('Error loading participants');
@@ -18,7 +20,8 @@ function displayConversations() {
 
     Promise.all(promises)
         .then(() => {
-            conversationContainer.html(html);
+            conversationPrivate.html(htmlPrivate);
+            conversationGroup.html(htmlGroup);
         });
 }
 
