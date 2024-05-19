@@ -27,4 +27,9 @@ public class PostService implements IPostService {
     public List<Post> findAllPostForNewsFeed(String userId) {
         return postRepository.findAllPostForNewsFeed(userId);
     }
+
+    @Override
+    public Optional<Post> findById(String key) {
+        return postRepository.findById(key);
+    }
 }
