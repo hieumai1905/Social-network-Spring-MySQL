@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<div th:fragment="fragment-feeling-post" class="card-body d-flex p-0 mt-3">
+    <a href="#"
+       class="emoji-btn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
+            <span th:if="${item.isLiked}" class="btn-like">
+                <i class="bg-primary feather-thumbs-up text-white me-1 btn-round-xs font-xss"></i>
+            </span>
+        <span th:unless="${item.isLiked}" class="btn-like">
+                <i class="feather-thumbs-up text-grey-900 me-1 btn-round-xs font-xss"></i>
+            </span>
+        <span th:if="${item.likes.size() != 0}" th:text="${item.likes.size()}" class="like_count_current"></span>
+        <span th:if="${item.likes.size() == 0}" class="like_count_current"></span>&nbsp;Like
+    </a>
+    <a class="cursor-pointer btn-comment d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss border-0">
+        <i class="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg"></i>
+        <span class="d-none-xss comment_count_current" th:text="${item.comments.size()}"
+              th:if="${item.comments.size() != 0}"></span>
+
+        <span class="d-none-xss comment_count_current"
+              th:if="${item.comments.size() == 0}"></span>
+        &nbsp; Comment
+    </a>
+</div>
+</body>
+</html>
