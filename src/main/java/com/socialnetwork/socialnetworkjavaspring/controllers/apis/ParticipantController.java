@@ -8,6 +8,7 @@ import com.socialnetwork.socialnetworkjavaspring.models.enums.ConversationType;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.ParticipantStatus;
 import com.socialnetwork.socialnetworkjavaspring.services.conversations.IConversationService;
 import com.socialnetwork.socialnetworkjavaspring.services.participants.IParticipantService;
+import com.socialnetwork.socialnetworkjavaspring.utils.Constants;
 import com.socialnetwork.socialnetworkjavaspring.utils.ConvertUtils;
 import com.socialnetwork.socialnetworkjavaspring.utils.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class ParticipantController extends ApplicationController {
 
     private ApiResponse handleLeaveConversation(Optional<Participant> currentUserParticipant, List<Participant> participants, Optional<Conversation> conversation) {
         if (currentUserParticipant.isPresent()) {
-            if (participants.size() == 1) {
+            if (participants.size() == Constants.NUMBER_ONE) {
                 conversationService.delete(conversation.get());
             } else {
                 currentUserParticipant.get().setStatus(ParticipantStatus.LEAVED);

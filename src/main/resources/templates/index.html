@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/layouts/application:: application_layout}" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:fragment="page_title">New feeds</title>
+</head>
+<body>
+
+<!-- main content -->
+<div th:fragment="main_content" class="main-content right-chat-active">
+    <div class="middle-sidebar-bottom">
+        <div class="middle-sidebar-left">
+            <div class="row feed-body">
+                <!-- posts content-->
+                <div th:replace="~{/posts/_post::post}"></div>
+                <!-- posts content-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- main content -->
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<div th:fragment="post" class="col-xl-8 col-xxl-9 col-lg-8">
+    <!-- create post block here-->
+    <div th:replace="~{/posts/_header_create::fragment-new-post}"></div>
+    <!-- create post block here-->
+
+    <!-- post here-->
+    <div th:replace="~{/posts/_posts::fragment-post-list}"></div>
+    <!-- post here-->
+    <div class="card w-100 text-center shadow-xss rounded-xxl border-0 p-4 mb-3 mt-3">
+        <div class="snippet mt-2 ms-auto me-auto" data-title=".dot-typing">
+            <div class="stage">
+                <div class="dot-typing"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

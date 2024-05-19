@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="fragment-comment-new" class="card-body p-0 mt-3 position-relative">
+    <figure class="avatar position-absolute ms-2 mt-1 top-5">
+        <img th:src="${currentUser.avatar}" alt="image" class="shadow-sm rounded-circle w30">
+    </figure>
+    <textarea name="message"
+              class="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-700 fw-500 comment_input border-light-md theme-dark-bg"
+              cols="30" rows="5" placeholder="What's on your mind?"></textarea>
+    <figure class="avatar position-absolute font-xssss end-0 me-3 mt-2 top-5">
+        <i class="fa fa-camera" aria-hidden="true"></i>
+    </figure>
+    <figure class="avatar position-absolute mt-5 top-5 me-3 end-0 btn-comment-post">
+        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+    </figure>
+</div>
+</body>
+</html>
