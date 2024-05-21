@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="application_layout" lang="en">
 <body>
-<div th:fragment="fragment-comment-reply-list(comment)" class="comments-reply-list ms-5 d-none" th:if="${comment.commentReplies.size() >0}">
+<div th:fragment="fragment-comment-reply-list(comment)" class="comments-reply-list ms-5 d-none custom-overflow" th:if="${comment.commentReplies.size() >0}">
     <div class="ms-6 mt-2" th:each="commentReply: ${comment.commentReplies}">
         <div class="card-body p-0 d-flex">
             <figure class="avatar me-3">
                 <img th:src="${commentReply.user.avatar}" alt="image" class="shadow-sm rounded-circle w45">
             </figure>
-            <div class="bg-comment rounded-xxl px-2">
+            <div class="bg-comment rounded-xxxl px-2">
                 <h4 class="fw-700 text-grey-900 font-xssss mt-1"
                     th:text="${commentReply.user.fullName}"></h4>
                 <p th:text="${commentReply.content}"></p>
             </div>
+            <a href="#" class="ms-2" th:id="'dd-comment-reply-' + ${commentReply.commentReplyId}" data-bs-toggle="dropdown"
+               aria-expanded="false">
+                <i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i>
+            </a>
+            <div class="dropdown-menu p-1 rounded-xxxl border-0 shadow-lg"
+                 th:aria-labelledby="'dd-comment-reply-' + ${commentReply.commentReplyId}">
+                <h4 class="fw-600 w-100 cursor-pointer p-1 text-grey-900 font-xsss dropdown-item mt-0 me-4 hover-bg-light-gray">Edit
+                </h4>
+                <h4 class="fw-600 w-100 cursor-pointer p-1 text-grey-900 font-xsss dropdown-item mt-0 me-4">Delete
+                </h4>
+            </div>
         </div>
-        <div class="ms-6">
+        <div class="ms-4">
             <div class="card-body d-flex p-0 mt-1">
                         <span class="createAtSpan d-flex align-items-center fw-600 text-grey-500 lh-26 font-xssss me-2"
                               th:data-createAt="${commentReply.replyAt}"></span>
@@ -27,9 +38,9 @@
                             </span>
                     <span th:text="${commentReply.likes.size()}"
                           th:if="${commentReply.likes.size() > 0}"></span> &nbsp;
-                    Like
+                    <span class="link-hover">Like</span>
                 </a>
-                <button class="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss border-0 bg-white">
+                <button class="link-hover d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss border-0 bg-white">
                     Reply
                 </button>
             </div>

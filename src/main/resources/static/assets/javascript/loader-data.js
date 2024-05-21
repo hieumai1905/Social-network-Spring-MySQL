@@ -1,5 +1,8 @@
 let conversations = [];
 let searchInput = null;
+let currentUserAvatar = null;
+let currentUserId = null;
+let currentUserName = null;
 
 function loadConversations() {
     $.ajax({
@@ -24,6 +27,15 @@ function replaceTimeFormat() {
 
 function initVariables() {
     searchInput = $('#search-text');
+    currentUserId = $('#current_user_id').val();
+    currentUserName = $('#current_user_name').val();
+    currentUserAvatar = $('#current_user_avatar').val();
+}
+
+function invertScrollbar(element) {
+    element.animate({
+        scrollTop: 10000000000
+    }, 'slow');
 }
 
 window.onload = () => {
@@ -48,7 +60,7 @@ window.onload = () => {
     if (typeof initCreatePost === 'function') {
         initCreatePost();
     }
-    if (typeof loadComment() === 'function') {
+    if (typeof loadComment === 'function') {
         loadComment();
     }
 };

@@ -15,10 +15,10 @@
     </a>
     <a class="cursor-pointer btn-show-comment d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss border-0">
         <i class="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg"></i>
-        <span class="d-none-xss comment_count_current" th:text="${item.comments.size()}"
+        <span class="d-none-xss comment-count" th:text="${item.comments.size()}" th:attr="count-comment-post-id=${item.postId}"
               th:if="${item.comments.size() != 0}"></span>
 
-        <span class="d-none-xss comment_count_current"
+        <span class="d-none-xss comment-count" th:attr="count-comment-post-id=${item.postId}"
               th:if="${item.comments.size() == 0}"></span>
         &nbsp; Comment
     </a>

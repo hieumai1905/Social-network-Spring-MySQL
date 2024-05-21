@@ -54,17 +54,17 @@ function renderConversation(conversationId, conversationName, conversationAvatar
           </a>
         </h3>
         
-        <a href="#" class="ms-auto" id="dropdownMenu${conversationId}" data-bs-toggle="dropdown" aria-expanded="false">
+        <a href="#" class="ms-auto" id="dd-conversation-${conversationId}" data-bs-toggle="dropdown" aria-expanded="false">
           <i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i>
         </a>
-        <div class="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu${conversationId}">
+        <div class="ps-1 px-1 dropdown-menu dropdown-menu-end rounded-xxxl border-0 shadow-lg" aria-labelledby="dd-conversation-${conversationId}">
     `;
 
     if (isGroup) {
         return `${commonHtml}
-          <div class="card-body p-0 d-flex">
-            <i class="fa fa-sign-out text-grey-500 mt-1" aria-hidden="true"></i>
-            <span class="cursor-pointer d-block font-xssss fw-500 mt-1 lh-3 text-grey-500" onclick="leaveConversationGroup(${conversationId})">&ensp;Leave group</span>
+          <div class="card-body p-0 dropdown-item d-flex">
+            <i class="px-1 ms-3 fa fa-sign-out text-grey-600 mt-1" aria-hidden="true"></i>
+            <span class="px-1 cursor-pointer d-block font-xssss fw-500 mt-1 lh-3 text-grey-600" onclick="leaveConversationGroup(${conversationId})">&ensp;Leave group</span>
           </div>
         </div>
       </li>
