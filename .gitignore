@@ -37,3 +37,6 @@ out/
 
 ### Variable environment ###
 local.env
+
+### Ignore resources ###
+files-upload/

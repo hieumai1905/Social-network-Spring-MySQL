@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/conversations")
-public class ConversationController {
+public class ApisConversationController {
 
     @Autowired
     private IConversationService conversationService;

@@ -16,7 +16,8 @@ public interface IUserRepository extends JpaRepository<User, String> {
     @Query(value = "SELECT * FROM users " +
             "WHERE CONVERT(LOWER(REPLACE(REPLACE(full_name, 'Đ', 'd'), 'Ă', 'a'))," +
             " CHAR) LIKE CONCAT('%', CONVERT(LOWER(REPLACE(REPLACE(:fullName, 'Đ', 'd'), 'Ă', 'a')), CHAR), '%') " +
-            "and user_id <> :userId and user_role = 'ROLE_USER'"
+            "AND user_id <> :userId AND user_role = 'ROLE_USER' " +
+            "AND user_id NOT IN (SELECT user_target_id FROM relations WHERE type = 'BLOCK' AND user_id = :userId)"
             , nativeQuery = true)
     Page<User> findByFullNameLikeIgnoreCaseAndAccents(String fullName, String userId, Pageable pageable);
 }
