@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<div th:fragment="fragment-user-list" th:each="user : ${users}" class="col-md-12 col-sm-12 pe-2 ps-2">
+  <div class="card d-block border-0 shadow-xss rounded-3 overflow-hidden mb-3">
+    <div class="card-body w-100 ps-3 pb-4 row">
+      <div class="col-md-1">
+        <figure class="avatar ms-auto me-auto mb-0 w65 z-index-1">
+          <img th:src="${user.avatar}" alt="image" class="float-right p-0 bg-white rounded-circle w-100 shadow-xss">
+        </figure>
+      </div>
+      <div class="col-md-9">
+        <span class="fw-700 font-xsss mt-3 mb-1" th:text="${user.fullName}"></span>
+        <p class="custom-text-overflow">
+          dsgsdsdgfrwegwe fggfqefqwfev fwq dqwddsgsdsdgfrwegwe fggfqefqwfev fwq dqwd dsgsdsdgfrwegwe fggfqefqwfev fwq dqwd dsgsdsdgfrwegwe fggfqefqwfev fwq dqwddsgsdsdgfrwegwe fggfqefqwfev fwq dqwddsgsdsdgfrwegwe fggfqefqwfev fwq dqwddsgsdsdgfrwegwe fggfqefqwfev fwq dqwd</p>
+      </div>
+      <div class="col-md-2 mt-4">
+        <div th:if="${user.isFriend}">
+          <a href="#" class="mt-0 btn pt-2 pb-2 ps-3 pe-3 lh-24 ms-1 ls-3 d-inline-block rounded-xl bg-danger font-xss fw-700 ls-lg text-white">FRIEND</a>
+        </div>
+        <div th:unless="${user.isFriend}">
+          <a href="#" style="width:120px; height: 45px;" class="mt-0 btn pt-2 pb-2 ps-3 pe-3 lh-24 ms-1 ls-3 d-inline-block rounded-xl bg-success font-xssss fw-700 ls-lg text-white">ADD FRIEND</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
