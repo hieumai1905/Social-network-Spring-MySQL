@@ -34,7 +34,7 @@ public class SearchController extends ApplicationController{
         SearchPeopleResponseDTO searchPeopleResponseDTO = userService
                 .findByFullNameLikeIgnoreCaseAndAccents(new SearchPeopleRequestDTO(q), currentUser.getUserId());
         modelAndView.addObject("users", searchPeopleResponseDTO.getUserResponses());
-
+        modelAndView.addObject("search_value", q);
         return modelAndView;
     }
 }

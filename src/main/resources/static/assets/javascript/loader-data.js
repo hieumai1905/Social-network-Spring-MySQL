@@ -1,4 +1,5 @@
 let conversations = [];
+let searchInput = null;
 
 function loadConversations() {
     $.ajax({
@@ -21,7 +22,24 @@ function replaceTimeFormat() {
     });
 }
 
-window.onload = () => {
-    loadConversations();
-    replaceTimeFormat();
+function initVariables() {
+    searchInput = $('#search-text');
 }
+
+window.onload = () => {
+    if (typeof loadConversations === 'function') {
+        loadConversations();
+    }
+
+    if (typeof replaceTimeFormat === 'function') {
+        replaceTimeFormat();
+    }
+
+    if (typeof initVariables === 'function') {
+        initVariables();
+    }
+
+    if (typeof initSearch === 'function') {
+        initSearch();
+    }
+};

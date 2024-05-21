@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/participants")
-public class ParticipantController extends ApplicationController {
+public class ApisParticipantController extends ApplicationController {
 
     @Autowired
     private IParticipantService participantService;

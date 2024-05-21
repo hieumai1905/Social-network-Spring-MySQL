@@ -1,19 +1,20 @@
 let pageIndex = 0, totalElements = 0, pageSize = 0;
 let isFetching = false, isRemainResults = true;
-let usersDiv = $('#user-list');
-$(document).ready(function () {
+let searchContainer = null;
 
+function initSearch() {
+    searchContainer = $('#search-results');
     scrollToTop();
 
-    $('#search-friends').on('change', function() {
-        $('#user-list').empty();
+    $('#search-input').on('change', function () {
+        searchContainer.empty();
         pageIndex = 0;
         isRemainResults = true;
         findUsersByFullName();
     });
 
     registerScrollEvents();
-});
+}
 
 function scrollToTop() {
     $(window).on('load', function() {
@@ -29,8 +30,8 @@ function registerScrollEvents(){
                 findUsersByFullName();
                 pageIndex++;
             }else{
-                if ($('#user-list #no-user-remaining').length === 0) {
-                    usersDiv.append('<div class="text-center" id="no-user-remaining">No Results Remaining!</div>');
+                if ($('#search-results #no-user-remaining').length === 0) {
+                    searchContainer.append('<div class="text-center" id="no-user-remaining">No Results Remaining!</div>');
                 }
             }
         }
@@ -40,7 +41,7 @@ function registerScrollEvents(){
 function findUsersByFullName() {
     isFetching = true;
     let formData = {
-        fullName: $('#search-friends').val(),
+        fullName: $('#search-input').val(),
         pageIndex: pageIndex,
         type: 'people'
     };
@@ -64,10 +65,10 @@ function handleLoadUsers(data) {
     pageSize = data?.pageSize;
     totalElements = data?.totalElements;
     if(data?.userResponses === null || data?.userResponses.length === 0) {
-        usersDiv.append(`<div class="text-center">No Results Found!</div>`);
+        searchContainer.append(`<div class="text-center">No Results Found!</div>`);
     }else{
         data?.userResponses?.forEach(function(user) {
-            usersDiv.append(createUserCard(user));
+            searchContainer.append(createUserCard(user));
         });
     }
 }
@@ -84,7 +85,6 @@ function createUserCard(user) {
               <div class="col-md-9">
                 <span class="fw-700 font-xsss mt-3 mb-1">${user.fullName}</span>
                 <p class="custom-text-overflow">
-                  Some example text that might be too long to fit into the box and needs to be truncated.
                 </p>
               </div>
               <div class="col-md-2 mt-4">
