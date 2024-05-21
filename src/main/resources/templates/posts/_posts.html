@@ -42,6 +42,10 @@
     <!-- select feeling post here-->
     <hr>
 
+    <!-- List comment-->
+    <div th:replace="~{/comments/_comments::fragment-comment-list(${item.comments})}"></div>
+    <!-- List comment-->
+
     <!-- input comment here-->
     <div th:replace="~{/comments/_new::fragment-comment-new}"></div>
     <!-- input comment here-->

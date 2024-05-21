@@ -42,4 +42,7 @@ window.onload = () => {
     if (typeof initSearch === 'function') {
         initSearch();
     }
+    if (typeof loadComment() === 'function') {
+        loadComment();
+    }
 };
