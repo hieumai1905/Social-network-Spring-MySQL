@@ -25,6 +25,10 @@ public class Comment {
     @Temporal(TemporalType.TIMESTAMP)
     private Date commentAt;
 
+    @Column(name = "update_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updateAt;
+
     @Column(name = "content", nullable = false)
     private String content;
 
@@ -45,6 +49,12 @@ public class Comment {
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     private List<Like> likes;
 
+    public Comment(String content, User user, Post post) {
+        this.content = content;
+        this.user = user;
+        this.post = post;
+    }
+
     @PrePersist
     public void onCreate() {
         this.commentAt = new Date();
@@ -52,6 +62,6 @@ public class Comment {
 
     @PreUpdate
     public void onUpdate() {
-        this.commentAt = new Date();
+        this.updateAt = new Date();
     }
 }

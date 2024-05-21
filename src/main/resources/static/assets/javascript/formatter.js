@@ -5,14 +5,14 @@ function formatTime(time) {
 
     if (minutesDiff < 60) {
         if (minutesDiff === 0) {
-            return "Just now";
+            return "1m";
         }
-        return minutesDiff + " minutes ago";
+        return minutesDiff + "m";
     } else if (minutesDiff < 24 * 60) {
         let hoursDiff = Math.floor(minutesDiff / 60);
-        return hoursDiff + " hours ago";
+        return hoursDiff + "h";
     } else {
         let daysDiff = Math.floor(minutesDiff / (60 * 24));
-        return daysDiff + " days ago";
+        return daysDiff + "d";
     }
 }

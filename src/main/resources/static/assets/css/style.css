@@ -9,7 +9,7 @@
 
 /*custom*/
 .custom-overflow {
-    max-height: 250px;
+    max-height: 270px;
     overflow-y: auto;
 }
 
@@ -17302,10 +17302,6 @@ select.sort {
     }
 }
 
-.custom-text-overflow {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.bg-comment{
+    background-color: #e7e7e7;
 }

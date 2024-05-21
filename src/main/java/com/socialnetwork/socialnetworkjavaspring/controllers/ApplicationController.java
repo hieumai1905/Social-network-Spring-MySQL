@@ -33,7 +33,7 @@ public class ApplicationController {
         return setAuthor(modelAndView);
     }
 
-    protected ModelAndView setAuthor(ModelAndView modelAndView){
+    protected ModelAndView setAuthor(ModelAndView modelAndView) {
         modelAndView.addObject("currentUser", currentUser);
         return modelAndView;
     }
