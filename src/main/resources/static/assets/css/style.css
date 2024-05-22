@@ -17305,3 +17305,60 @@ select.sort {
 .bg-comment{
     background-color: #e7e7e7;
 }
+
+.h250{
+    height: 250px;
+}
+
+.drop-zone {
+    border: 2px dashed #aaa;
+    padding: 20px;
+    text-align: center;
+}
+
+.drag-over {
+    background-color: #f0f0f0;
+}
+
+.file-list {
+    margin-top: 20px;
+}
+
+.file-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.create-post {
+    width: 100%;
+    height: 100%;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.custom-file-list {
+    max-height: 300px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #ff0000;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:fragment="application_layout" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="application_layout(isFragments)" lang="en">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -37,6 +37,11 @@
     </div>
     <!-- right chat -->
 </div>
+<!--fragments-->
+<div th:if="${isFragments}">
+    <div th:replace="~{::fragments}"></div>
+</div>
+<!--fragments-->
 <script th:src="@{/assets/js/plugin.js}"></script>
 <script th:src="@{/assets/js/lightbox.js}"></script>
 <script th:src="@{/assets/js/scripts.js}"></script>

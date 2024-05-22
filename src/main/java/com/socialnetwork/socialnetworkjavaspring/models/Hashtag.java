@@ -24,4 +24,8 @@ public class Hashtag {
 
     @OneToMany(mappedBy = "hashtag", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PostHashtag> postHashtags;
+
+    public Hashtag(String hashtag) {
+        this.hashtag = hashtag;
+    }
 }

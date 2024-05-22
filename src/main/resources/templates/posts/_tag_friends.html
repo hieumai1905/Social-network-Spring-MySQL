@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<!-- Modal Tag Friends-->
+<div th:fragment="fragment-tag-friends" class="modal fade" id="tag-friends" tabindex="-1" aria-labelledby="tag-friends" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title font-lg fw-bold" id="tag-friendsLabel">Tag Friends</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <div class="container mt-4">
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="fa fa-search text-dark" aria-hidden="true"></i>
+                </span>
+              <input type="text" id="search-friends" class="form-control" placeholder="Search">
+            </div>
+            <p class="m-2">Users Tag:</p>
+            <div id="users-tag" class="m-2 p-2 border border-1 custom-overflow">
+
+            </div>
+            <div id="list-friends" class="custom-overflow">
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer text-light">
+        <button data-bs-dismiss="modal" type="button" class="btn btn-primary text-white ms-3">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

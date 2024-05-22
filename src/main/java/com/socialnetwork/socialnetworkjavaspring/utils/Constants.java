@@ -13,4 +13,8 @@ public final class Constants {
     public static final Integer DEFAULT_PAGE_INDEX = 0;
     public static final String SEARCH_TYPE_PEOPLE = "people";
     public static final String SEARCH_TYPE_POST = "post";
+    public static final String FILE_SEPARATOR = "/";
+    public static final String DOT = ".";
+    public static final String[] allowExtensionImages = {"jpg", "png", "jpeg", "gif"};
+    public static final String[] allowExtensionVideos = {"mp4", "avi", "mov", "mkv"};
 }
