@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/layouts/application:: application_layout}" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/layouts/application:: application_layout(true)}" lang="en">
 <head>
     <meta charset="UTF-8">
     <title th:fragment="page_title">New feeds</title>
@@ -20,5 +20,11 @@
 </div>
 <!-- main content -->
 
+<!--    create post modal-->
+<div th:fragment="fragments">
+    <div th:replace="~{/posts/_create_post :: fragment-create-post}"></div>
+    <div th:replace="~{/posts/_tag_friends :: fragment-tag-friends}"></div>
+</div>
+<!--    create post modal-->
 </body>
 </html>

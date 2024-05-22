@@ -42,6 +42,12 @@ window.onload = () => {
     if (typeof initSearch === 'function') {
         initSearch();
     }
+    if (typeof registerModalEvent === 'function') {
+        registerModalEvent();
+    }
+    if (typeof initCreatePost === 'function') {
+        initCreatePost();
+    }
     if (typeof loadComment() === 'function') {
         loadComment();
     }

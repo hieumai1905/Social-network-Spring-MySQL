@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<!-- Modal -->
+<div th:fragment="fragment-create-post" class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createPostModalLabel">Create Post</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <figure class="avatar float-left mb-0 me-2">
+            <img th:src="${currentUser.avatar}" alt="image" class="w50">
+          </figure>
+          <h4 th:text="${currentUser.fullName}" class="fw-600 position-relative z-index-1 ls-1 font-xssss text-dark mt-2">
+            </h4>
+          <select id="access" class="form-select form-select-sm w-25">
+            <option value="PUBLIC">Public</option>
+            <option value="PRIVATE">Private</option>
+            <option value="FRIEND">Friends</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <div class="form-group">
+            <input id="content" class="form-control border-0 font-xss" type="text"
+                   placeholder="What are you thinking??" />
+          </div>
+          <div class="container mt-4">
+            <div class="drop-zone" id="drop-zone">
+              <p class="text-center">Drag & Drop files here or click to select</p>
+              <input type="file" id="file-input" multiple style="display: none;" accept=".jpg,.png,.jpeg,.gif,.mp4,.avi,.mov,.mkv"/>
+            </div>
+            <div class="file-list mt-3 overflow-y">
+              <h5>Uploaded Files:</h5>
+              <ul id="file-list" class="custom-file-list"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer text-light">
+        <i id="tag-friends-icon" data-bs-toggle="modal" data-bs-target="#tag-friends" class="fa fa-tags text-dark cursor-pointer" aria-hidden="true"></i>
+        <button id="createPost" type="button" class="btn btn-primary ms-3 text-white">Post</button>
+      </div>
+    </div>
+  </div>
+  <script th:src="@{/assets/javascript/posts/input-file.js}"></script>
+  <script th:src="@{/assets/javascript/posts/create-post.js}"></script>
+</div>
+</body>
+</html>

@@ -80,6 +80,11 @@ public class UserService implements IUserService {
                 userResponses);
     }
 
+    @Override
+    public List<User> findUsersByRelationType(String userId, RelationType type) {
+        return userRepository.findUsersByRelationType(userId, type.toString());
+    }
+
     private Boolean isFriendWithCurrentUser(List<Relation> relations, String userId) {
         if(relations != Constants.NULL_OBJECT && relations.size() > Constants.NUMBER_ZERO){
             for (Relation relation : relations) {

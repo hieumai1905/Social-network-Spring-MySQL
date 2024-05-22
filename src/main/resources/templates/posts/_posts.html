@@ -28,7 +28,7 @@
                 <a th:href="${image.url}" data-lightbox="roadtrip"
                    th:if="${iterStat.count} <= 3"
                    th:classappend="${iterStat.count} == 3 and ${item.medias.size()} > 3 ? 'position-relative d-block' : ''">
-                    <img th:src="${image.url}" class="rounded-3 w-100" alt="image">
+                    <img th:src="@{'/assets/files-upload/' + ${image.url}}" class="rounded-3 w-100" alt="image">
                     <span th:if="${iterStat.count == 3 and item.medias.size() > 3}"
                           class="img-count font-sm text-white ls-3 fw-600">
                         <b>+[[${item.medias.size() - 3}]]</b>

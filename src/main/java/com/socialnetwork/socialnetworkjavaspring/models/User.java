@@ -109,6 +109,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Relation> relations;
 
+    public User(String userId) {
+        this.userId = userId;
+    }
+
     @PrePersist
     public void prePersist() {
         this.avatar = "/assets/files-upload/images/default-avatar.png";
