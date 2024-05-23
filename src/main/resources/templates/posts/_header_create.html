@@ -12,9 +12,6 @@
         <figure class="avatar position-absolute ms-2 mt-1 top-5">
             <img th:src="${currentUser.avatar}" alt="image" class="shadow-sm rounded-circle w30">
         </figure>
-        <input type="hidden" th:value="${currentUser.userId}" id="current_user_id">
-        <input type="hidden" th:value="${currentUser.fullName}" id="current_user_name">
-        <input type="hidden" th:value="${currentUser.avatar}" id="current_user_avatar">
         <textarea name="message"
                   class="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg"
                   cols="30" rows="10" placeholder="What's on your mind?">

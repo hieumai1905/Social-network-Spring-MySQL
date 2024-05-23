@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/layouts/application:: application_layout(true)}" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:fragment="page_title" th:text="${interact_type}"></title>
+</head>
+<body>
+
+<!-- main content -->
+<div th:fragment="main_content" class="main-content right-chat-active">
+    <div class="middle-sidebar-bottom">
+        <div class="middle-sidebar-left pe-0">
+            <div class="row ms-2">
+                <div class="col-xl-11">
+                    <div class="card shadow-xss w-100 d-block d-flex border-0 p-4 mb-3">
+                        <div class="card-body d-flex align-items-center p-0">
+                            <h2 class="fw-700 mb-0 mt-0 font-md text-grey-900" th:text="${interact_type}"></h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div th:replace="~{/posts/_posts::fragment-post-list}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/assets/javascript/posts/posts.js}"></script>
+    <script th:src="@{/assets/javascript/posts/delete-post.js}"></script>
+    <script th:src="@{/assets/javascript/posts/create-post.js}"></script>
+    <script th:src="@{/assets/javascript/likes/like-handle.js}"></script>
+    <script th:src="@{/assets/javascript/comments/comment-handle.js}"></script>
+</div>
+<!-- main content -->
+
+<!--    create post modal-->
+<div th:fragment="fragments">
+    <div th:replace="~{/posts/_tag_friends :: fragment-tag-friends}"></div>
+    <div th:replace="~{/shared/_confirm_delete_modal :: fragment-comfirm-delete}"></div>
+</div>
+<!--    create post modal-->
+</body>
+</html>
