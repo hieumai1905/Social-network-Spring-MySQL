@@ -2,40 +2,54 @@
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="application_layout" lang="en">
 <body>
 <div th:fragment="fragment-comment-list(comments)" class="comments-list custom-overflow d-none">
-    <div class="comment" th:each="comment:${comments}">
+    <div class="comment mt-1" th:each="comment:${comments}" th:attr="data-comment-id=${comment.commentId}">
         <div class="card-body p-0 d-flex">
             <figure class="avatar me-3">
-                <img th:src="${comment.user.avatar}" alt="image" class="shadow-sm rounded-circle w45"></figure>
-            <div class="bg-comment rounded-xxl px-2">
-                <h4 class="fw-700 text-grey-900 font-xssss mt-1"
-                    th:text="${comment.user.fullName}"></h4>
+                <img th:src="${comment.user.avatar}" alt="image" class="shadow-sm rounded-circle w45">
+            </figure>
+            <div class="bg-comment rounded-xxxl px-2">
+                <h4 class="fw-700 text-grey-900 font-xssss mt-2" th:text="${comment.user.fullName}"></h4>
                 <p th:text="${comment.content}"></p>
             </div>
+            <a href="#" class="ms-2" th:id="'dd-comment-' + ${comment.commentId}" data-bs-toggle="dropdown"
+               aria-expanded="false" th:if="${comment.user.userId == currentUser.userId}">
+                <i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i>
+            </a>
+            <div class="dropdown-menu p-1 rounded-xxxl border-0 shadow-lg"
+                 th:aria-labelledby="'dd-comment-' + ${comment.commentId}"
+                 th:if="${comment.user.userId == currentUser.userId}">
+                <input type="hidden" th:value="${comment.commentId}" class="comment-id">
+                <h4 class="fw-600 w-100 cursor-pointer p-1 text-grey-900 font-xsss dropdown-item mt-0 me-4
+                hover-bg-light-gray btn-edit-comment" th:attr="data-comment-post-id=${comment.post.postId}">Edit</h4>
+                <h4 class="fw-600 w-100 cursor-pointer p-1 text-grey-900 font-xsss dropdown-item mt-0 me-4 btn-delete-comment">
+                    Delete</h4>
+            </div>
         </div>
-        <div class="ms-6">
-            <div class="card-body d-flex p-0 mt-1">
+        <div class="ms-4">
+            <div class="card-body d-flex p-0 mt-1 ms-2">
                 <span class="createAtSpan d-flex align-items-center fw-600 text-grey-500 lh-26 font-xssss me-2"
                       th:data-createAt="${comment.commentAt}">
                 </span>
                 <a href="#"
                    class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
-                    <span th:if="${comment.isLiked}"
-                          onclick="likeComment('${comment.commentId}', 0)">
-                        <i class="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss"></i>
+                    <span th:if="${comment.isLiked}">
+                         <i class="bg-primary feather-thumbs-up text-white me-1 btn-round-xs font-xss"></i>
                     </span>
-                    <span th:unless="${comment.isLiked}" onclick="likeComment('${comment.commentId}', 1)">
-                        <i class="feather-thumbs-up text-grey-900 me-1 btn-round-xs font-xss"></i>
+                    <span th:unless="${comment.isLiked}">
+                    <i class="text-grey-900 feather-thumbs-up text-white me-1 btn-round-xs font-xss"></i>
                     </span>
-                    <span th:text="${comment.likes.size()}" th:if="${comment.likes.size() > 0}"></span> &nbsp; Like
+                    <span th:text="${comment.likes.size()}" th:if="${comment.likes.size() > 0}"></span> &nbsp;
+                    <span class="link-hover">Like</span>
                 </a>
-                <a class="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss">
+                <a href="#"
+                   class="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss">
                     <i class="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg"></i>
                     <span class="d-none-xss" th:text="${comment.commentReplies.size()}"
                           th:if="${comment.commentReplies.size() >0}">
-                    </span> &nbsp; Reply
+                    </span> &nbsp; <span class="link-hover">Reply</span>
                 </a>
                 <div class="cursor-pointer mt-1" th:if="${comment.commentReplies.size() >0}">
-                    <a class="btn-comment-reply ms-2 text-decoration-underline d-flex text-grey-900
+                    <a class="link-hover btn-comment-reply ms-2 text-decoration-underline d-flex text-grey-900
                             text-dark lh-26 font-xssss">
                         View more
                     </a>

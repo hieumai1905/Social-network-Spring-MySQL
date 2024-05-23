@@ -9,8 +9,14 @@
 
 /*custom*/
 .custom-overflow {
-    max-height: 270px;
-    overflow-y: auto;
+    max-height: 345px;
+    overflow: auto;
+    -ms-overflow-style: none;
+}
+
+.custom-overflow::-webkit-scrollbar {
+    width: 0 !important;
+    display: none;
 }
 
 .carousel-indicators {
@@ -17361,4 +17367,9 @@ select.sort {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.link-hover:hover {
+    text-decoration: underline;
+    font-weight: bold;
 }
