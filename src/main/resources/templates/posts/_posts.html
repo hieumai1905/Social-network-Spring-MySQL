@@ -23,9 +23,17 @@
                 class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
         <div class="dropdown-menu dropdown-menu-end p-2 rounded-xxxl cursor-pointer border-0 shadow-lg"
              aria-labelledby="dropdownMenu2">
+            <div th:data-postId="${item.postId}" class="save-post card-body p-2 dropdown-item rounded-xxxl d-flex">
+                <i class="feather-bookmark text-grey-500 me-2 fw-600 font-sm"></i>
+                <h4 class="fw-600 text-grey-900 font-xsss mt-1">Save Post</h4>
+            </div>
+            <div th:data-postId="${item.postId}" class="hide-post card-body p-2 dropdown-item rounded-xxxl d-flex">
+                <i class="feather-alert-circle text-grey-500 me-2 fw-600 font-sm"></i>
+                <h4 class="fw-600 text-grey-900 font-xsss mt-1">Hide Post</h4>
+            </div>
             <div th:if="${currentUser.userId == item.user.userId}" th:data-postId="${item.postId}" class="delete-post card-body p-2 dropdown-item rounded-xxxl d-flex">
-                <i class="fa fa-trash-o text-grey-500 me-3 font-lg"></i>
-                <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Delete Post
+                <i class="fa fa-trash-o text-grey-500 me-2 fw-600 font-sm"></i>
+                <h4 class="fw-600 text-grey-900 font-xsss mt-1">Delete Post
                 </h4>
             </div>
         </div>

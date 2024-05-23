@@ -1,0 +1,32 @@
+package com.socialnetwork.socialnetworkjavaspring.controllers.apis;
+
+import com.socialnetwork.socialnetworkjavaspring.controllers.ApplicationController;
+import com.socialnetwork.socialnetworkjavaspring.models.enums.InteractType;
+import com.socialnetwork.socialnetworkjavaspring.services.post_interacts.IPostInteractService;
+import com.socialnetwork.socialnetworkjavaspring.utils.responses.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/posts/{post-id}/interact/{interact-type}")
+public class ApisPostInteractController extends ApplicationController {
+
+    @Autowired
+    private IPostInteractService postInteractService;
+
+    @PostMapping
+    public ResponseEntity<ApiResponse> interactPost(@PathVariable("interact-type") String type,
+                                                    @PathVariable("post-id") String postId){
+        try {
+            InteractType interactType = InteractType.valueOf(type.toUpperCase());
+            return responseApi(HttpStatus.OK,
+                    postInteractService.updatePostInteract(interactType, postId, currentUser));
+        }catch (IllegalArgumentException e) {
+            return responseApi(HttpStatus.BAD_REQUEST, "Invalid interact type!");
+        }catch (Exception e) {
+            return responseApi(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+}
