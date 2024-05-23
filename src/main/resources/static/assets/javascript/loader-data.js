@@ -60,6 +60,9 @@ window.onload = () => {
     if (typeof initCreatePost === 'function') {
         initCreatePost();
     }
+    if (typeof initLike === 'function') {
+        initLike();
+    }
     if (typeof loadComment === 'function') {
         loadComment();
     }

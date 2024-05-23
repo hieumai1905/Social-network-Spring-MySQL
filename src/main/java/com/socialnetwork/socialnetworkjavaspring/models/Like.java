@@ -34,4 +34,9 @@ public class Like {
     @ManyToOne
     @JoinColumn(name = "comment_reply_id")
     private CommentReply commentReply;
+
+    public Like(User user, Post post) {
+        this.user = user;
+        this.post = post;
+    }
 }

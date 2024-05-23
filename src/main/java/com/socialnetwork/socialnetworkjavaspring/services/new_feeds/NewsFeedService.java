@@ -3,7 +3,7 @@ package com.socialnetwork.socialnetworkjavaspring.services.new_feeds;
 import com.socialnetwork.socialnetworkjavaspring.models.Post;
 import com.socialnetwork.socialnetworkjavaspring.models.Comment;
 import com.socialnetwork.socialnetworkjavaspring.models.CommentReply;
-import com.socialnetwork.socialnetworkjavaspring.services.like.ILikeService;
+import com.socialnetwork.socialnetworkjavaspring.services.likes.ILikeService;
 import com.socialnetwork.socialnetworkjavaspring.services.posts.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
