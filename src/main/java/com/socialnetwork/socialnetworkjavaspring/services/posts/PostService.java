@@ -112,4 +112,13 @@ public class PostService implements IPostService {
     public Optional<Post> findById(String postId) {
         return postRepository.findById(postId);
     }
+
+    @Override
+    public String delete(String postId, String userId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new NullPointerException("Post not found!"));
+        if(!post.getUser().getUserId().equals(userId))
+            throw new RuntimeException("This post is not your!");
+        postRepository.delete(post);
+        return postId;
+    }
 }

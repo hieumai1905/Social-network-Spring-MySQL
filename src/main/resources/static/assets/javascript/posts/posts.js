@@ -20,4 +20,13 @@ function registerModalEvent() {
         let createPostModalInstance = bootstrap.Modal.getInstance($createPostModal[0]);
         createPostModalInstance.show();
     });
+
+    $('#btnConfirmModal').on('click', function(e){
+        e.preventDefault();
+        let postId = $(this).attr('data-postId');
+        let action = $(this).attr('data-action');
+        if(action === 'delete-post'){
+            deletePost(postId);
+        }
+    });
 }
