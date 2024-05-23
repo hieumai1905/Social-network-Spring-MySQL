@@ -1,4 +1,4 @@
-package com.socialnetwork.socialnetworkjavaspring.services.like;
+package com.socialnetwork.socialnetworkjavaspring.services.likes;
 
 import com.socialnetwork.socialnetworkjavaspring.models.Like;
 import com.socialnetwork.socialnetworkjavaspring.repositories.ILikeRepository;
@@ -36,5 +36,10 @@ public class LikeService implements ILikeService {
     @Override
     public boolean existsByCommentReplyIdAndUserId(Long commentReplyId, String userId) {
         return likeRepository.existsByCommentReply_CommentReplyIdAndUser_UserId(commentReplyId, userId);
+    }
+
+    @Override
+    public Optional<Like> findByPostIdAndUserId(String postId, String userId) {
+        return likeRepository.findByPost_PostIdAndUser_UserId(postId, userId);
     }
 }
