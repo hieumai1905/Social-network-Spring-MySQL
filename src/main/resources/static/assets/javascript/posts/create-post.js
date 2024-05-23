@@ -65,7 +65,7 @@ function addPost(post) {
     });
 
     const postHtml = `
-        <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
+        <div id="post-${post.postId}" class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
             <div class="card-body p-0 d-flex">
                 <input type="hidden" value="${post.postId}" class="post_current_id">
                 <figure class="avatar me-3"><img src="${post.author.avatar}" alt="image" class="shadow-sm rounded-circle w45"></figure>
@@ -75,6 +75,18 @@ function addPost(post) {
                     ${additionalTags ? `<span>${additionalTags}</span>` : ''}
                     <span class="createAtSpan d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">${createAt}</span>
                 </h4>
+                <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown"
+                   aria-expanded="false"><i
+                        class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
+                <div class="dropdown-menu dropdown-menu-end p-2 rounded-xxxl cursor-pointer border-0 shadow-lg"
+                     aria-labelledby="dropdownMenu2">
+                    <div data-postId="${post.postId}" id="delete-post-${post.postId}" class="card-body p-2 dropdown-item rounded-xxxl d-flex">
+                        <i class="fa fa-trash-o text-grey-500 me-3 font-lg"></i>
+                        <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Delete Post<span
+                                class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Delete your post</span>
+                        </h4>
+                    </div>
+                </div>
             </div>
             <div class="card-body p-0 me-lg-5">
                 <p class="fw-500 text-grey-500 lh-26 font-xssss w-100">${post.postContent}</p>
@@ -99,7 +111,7 @@ function addPost(post) {
                 </a>
             </div>
             <hr>
-            <div th:fragment="fragment-comment-new" class="card-body p-0 mt-3 position-relative">
+            <div class="card-body p-0 mt-3 position-relative">
                 <figure class="avatar position-absolute ms-2 mt-1 top-5">
                     <img src="${post.author.avatar}" alt="image" class="shadow-sm rounded-circle w30">
                 </figure>
@@ -114,8 +126,11 @@ function addPost(post) {
                 </figure>
             </div>
         </div>`;
-
     postContainer.prepend(postHtml);
+    $(document).on('click', `#delete-post-${post.postId}`, function() {
+        let postId = $(this).data('postid');
+        confirmToDeletePost(postId);
+    });
 }
 
 function clearForm(){
@@ -245,5 +260,9 @@ function initCreatePost(){
             return user.fullName.toLowerCase().includes(text);
         });
         displayFriendsView();
+    });
+    $(".delete-post").on("click", function () {
+       let postId = $(this).data("postid");
+        confirmToDeletePost(postId);
     });
 }

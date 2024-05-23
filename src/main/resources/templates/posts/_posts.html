@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <body>
 <div th:fragment="fragment-post-list" class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3"
-     th:each="item: ${posts}">
+     th:each="item: ${posts}" th:id="'post-' + ${item.postId}">
     <div class="card-body p-0 d-flex">
         <input type="hidden" th:value="${item.postId}" class="current-post-id">
         <figure class="avatar me-3"><img th:src="${item.user.avatar}" alt="image"
@@ -18,6 +18,17 @@
             <span class="createAtSpan d-block font-xssss fw-500 mt-1 lh-3 text-grey-500"
                   th:data-createAt="${item.createAt}"></span>
         </h4>
+        <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown"
+           aria-expanded="false"><i
+                class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
+        <div class="dropdown-menu dropdown-menu-end p-2 rounded-xxxl cursor-pointer border-0 shadow-lg"
+             aria-labelledby="dropdownMenu2">
+            <div th:if="${currentUser.userId == item.user.userId}" th:data-postId="${item.postId}" class="delete-post card-body p-2 dropdown-item rounded-xxxl d-flex">
+                <i class="fa fa-trash-o text-grey-500 me-3 font-lg"></i>
+                <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Delete Post
+                </h4>
+            </div>
+        </div>
     </div>
     <div class="card-body p-0 me-lg-5">
         <p class="fw-500 text-grey-500 lh-26 font-xssss w-100" th:text="${item.postContent}"></p>

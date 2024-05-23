@@ -15,4 +15,6 @@ public interface IPostService extends IGeneralService<Post, String> {
     PostResponseDTO save(PostRequestDTO request, List<MultipartFile> files, User user);
 
     Optional<Post> findById(String postId);
+
+    String delete(String postId, String userId);
 }
