@@ -4,11 +4,13 @@ import com.socialnetwork.socialnetworkjavaspring.DTOs.posts.PostRequestDTO;
 import com.socialnetwork.socialnetworkjavaspring.DTOs.posts.PostResponseDTO;
 import com.socialnetwork.socialnetworkjavaspring.DTOs.users.UserResponseDTO;
 import com.socialnetwork.socialnetworkjavaspring.models.*;
+import com.socialnetwork.socialnetworkjavaspring.models.enums.InteractType;
 import com.socialnetwork.socialnetworkjavaspring.models.key.PostHashtagId;
 import com.socialnetwork.socialnetworkjavaspring.models.key.UserTagId;
 import com.socialnetwork.socialnetworkjavaspring.repositories.IHashtagRepository;
 import com.socialnetwork.socialnetworkjavaspring.repositories.IPostRepository;
 import com.socialnetwork.socialnetworkjavaspring.repositories.IUserRepository;
+import com.socialnetwork.socialnetworkjavaspring.services.likes.ILikeService;
 import com.socialnetwork.socialnetworkjavaspring.services.medias.IMediaService;
 import com.socialnetwork.socialnetworkjavaspring.utils.ConvertUtils;
 import com.socialnetwork.socialnetworkjavaspring.utils.DateTimeUtils;
@@ -19,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.*;
 
 @Service
-public class PostService implements IPostService {
+public class PostService extends PostGeneralService implements IPostService {
     @Autowired
     private IPostRepository postRepository;
     @Autowired
@@ -28,6 +30,9 @@ public class PostService implements IPostService {
     private IMediaService mediaService;
     @Autowired
     private IUserRepository userRepository;
+
+    @Autowired
+    private ILikeService likeService;
 
     @Override
     public Optional<Post> save(Post object) {
@@ -120,5 +125,17 @@ public class PostService implements IPostService {
             throw new RuntimeException("This post is not your!");
         postRepository.delete(post);
         return postId;
+    }
+
+    @Override
+    public List<Post> findPostByInteractType(InteractType interactType, String userId) {
+        List<Post> posts = postRepository.findPostByInteractType(String.valueOf(interactType), userId);
+        posts.forEach(post -> {
+            boolean isLiked = likeService.existsByPostIdAndUserId(post.getPostId(), userId);
+            post.setLiked(isLiked);
+            setLikedStatusForCommentsAndReplies(post, userId);
+            sortCommentsAndReplies(post);
+        });
+        return posts;
     }
 }

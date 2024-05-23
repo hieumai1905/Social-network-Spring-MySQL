@@ -46,4 +46,12 @@ public interface IPostRepository extends JpaRepository<Post, String> {
             " " +
             "ORDER BY create_at DESC", nativeQuery = true)
     List<Post> findAllPostForNewsFeed(String userId);
+
+    @Query(value = "SELECT p.* " +
+            "FROM posts p " +
+            "WHERE p.post_id IN (SELECT pi.post_id " +
+            "                    FROM post_interacts pi " +
+            "                    WHERE pi.type = :interactType " +
+            "                    AND pi.user_id = :userId)", nativeQuery = true)
+    List<Post> findPostByInteractType(String interactType, String userId);
 }

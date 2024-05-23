@@ -8,7 +8,9 @@
             </span>
         </a>
     </div>
-
+    <input type="hidden" th:value="${currentUser.userId}" id="current_user_id">
+    <input type="hidden" th:value="${currentUser.fullName}" id="current_user_name">
+    <input type="hidden" th:value="${currentUser.avatar}" id="current_user_avatar">
     <form action="/search" method="get" class="float-left header-search" onsubmit="return validateSearchForm()">
         <div class="form-group mb-0 icon-input">
             <i class="feather-search font-sm text-grey-400"></i>
