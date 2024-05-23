@@ -29,4 +29,41 @@ function registerModalEvent() {
             deletePost(postId);
         }
     });
+    $('.save-post').on('click', function() {
+        let postId = $(this).attr('data-postId');
+        updatePostInteract('saved', postId);
+    });
+    $('.hide-post').on('click', function() {
+        let postId = $(this).attr('data-postId');
+        updatePostInteract('hidden', postId);
+    });
+}
+
+function updatePostInteract(type, postId){
+    $.ajax({
+        url: `/api/posts/${postId}/interact/${type}`,
+        type: 'POST',
+        success: function(response) {
+            console.log('Success:', response);
+            if(response.code === 200){
+                let btnDeletePost = $('#btnConfirmModal');
+                let modalDeletePost = $('#confirmModal');
+                modalDeletePost.find('.modal-title').text("Notification");
+                modalDeletePost.find('.modal-body').text(response.message);
+                modalDeletePost.find('#btnCancelModal').hide();
+                modalDeletePost.modal('show');
+                btnDeletePost.text('Ok');
+                if(type === 'hidden')
+                    $('#post-' + postId).remove();
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+            if(xhr.responseJSON && xhr.responseJSON.message) {
+                console.log('Error: ' + xhr.responseJSON.message);
+            } else {
+                console.log('An error occurred: ' + error);
+            }
+        }
+    });
 }

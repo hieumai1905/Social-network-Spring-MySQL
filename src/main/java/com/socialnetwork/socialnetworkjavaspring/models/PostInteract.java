@@ -32,6 +32,13 @@ public class PostInteract {
     @Temporal(TemporalType.TIMESTAMP)
     private Date interactAt;
 
+    public PostInteract(Post post, User user, InteractType interactType, Date interactAt) {
+        this.post = post;
+        this.user = user;
+        this.type = interactType;
+        this.interactAt = interactAt;
+    }
+
     @PrePersist
     protected void onCreate() {
         this.interactAt = new Date();

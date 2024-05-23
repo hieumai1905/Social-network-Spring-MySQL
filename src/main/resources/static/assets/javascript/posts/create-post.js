@@ -80,11 +80,17 @@ function addPost(post) {
                         class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
                 <div class="dropdown-menu dropdown-menu-end p-2 rounded-xxxl cursor-pointer border-0 shadow-lg"
                      aria-labelledby="dropdownMenu2">
+                     <div data-postId="${post.postId}" id="save-post-${post.postId}" class="card-body p-2 dropdown-item rounded-xxxl d-flex">
+                        <i class="feather-bookmark text-grey-500 me-2 fw-600 font-sm"></i>
+                        <h4 class="fw-600 text-grey-900 font-xsss mt-1">Save Post</h4>
+                    </div>
+                    <div data-postId="${post.postId}" id="hide-post-${post.postId}" class="card-body p-2 dropdown-item rounded-xxxl d-flex">
+                        <i class="feather-alert-circle text-grey-500 me-2 fw-600 font-sm"></i>
+                        <h4 class="fw-600 text-grey-900 font-xsss mt-1">Hide Post</h4>
+                    </div>
                     <div data-postId="${post.postId}" id="delete-post-${post.postId}" class="card-body p-2 dropdown-item rounded-xxxl d-flex">
-                        <i class="fa fa-trash-o text-grey-500 me-3 font-lg"></i>
-                        <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Delete Post<span
-                                class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Delete your post</span>
-                        </h4>
+                        <i class="fa fa-trash-o text-grey-500 me-2 fw-600 font-sm"></i>
+                        <h4 class="fw-600 text-grey-900 font-xsss mt-1">Delete Post</h4>
                     </div>
                 </div>
             </div>
@@ -130,6 +136,14 @@ function addPost(post) {
     $(document).on('click', `#delete-post-${post.postId}`, function() {
         let postId = $(this).data('postid');
         confirmToDeletePost(postId);
+    });
+    $(document).on('click', `#save-post-${post.postId}`, function() {
+        let postId = $(this).data('postid');
+        updatePostInteract('saved', postId);
+    });
+    $(document).on('click', `#hide-post-${post.postId}`, function() {
+        let postId = $(this).data('postid');
+        updatePostInteract('hidden', postId);
     });
 }
 
