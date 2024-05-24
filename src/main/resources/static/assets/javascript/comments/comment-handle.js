@@ -24,6 +24,7 @@ function registerShowCommentEvents() {
     btnDisplayComments = $('.btn-show-comment');
     comments = $('.comments-list');
     commentCounts = $('.comment-count');
+    btnDisplayComments.off('click');
     if (btnDisplayComments.length > 0) {
         btnDisplayComments.each(function (index) {
             $(this).click(function (event) {
@@ -151,7 +152,7 @@ function createComment(content, index, postId) {
         }),
         success: function (response) {
             if (response.code === 201) {
-                console.log(response.data.message);
+                console.log(response.message);
                 handleCreatCommentSuccess(response.data, index, postId);
             }
         },

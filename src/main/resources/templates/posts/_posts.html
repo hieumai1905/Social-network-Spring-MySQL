@@ -24,7 +24,7 @@
         <div class="dropdown-menu dropdown-menu-end p-2 rounded-xxxl cursor-pointer border-0 shadow-lg"
              aria-labelledby="dropdownMenu2">
             <div th:if="${item.isSaved && (interact_type == null || interact_type == 'POSTS SAVED')}" th:data-postId="${item.postId}" class="un-save-post card-body p-2 dropdown-item rounded-xxxl d-flex">
-                <i class="fa fa-bookmark text-grey-500 me-2 fw-600 font-sm"></i>
+                <i class="fa fa-window-close-o text-grey-500 me-2 fw-600 font-sm"></i>
                 <h4 class="fw-600 text-grey-900 font-xsss mt-1">UnSave Post</h4>
             </div>
             <div th:if="${!item.isSaved && (interact_type == null || interact_type == 'POSTS SAVED')}" th:data-postId="${item.postId}" class="save-post card-body p-2 dropdown-item rounded-xxxl d-flex">
@@ -38,6 +38,11 @@
             <div th:if="${item.isHidden && (interact_type == null || interact_type == 'POSTS HIDDEN')}" th:data-postId="${item.postId}" class="un-hide-post card-body p-2 dropdown-item rounded-xxxl d-flex">
                 <i class="fa fa-eye text-grey-500 me-2 fw-600 font-sm"></i>
                 <h4 class="fw-600 text-grey-900 font-xsss mt-1">UnHide Post</h4>
+            </div>
+            <div th:if="${currentUser.userId == item.user.userId && interact_type == null}" th:data-postId="${item.postId}" class="update-post card-body p-2 dropdown-item rounded-xxxl d-flex">
+                <i class="fa fa-pencil-square-o text-grey-500 me-2 fw-600 font-sm"></i>
+                <h4 class="fw-600 text-grey-900 font-xsss mt-1">Update Post
+                </h4>
             </div>
             <div th:if="${currentUser.userId == item.user.userId}" th:data-postId="${item.postId}" class="delete-post card-body p-2 dropdown-item rounded-xxxl d-flex">
                 <i class="fa fa-trash-o text-grey-500 me-2 fw-600 font-sm"></i>
