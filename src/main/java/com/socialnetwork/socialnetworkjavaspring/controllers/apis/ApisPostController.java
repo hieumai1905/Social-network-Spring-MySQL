@@ -23,7 +23,7 @@ public class ApisPostController extends ApplicationController {
                                                   @RequestPart(value = "files", required = false) List<MultipartFile> files){
         try{
             return responseApi(HttpStatus.CREATED, "Create post successfully!",
-                    postService.save(request, files, currentUser));
+                    postService.save(null, request, files, currentUser));
         }catch (Exception ex){
             return responseApi(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
@@ -34,6 +34,27 @@ public class ApisPostController extends ApplicationController {
         try{
             return responseApi(HttpStatus.OK, "Delete post successfully!",
                     postService.delete(postId, currentUser.getUserId()));
+        }catch (Exception ex){
+            return responseApi(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
+    }
+
+    @PutMapping("/{postId}")
+    public ResponseEntity<ApiResponse> update(@PathVariable String postId, @ModelAttribute PostRequestDTO request,
+                                              @RequestPart(value = "files", required = false) List<MultipartFile> files){
+        try{
+            return responseApi(HttpStatus.OK, "Update post successfully!",
+                    postService.save(postId, request, files, currentUser));
+        }catch (Exception ex){
+            return responseApi(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
+    }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<ApiResponse> findById(@PathVariable String postId){
+        try{
+            return responseApi(HttpStatus.OK, "Find post by id successfully!",
+                    postService.findPostResponseById(postId));
         }catch (Exception ex){
             return responseApi(HttpStatus.BAD_REQUEST, ex.getMessage());
         }

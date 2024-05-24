@@ -29,6 +29,7 @@ function handleFiles(filesArray) {
     let index = 0;
     for (const file of filesArray) {
         files.push(file);
+        console.log(files);
         let li = document.createElement('li');
         let fileType = file.type.split('/')[0];
         let mediaContainer = document.createElement('div');

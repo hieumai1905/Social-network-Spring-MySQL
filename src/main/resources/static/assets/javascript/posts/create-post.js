@@ -1,5 +1,5 @@
 let userTags = [], selectedUser = [], searchUserTags = [];
-function createPost() {
+function savePost(postId) {
     let formData = new FormData();
     let content = $('#content').val();
     if(content.trim() === '' && (files === null || files.length === 0))
@@ -26,26 +26,34 @@ function createPost() {
         formData.append('hagTags', tag);
     });
 
+    let url = '/api/posts', type = 'POST';
+    if(postId !== ""){
+        url += `/${postId}`;
+        type = 'PUT';
+    }
+
     $.ajax({
-        url: '/api/posts',
-        type: 'POST',
+        url: url,
+        type: type,
         data: formData,
         processData: false,
         contentType: false,
         success: function(response) {
-            console.log('Post created successfully:', response);
-            if(response.code === 201) {
-                addPost(response.data);
-                clearForm();
+            console.log('Save successfully:', response);
+            if(response.code === 201 && postId === "") {
+                savePostToUI(response.data, true);
+            }else if(response.code === 200 && postId !== ""){
+                savePostToUI(response.data, false);
             }
+            clearForm();
         },
         error: function(xhr, status, error) {
-            console.error('Error creating post:', error);
+            console.error('Error save post:', error);
         }
     });
 }
 
-function addPost(post) {
+function savePostToUI(post, isNewPost) {
     const postContainer = $('#post-container');
     const userTags = post.userTags || [];
     const userTag = userTags.length > 0 ? userTags[0].fullName : '';
@@ -67,7 +75,7 @@ function addPost(post) {
     const postHtml = `
         <div id="post-${post.postId}" class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
             <div class="card-body p-0 d-flex">
-                <input type="hidden" value="${post.postId}" class="post_current_id">
+                <input type="hidden" value="${post.postId}" class="current-post-id">
                 <figure class="avatar me-3"><img src="${post.author.avatar}" alt="image" class="shadow-sm rounded-circle w45"></figure>
                 <h4 class="fw-700 text-grey-900 font-xssss mt-1">
                     <span>${post.author.fullName}</span>
@@ -88,6 +96,11 @@ function addPost(post) {
                         <i class="fa fa-eye-slash text-grey-500 me-2 fw-600 font-sm"></i>
                         <h4 class="fw-600 text-grey-900 font-xsss mt-1">Hide Post</h4>
                     </div>
+                    <div data-postId="${post.postId}" id="update-post-${post.postId}" class="card-body p-2 dropdown-item rounded-xxxl d-flex">
+                        <i class="fa fa-pencil-square-o text-grey-500 me-2 fw-600 font-sm"></i>
+                        <h4 class="fw-600 text-grey-900 font-xsss mt-1">Update Post
+                        </h4>
+                    </div>
                     <div data-postId="${post.postId}" id="delete-post-${post.postId}" class="card-body p-2 dropdown-item rounded-xxxl d-flex">
                         <i class="fa fa-trash-o text-grey-500 me-2 fw-600 font-sm"></i>
                         <h4 class="fw-600 text-grey-900 font-xsss mt-1">Delete Post</h4>
@@ -104,54 +117,62 @@ function addPost(post) {
             </div>
             <div class="card-body d-flex p-0 mt-3">
                 <a href="#"
-                   class="emoji-btn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
+                   class="emoji-btn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2 btn-like-post">
                     <span class="btn-like">
-                            <i class="feather-thumbs-up text-grey-900 me-1 btn-round-xs font-xss"></i>
-                        </span>
-                    <span class="like_count_current"></span>&nbsp;Like
+                        <i class="feather-thumbs-up text-grey-900 me-1 btn-round-xs font-xss"></i>
+                    </span>
+                    <span class="like-count"></span>&nbsp;Like
                 </a>
-                <a class="cursor-pointer btn-comment d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss border-0">
+                <a class="cursor-pointer btn-show-comment d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss border-0">
                     <i class="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg"></i>
-                    <span class="d-none-xss comment_count_current"></span>
+                    <span class="d-none-xss comment-count" count-comment-post-id="${post.postId}"></span>
                     &nbsp; Comment
                 </a>
             </div>
             <hr>
-            <div class="card-body p-0 mt-3 position-relative">
+            <div class="card-body p-0 mt-1 position-relative">
                 <figure class="avatar position-absolute ms-2 mt-1 top-5">
                     <img src="${post.author.avatar}" alt="image" class="shadow-sm rounded-circle w30">
                 </figure>
-                <textarea name="message"
-                          class="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-700 fw-500 comment_input border-light-md theme-dark-bg"
-                          cols="30" rows="5" placeholder="What's on your mind?"></textarea>
+                <textarea comment-input-post-id="${post.postId}"
+                        class="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-700 fw-500 comment-input border-light-md theme-dark-bg"
+                        cols="30" rows="5" placeholder="What's on your mind?"></textarea>
+                </textarea>
+                <input type="hidden" value="create" class="comment-type" comment-type-post-id="${post.postId}">
+                <input type="hidden" value="" id="comment-id-update">
                 <figure class="avatar position-absolute font-xssss end-0 me-3 mt-2 top-5">
                     <i class="fa fa-camera" aria-hidden="true"></i>
                 </figure>
-                <figure class="avatar position-absolute mt-5 top-5 me-3 end-0 btn-comment-post">
+                <figure class="avatar position-absolute mt-5 top-5 me-3 end-0 btn-comment">
                     <i class="fa fa-paper-plane" aria-hidden="true"></i>
                 </figure>
             </div>
         </div>`;
-    postContainer.prepend(postHtml);
+    if (isNewPost) {
+        postContainer.prepend(postHtml);
+    } else {
+        $(`#post-${post.postId}`).replaceWith(postHtml);
+    }
     $(document).on('click', `#delete-post-${post.postId}`, function() {
-        let postId = $(this).data('postid');
-        confirmToDeletePost(postId);
+        confirmToDeletePost(post.postId);
+    });
+    $(document).on('click', `#update-post-${post.postId}`, function() {
+        findPostById(post.postId);
     });
     $(document).on('click', `#save-post-${post.postId}`, function() {
-        let postId = $(this).data('postid');
-        updatePostInteract('saved', postId, $(this));
+        updatePostInteract('saved', post.postId, $(this));
     });
     $(document).on('click', `#hide-post-${post.postId}`, function() {
-        let postId = $(this).data('postid');
-        updatePostInteract('hidden', postId, $(this));
+        updatePostInteract('hidden', post.postId, $(this));
     });
+    loadComment();
 }
 
 function clearForm(){
     $('#content').val('');
     $('#access').val('PUBLIC');
     files = [];
-    selectedUser = [];
+    resetUsersTag();
     $('#file-input').val('');
     $('#file-list').empty();
     $('#createPostModal').modal('hide');
@@ -222,6 +243,14 @@ function addUserTag(user) {
     }
 }
 
+function resetUsersTag() {
+    $("#users-tag").empty();
+    for (let user of userTags)
+        user.isSelected = true;
+    displayFriendsView();
+    selectedUser = [];
+}
+
 function changeStatusUserTag(userId, status){
     userTags = userTags.map(function(u) {
         if (u.userId === userId) {
@@ -265,9 +294,7 @@ function removeUserById(userIdToRemove) {
 
 function initCreatePost(){
     getFriends();
-    $("#createPost").on("click", function () {
-        createPost();
-    });
+
     $("#search-friends").on("input", function () {
         let text = $(this).val().toLowerCase().trim();
         searchUserTags = userTags.filter(function (user) {

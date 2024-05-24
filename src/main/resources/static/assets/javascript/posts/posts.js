@@ -21,6 +21,22 @@ function registerModalEvent() {
         let createPostModalInstance = bootstrap.Modal.getInstance($createPostModal[0]);
         createPostModalInstance.show();
     });
+
+    $("#showPostModal").on("click", function () {
+        let postModal = $("#createPostModal");
+        $("#content").val("");
+        $("#file-list").empty();
+        $("#post-id").val("");
+        resetUsersTag();
+        postModal.find(".modal-title").text("Create post");
+        postModal.modal("show");
+    });
+
+    $("#createPost").on("click", function () {
+        let postId = $("#post-id").val();
+        savePost(postId);
+    });
+
     btnDeletePost = $('#btnConfirmModal');
     modalDeletePost = $('#confirmModal');
     btnDeletePost.on('click', function(e){
@@ -46,6 +62,10 @@ function registerModalEvent() {
     $('.un-hide-post').on('click', function() {
         let postId = $(this).attr('data-postId');
         deletePostInteract('hidden', postId, $(this));
+    });
+    $(".update-post").on("click", function () {
+        let postId = $(this).data("postid");
+        findPostById(postId);
     });
 }
 
@@ -79,6 +99,7 @@ function updatePostInteract(type, postId, element){
 }
 
 function switchDiv(element, isSaved, postId){
+    element.off();
     let newDiv = isSaved ?
         $('<div>', {
             'data-postId': postId,
@@ -88,7 +109,7 @@ function switchDiv(element, isSaved, postId){
         $('<div>', {
             'data-postId': postId,
             'class': `update-un-save-post-${postId} card-body p-2 dropdown-item rounded-xxxl d-flex`,
-            'html': '<i class="fa fa-bookmark text-grey-500 me-2 fw-600 font-sm"></i><h4 class="fw-600 text-grey-900 font-xsss mt-1">UnSave Post</h4>'
+            'html': '<i class="fa fa-window-close-o text-grey-500 me-2 fw-600 font-sm"></i><h4 class="fw-600 text-grey-900 font-xsss mt-1">UnSave Post</h4>'
         });
     element.replaceWith(newDiv);
     $(isSaved ? `.update-save-post-${postId}` : `.update-un-save-post-${postId}`).on("click", function () {

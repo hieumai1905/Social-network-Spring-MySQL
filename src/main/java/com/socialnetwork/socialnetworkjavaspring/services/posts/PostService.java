@@ -39,16 +39,6 @@ public class PostService extends PostGeneralService implements IPostService {
     private IPostInteractService postInteractService;
 
     @Override
-    public Optional<Post> save(Post object) {
-        return Optional.of(postRepository.save(object));
-    }
-
-    @Override
-    public Optional<Post> delete(Post object) {
-        return Optional.empty();
-    }
-
-    @Override
     public List<Post> findAllPostForNewsFeed(String userId) {
         return postRepository.findAllPostForNewsFeed(userId);
     }
@@ -67,13 +57,27 @@ public class PostService extends PostGeneralService implements IPostService {
     }
 
     @Override
-    public PostResponseDTO save(PostRequestDTO request, List<MultipartFile> files, User user) {
-        Post post = new Post();
+    public PostResponseDTO save(String postId, PostRequestDTO request, List<MultipartFile> files, User user) {
+        Post post = null;
+        List<Comment> comments = new ArrayList<>();
+        List<Like> likes = new ArrayList<>();
+        List<PostInteract> postInteracts = new ArrayList<>();
+        if(postId != null) {
+            post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found!"));
+            comments = post.getComments();
+            likes = post.getLikes();
+            postInteracts = post.getPostInteracts();
+            postRepository.delete(post);
+        }
+        post = new Post();
+        post.setPostId(postId == null ? UUID.randomUUID().toString() : postId);
         post.setPostContent(request.getContent());
         post.setPostType(request.getPostType());
         post.setAccess(request.getAccess());
-        post.setPostId(UUID.randomUUID().toString());
         post.setUser(user);
+        post.setPostInteracts(postInteracts);
+        post.setComments(comments);
+        post.setLikes(likes);
         List<UserResponseDTO> userTags = setUserTags(post, request.getUserTagIds());
         setPostHagTags(post, request.getHagTags());
         postRepository.save(post);
@@ -133,6 +137,31 @@ public class PostService extends PostGeneralService implements IPostService {
     @Override
     public Optional<Post> findById(String postId) {
         return postRepository.findById(postId);
+    }
+
+    @Override
+    public PostResponseDTO findPostResponseById(String postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new NullPointerException("Post not found!"));
+        PostResponseDTO postResponseDTO = ConvertUtils.convert(post, PostResponseDTO.class);
+        postResponseDTO.setAuthor(ConvertUtils.convert(post.getUser(), UserResponseDTO.class));
+        if(post.getMedias() != null){
+            postResponseDTO.setMedias(new ArrayList<>());
+            for (Media media : post.getMedias()) {
+                postResponseDTO.getMedias().add(media.getUrl());
+            }
+        }
+        if(post.getUserTags() != null){
+            postResponseDTO.setUserTags(new ArrayList<>());
+            for (UserTag userTag : post.getUserTags()) {
+                postResponseDTO.getUserTags().add(new UserResponseDTO(
+                        userTag.getUser().getUserId(),
+                        userTag.getUser().getFullName(),
+                        userTag.getUser().getAvatar(),
+                        null
+                ));
+            }
+        }
+        return postResponseDTO;
     }
 
     @Override
