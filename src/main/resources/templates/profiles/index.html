@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/layouts/application:: application_layout(${author} ? true : false)}" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:fragment="page_title" th:text="${user_info.fullName}"></title>
+</head>
+<body>
+<!-- main content -->
+<div th:fragment="main_content" class="main-content right-chat-active">
+    <div class="middle-sidebar-bottom">
+        <div class="middle-sidebar-left">
+            <div class="row feed-body">
+                <div class="col-lg-12 mb-3">
+                    <div class="card w-100 border-0 p-0 bg-white shadow-xss rounded-xxl">
+                        <div class="card-body h250 p-0 rounded-xxl overflow-hidden m-3">
+                            <img th:src="${user_info.coverPhoto}" class="w-100" style="max-height: 350px"
+                                 alt="image"></div>
+                        <div class="card-body p-0 position-relative">
+                            <figure class="avatar position-absolute w100 z-index-1" style="top:-40px; left: 30px;">
+                                <img th:src="${user_info.avatar}" alt="image"
+                                     class="float-right p-1 bg-white rounded-circle w-100"></figure>
+                            <h4 class="fw-700 font-sm mt-2 mb-lg-5 mb-4 pl-15" th:text="${user_info.fullName}">
+                            </h4>
+                            <div class="d-flex align-items-center justify-content-center position-absolute-md right-15 top-0 me-2">
+                                <a href="#"
+                                   class="d-none d-lg-block bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3"
+                                   th:if="${!author && !isFriend}" style="margin-right: 8px;">Add Friend</a>
+                                <a href="#"
+                                   class="d-none d-lg-block bg-grey p-3 z-index-1 rounded-3 text-grey-900 font-xsssss text-uppercase fw-700 ls-3"
+                                   th:if="${!author && isFriend}" style="margin-right: 8px;"> Cancel Friend</a>
+                                <a href="#"
+                                   class="d-none d-lg-block bg-grey p-3 z-index-1 rounded-3 text-grey-900 font-xsssss text-uppercase fw-700 ls-3"
+                                   th:if="${!author && isFollow}" th:text="UnFollow"></a>
+                                <a href="#"
+                                   class="d-none d-lg-block bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3"
+                                   th:if="${!author && !isFollow}" th:text="Follow"></a>
+                                <a href="#" id="dropdownMenu4"
+                                   class="d-none d-lg-block btn-round-lg ms-2 rounded-3 text-grey-700 bg-greylight"
+                                   data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                        class="ti-more font-md"></i></a>
+                                <div th:if="${!author}"
+                                     class="dropdown-menu dropdown-menu-end p-3 rounded-xxl border-0 shadow-lg m-1"
+                                     aria-labelledby="dropdownMenu4">
+                                    <div class="card-body p-0 d-flex mb-3">
+                                        <i class="feather-flag text-grey-500 me-3 font-lg"></i>
+                                        <a href="#" class="fw-600 text-grey-900 font-xssss mt-1 me-0">Report</a>
+                                    </div>
+                                    <div class="card-body p-0 d-flex mt-2">
+                                        <i class="feather-lock text-grey-500 me-3 font-lg"></i>
+                                        <a href="#" class="fw-600 text-grey-900 font-xssss mt-1 me-0">Block</a>
+                                    </div>
+                                </div>
+
+                                <div th:if="${author}"
+                                     class="dropdown-menu dropdown-menu-end p-3 rounded-xxl border-0 shadow-lg m-1"
+                                     aria-labelledby="dropdownMenu4">
+                                    <div class="card-body p-0 d-flex">
+                                        <i class="feather-flag text-grey-500 me-3 font-lg"></i>
+                                        <a href="#" class="fw-600 text-grey-900 font-xssss mt-1 me-0">Lock</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-xxl-3 col-lg-4 pe-0">
+                    <div class="card w-100 shadow-xss rounded-xxl border-0 mb-3">
+                        <div class="card-body d-block p-4">
+                            <h4 class="fw-700 mb-3 font-xsss text-grey-900">Intro</h4>
+                            <p class="fw-500 text-grey-500 lh-24 font-xssss mb-0"
+                               th:if="${user_info.aboutMe != null}" th:text="${user_info.aboutMe}"></p>
+                        </div>
+                        <div class="card-body border-top-xs d-flex">
+                            <i class="feather-mail text-grey-500 me-3 font-lg"></i>
+                            <h4 class="fw-700 text-grey-900 font-xssss mt-1" th:text="${user_info.email}"></h4>
+                        </div>
+                        <div class="card-body d-flex pt-0" th:if="${user_info.dob != null}">
+                            <i class="feather-calendar text-grey-500 me-3 font-lg"></i>
+                            <h4 class="fw-700 text-grey-900 font-xssss mt-0">Birthday <span
+                                    class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500"
+                                    th:text="${user_info.dob}"></span>
+                            </h4>
+                        </div>
+                        <div class="card-body d-flex pt-0" th:if="${user_info.country != null}">
+                            <i class="feather-map-pin text-grey-500 me-3 font-lg"></i>
+                            <h4 class="fw-700 text-grey-900 font-xssss mt-1" th:text="${user_info.country}"></h4>
+                        </div>
+                        <div class="card-body d-flex pt-0">
+                            <i class="feather-users text-grey-500 me-3 font-lg"></i>
+                            <h4 class="fw-700 font-xssss mt-1">
+                                <a href="/friends" class="text-grey-900">
+                                    <span th:text="${number_of_friends}" th:if="${number_of_friends >0}"></span>&nbsp;
+                                    Friends
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="card w-100 shadow-xss rounded-xxl border-0 mb-3">
+                        <div class="card-body d-flex align-items-center">
+                            <h4 class="fw-700 mb-0 font-xssss text-grey-900">Photos</h4>
+                            <a href="#" class="fw-600 ms-auto font-xssss text-primary">See all</a>
+                        </div>
+                        <div class="card-body d-block pt-0 pb-2">
+                            <div class="row m-0">
+                                <div class="col-6 mb-2" th:each="media, iterStat : ${medias}"
+                                     th:if="${iterStat.count} &lt;= 4">
+                                    <img th:src="${media.url}" alt="image" class="img-fluid rounded-3 media-profile">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- posts content-->
+                <div th:replace="~{/posts/_post::fragment-posts}"></div>
+                <!-- posts content-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- main content -->
+
+<!--    create post modal-->
+<div th:fragment="fragments">
+    <div th:replace="~{/posts/_create_post :: fragment-create-post}"></div>
+    <div th:replace="~{/posts/_tag_friends :: fragment-tag-friends}"></div>
+    <div th:replace="~{/shared/_confirm_delete_modal :: fragment-comfirm-delete}"></div>
+</div>
+<!--    create post modal-->
+</body>
+</html>

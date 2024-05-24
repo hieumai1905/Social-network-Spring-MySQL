@@ -17373,3 +17373,10 @@ select.sort {
     text-decoration: underline;
     font-weight: bold;
 }
+
+.media-profile{
+    max-width: 120px;
+    max-height: 120px;
+    width: 120px;
+    height: 120px;
+}
