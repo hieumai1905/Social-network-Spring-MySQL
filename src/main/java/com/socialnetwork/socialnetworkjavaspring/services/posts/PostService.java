@@ -12,6 +12,7 @@ import com.socialnetwork.socialnetworkjavaspring.repositories.IPostRepository;
 import com.socialnetwork.socialnetworkjavaspring.repositories.IUserRepository;
 import com.socialnetwork.socialnetworkjavaspring.services.likes.ILikeService;
 import com.socialnetwork.socialnetworkjavaspring.services.medias.IMediaService;
+import com.socialnetwork.socialnetworkjavaspring.services.post_interacts.IPostInteractService;
 import com.socialnetwork.socialnetworkjavaspring.utils.ConvertUtils;
 import com.socialnetwork.socialnetworkjavaspring.utils.DateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class PostService extends PostGeneralService implements IPostService {
 
     @Autowired
     private ILikeService likeService;
+
+    @Autowired
+    private IPostInteractService postInteractService;
 
     @Override
     public Optional<Post> save(Post object) {
@@ -132,7 +136,11 @@ public class PostService extends PostGeneralService implements IPostService {
         List<Post> posts = postRepository.findPostByInteractType(String.valueOf(interactType), userId);
         posts.forEach(post -> {
             boolean isLiked = likeService.existsByPostIdAndUserId(post.getPostId(), userId);
+            PostInteract savedPostInteract = postInteractService.checkExistPostInteract(post, InteractType.SAVED, userId);
+            PostInteract hiddenPostInteract = postInteractService.checkExistPostInteract(post, InteractType.HIDDEN, userId);
             post.setLiked(isLiked);
+            post.setSaved(savedPostInteract != null);
+            post.setHidden(hiddenPostInteract != null);
             setLikedStatusForCommentsAndReplies(post, userId);
             sortCommentsAndReplies(post);
         });

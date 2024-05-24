@@ -85,7 +85,7 @@ function addPost(post) {
                         <h4 class="fw-600 text-grey-900 font-xsss mt-1">Save Post</h4>
                     </div>
                     <div data-postId="${post.postId}" id="hide-post-${post.postId}" class="card-body p-2 dropdown-item rounded-xxxl d-flex">
-                        <i class="feather-alert-circle text-grey-500 me-2 fw-600 font-sm"></i>
+                        <i class="fa fa-eye-slash text-grey-500 me-2 fw-600 font-sm"></i>
                         <h4 class="fw-600 text-grey-900 font-xsss mt-1">Hide Post</h4>
                     </div>
                     <div data-postId="${post.postId}" id="delete-post-${post.postId}" class="card-body p-2 dropdown-item rounded-xxxl d-flex">
@@ -139,11 +139,11 @@ function addPost(post) {
     });
     $(document).on('click', `#save-post-${post.postId}`, function() {
         let postId = $(this).data('postid');
-        updatePostInteract('saved', postId);
+        updatePostInteract('saved', postId, $(this));
     });
     $(document).on('click', `#hide-post-${post.postId}`, function() {
         let postId = $(this).data('postid');
-        updatePostInteract('hidden', postId);
+        updatePostInteract('hidden', postId, $(this));
     });
 }
 

@@ -10,7 +10,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "posts")
@@ -35,6 +34,12 @@ public class Post {
 
     @Transient
     private boolean isMyPost;
+
+    @Transient
+    private boolean isSaved;
+
+    @Transient
+    private boolean isHidden;
 
     @Column(name = "access", nullable = false)
     @Enumerated(EnumType.STRING)

@@ -1,7 +1,10 @@
 package com.socialnetwork.socialnetworkjavaspring.services.new_feeds;
 
 import com.socialnetwork.socialnetworkjavaspring.models.Post;
+import com.socialnetwork.socialnetworkjavaspring.models.PostInteract;
+import com.socialnetwork.socialnetworkjavaspring.models.enums.InteractType;
 import com.socialnetwork.socialnetworkjavaspring.services.likes.ILikeService;
+import com.socialnetwork.socialnetworkjavaspring.services.post_interacts.IPostInteractService;
 import com.socialnetwork.socialnetworkjavaspring.services.posts.IPostService;
 import com.socialnetwork.socialnetworkjavaspring.services.posts.PostGeneralService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +20,20 @@ public class NewsFeedService extends PostGeneralService implements INewsFeedServ
     @Autowired
     private ILikeService likeService;
 
+    @Autowired
+    private IPostInteractService postInteractService;
+
 
     @Override
     public List<Post> getNewsFeed(String userId) {
         List<Post> posts = postService.findAllPostForNewsFeed(userId);
         posts.forEach(post -> {
             boolean isLiked = likeService.existsByPostIdAndUserId(post.getPostId(), userId);
+            PostInteract savedPostInteract = postInteractService.checkExistPostInteract(post, InteractType.SAVED, userId);
+//            PostInteract hiddenPostInteract = postInteractService.checkExistPostInteract(post, InteractType.HIDDEN, userId);
             post.setLiked(isLiked);
+            post.setSaved(savedPostInteract != null);
+//            post.setHidden(hiddenPostInteract != null);
             setLikedStatusForCommentsAndReplies(post, userId);
             sortCommentsAndReplies(post);
         });

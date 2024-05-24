@@ -29,4 +29,20 @@ public class ApisPostInteractController extends ApplicationController {
             return responseApi(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+
+    @DeleteMapping
+    public ResponseEntity<ApiResponse> delete(@PathVariable("interact-type") String type,
+                          @PathVariable("post-id") String postId){
+        try {
+            InteractType interactType = InteractType.valueOf(type.toUpperCase());
+            postInteractService.deletePostInteract(interactType, postId, currentUser);
+            String message = interactType.equals(InteractType.SAVED) ? "UnSave post successfully!"
+                    : "UnHidden post successfully!";
+            return responseApi(HttpStatus.NO_CONTENT, message);
+        }catch (IllegalArgumentException e) {
+            return responseApi(HttpStatus.BAD_REQUEST, "Invalid interact type!");
+        }catch (Exception e) {
+            return responseApi(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
 }
