@@ -8,8 +8,11 @@ import com.socialnetwork.socialnetworkjavaspring.services.IGeneralService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IUserService extends IGeneralService<User, String>, UserDetailsService {
     SearchPeopleResponseDTO findByFullNameLikeIgnoreCaseAndAccents(SearchPeopleRequestDTO request, String userId);
     List<User> findUsersByRelationType(String userId, RelationType type);
+
+    User findById(String userId) throws Exception;
 }

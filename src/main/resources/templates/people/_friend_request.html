@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<div th:fragment="fragment_friend_request" class="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
+    <div class="card w-100 shadow-xss rounded-xxl border-0 mb-3" id="request-friend-container">
+        <div class="card-body d-flex align-items-center p-4"
+             style="border-bottom: #f1f1f1 1px solid;">
+            <h4 class="fw-700 mb-0 font-xssss text-grey-900">Friend Request</h4>&nbsp;
+            <span class="circle-count font-xssss bg-warning mt-0 text-white rounded ps-1 pe-1"
+                  th:if="${requestsFriend.size() >0}" th:text="${requestsFriend.size()}"
+                  id="request-friend-count"></span>
+            <a th:href="@{default-member.html}" class="fw-600 ms-auto font-xssss text-primary">See
+                all</a>
+        </div>
+        <div class="block request-friend" th:each="request: ${requestsFriend}" th:if="${requestStat.count <= 2}"
+             th:attr="data-request-id=${request.user.userId}">
+            <div class="card-body d-flex ps-4 pe-4 pb-0 bor-0">
+                <figure class="avatar me-3">
+                    <img th:src="${request.user.avatar}" alt="image" class="shadow-sm rounded-circle w45">
+                </figure>
+                <div class="flex-column">
+                    <div class="d-flex">
+                        <h3 class="fw-700 text-grey-900 font-xssss mt-1">
+                            <a class="fw-700 text-grey-900 font-xssss mt-1"
+                               th:href="'profile?id=' + ${request.user.userId}"
+                               th:text="${request.user.fullName}">
+                            </a>
+                        </h3>
+                        <p class="d-block font-xssss fw-500 mb-1 ms-1 lh-1 text-grey-500 createAtSpan"
+                           th:data-createAt="${request.setAt}"></p>
+                    </div>
+                    <p class="d-block font-xssss fw-500 lh-1 text-grey-500"
+                       th:if="${request.mutualFriendCount >0}"
+                       th:text="${request.mutualFriendCount} + ' mutual friends'"></p>
+                </div>
+            </div>
+            <div class="card-body d-flex align-items-center pt-0 ps-4 pe-4 border-bottom">
+                <a href="#"
+                   class="p-2 lh-20 w100 bg-primary me-2 text-white text-center font-xsss fw-600 ls-1 rounded-xl"
+                   th:attr="data-request-id=${request.user.userId}"
+                   onclick="confirmRequest(this)">Confirm</a>
+                <a href="#"
+                   class="p-2 lh-20 w100 bg-grey text-grey-800 text-center font-xsss fw-600 ls-1 rounded-xl"
+                   th:attr="data-request-id=${request.user.userId}"
+                   onclick="deleteRequest(this)">Delete</a>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/assets/javascript/relations/relation-handle.js}"></script>
+</div>
+</body>
+</html>
