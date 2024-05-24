@@ -1,14 +1,14 @@
-let btnDeletePost = null, modalDeletePost = null;
+let btnConfirmDeletePost = null, modalConfirmDeletePost = null;
 function confirmToDeletePost(postId){
-    btnDeletePost = $('#btnConfirmModal');
-    modalDeletePost = $('#confirmModal');
-    modalDeletePost.find('.modal-title').text("Delete Post");
-    modalDeletePost.find('.modal-body').text("Are you sure to delete this post?");
-    modalDeletePost.find('#btnCancelModal').show().text("Cancel");
-    modalDeletePost.modal('show');
-    btnDeletePost.attr('data-postId', postId);
-    btnDeletePost.attr('data-action', 'delete-post');
-    btnDeletePost.text('Delete');
+    btnConfirmDeletePost = $('#btnConfirmModal');
+    modalConfirmDeletePost = $('#confirmModal');
+    modalConfirmDeletePost.find('.modal-title').text("Delete Post");
+    modalConfirmDeletePost.find('.modal-body').text("Are you sure to delete this post?");
+    modalConfirmDeletePost.find('#btnCancelModal').show().text("Cancel");
+    modalConfirmDeletePost.modal('show');
+    btnConfirmDeletePost.attr('data-postId', postId);
+    btnConfirmDeletePost.attr('data-action', 'delete-post');
+    btnConfirmDeletePost.text('Delete');
 }
 
 function deletePost(postId){
@@ -19,7 +19,7 @@ function deletePost(postId){
             if(response.code === 200) {
                 $('#post-' + postId).remove();
             }
-            modalDeletePost.modal('hide');
+            modalConfirmDeletePost.modal('hide');
         },
         error: function(xhr) {
             alert('Error: ' + xhr.responseText);
