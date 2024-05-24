@@ -2,7 +2,7 @@ let userTags = [], selectedUser = [], searchUserTags = [];
 function createPost() {
     let formData = new FormData();
     let content = $('#content').val();
-    if(content.trim() === '')
+    if(content.trim() === '' && (files === null || files.length === 0))
         return;
 
     formData.append('access', $('#access').val());
