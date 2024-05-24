@@ -76,7 +76,7 @@ public class UserService implements IUserService {
                     )
             ));
         }
-        return new SearchPeopleResponseDTO(request.getPageIndex(),request.getPageSize(), users.getTotalElements(),
+        return new SearchPeopleResponseDTO(request.getPageIndex(), request.getPageSize(), users.getTotalElements(),
                 userResponses);
     }
 
@@ -85,10 +85,15 @@ public class UserService implements IUserService {
         return userRepository.findUsersByRelationType(userId, type.toString());
     }
 
+    @Override
+    public User findById(String userId) throws Exception {
+        return userRepository.findById(userId).orElseThrow(() -> new Exception("User not found"));
+    }
+
     private Boolean isFriendWithCurrentUser(List<Relation> relations, String userId) {
-        if(relations != Constants.NULL_OBJECT && relations.size() > Constants.NUMBER_ZERO){
+        if (relations != Constants.NULL_OBJECT && relations.size() > Constants.NUMBER_ZERO) {
             for (Relation relation : relations) {
-                if(relation.getUserTarget().getUserId().equals(userId)
+                if (relation.getUserTarget().getUserId().equals(userId)
                         && relation.getType().equals(RelationType.FRIEND))
                     return true;
             }

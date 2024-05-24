@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Optional;
 
 @Entity
 @Table(name = "relations")
@@ -36,6 +37,12 @@ public class Relation {
     @ManyToOne
     @JoinColumn(name = "user_target_id")
     private User userTarget;
+
+    public Relation(RelationType type, User user, User userTarget) {
+        this.type = type;
+        this.user = user;
+        this.userTarget = userTarget;
+    }
 
     @PrePersist
     public void prePersist() {
