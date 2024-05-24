@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<div class="col-xl-4 col-xxl-3 col-lg-4 pe-0" th:fragment="fragment-infomation">
+    <div class="card w-100 shadow-xss rounded-xxl border-0 mb-3">
+        <div class="card-body d-block p-4">
+            <h4 class="fw-700 mb-3 font-xsss text-grey-900">Intro</h4>
+            <p class="fw-500 text-grey-500 lh-24 font-xssss mb-0"
+               th:if="${user_info.aboutMe != null}" th:text="${user_info.aboutMe}"></p>
+        </div>
+        <div class="card-body border-top-xs d-flex">
+            <i class="feather-mail text-grey-500 me-3 font-lg"></i>
+            <h4 class="fw-700 text-grey-900 font-xssss mt-1" th:text="${user_info.email}"></h4>
+        </div>
+        <div class="card-body d-flex pt-0" th:if="${user_info.dob != null}">
+            <i class="feather-calendar text-grey-500 me-3 font-lg"></i>
+            <h4 class="fw-700 text-grey-900 font-xssss mt-0">Birthday <span
+                    class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500"
+                    th:text="${user_info.dob}"></span>
+            </h4>
+        </div>
+        <div class="card-body d-flex pt-0" th:if="${user_info.country != null}">
+            <i class="feather-map-pin text-grey-500 me-3 font-lg"></i>
+            <h4 class="fw-700 text-grey-900 font-xssss mt-1" th:text="${user_info.country}"></h4>
+        </div>
+        <div class="card-body d-flex pt-0">
+            <i class="feather-users text-grey-500 me-3 font-lg"></i>
+            <h4 class="fw-700 font-xssss mt-1">
+                <a href="/friends" class="text-grey-900">
+                    <span th:text="${number_of_friends}" th:if="${number_of_friends >0}"></span>&nbsp;
+                    Friends
+                </a>
+            </h4>
+        </div>
+    </div>
+    <div class="card w-100 shadow-xss rounded-xxl border-0 mb-3">
+        <div class="card-body d-flex align-items-center">
+            <h4 class="fw-700 mb-0 font-xssss text-grey-900">Photos</h4>
+            <a href="#" class="fw-600 ms-auto font-xssss text-primary">See all</a>
+        </div>
+        <div class="card-body d-block pt-0 pb-2">
+            <div class="row m-0">
+                <div class="col-6 mb-2" th:each="media, iterStat : ${medias}"
+                     th:if="${iterStat.count} &lt;= 4">
+                    <a th:href="@{${media.url}}">
+                        <img th:src="@{${media.url}}" alt="image"
+                             class="img-fluid rounded-3 media-profile">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
