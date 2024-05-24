@@ -21,4 +21,8 @@ public interface IPostService extends IGeneralService<Post, String> {
     List<Post> findPostByInteractType(InteractType interactType, String userId);
 
     String delete(String postId, String userId);
+
+    List<Post> findAllPostForProfileOther(String userId, Boolean isFriend);
+
+    List<Post> findAllPostForProfileMe(String userId);
 }

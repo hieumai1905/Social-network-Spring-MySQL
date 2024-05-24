@@ -4,8 +4,7 @@
 <nav th:fragment="fragment-siderbar" class="navigation scroll-bar">
     <div class="container ps-0 pe-0">
         <div class="nav-content">
-            <div
-                    class="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2 mt-2">
+            <div class="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2 mt-2">
                 <div class="nav-caption fw-600 font-xssss text-grey-500">
                     <span>New </span>Feeds
                 </div>
@@ -18,18 +17,22 @@
                     </li>
                     <li>
                         <a th:href="@{/posts/saved}" class="nav-content-bttn open-font">
-                            <i class="feather-save btn-round-md bg-gold-gradiant me-3"></i><span>Posts Save</span></a>
+                            <i class="feather-save btn-round-md bg-gold-gradiant me-3"></i>
+                            <span>Posts Save</span>
+                        </a>
                     </li>
                     <li>
                         <a th:href="@{/posts/hidden}"
                            class="nav-content-bttn open-font">
                             <i class="feather-eye-off btn-round-md bg-mini-gradiant me-3"></i>
-                            <span>Posts Hidden</span></a>
+                            <span>Posts Hidden</span>
+                        </a>
                     </li>
                     <li>
-                        <a th:href="@{/profile.me}" class="nav-content-bttn open-font">
+                        <a th:href="@{/profile(user-id=${currentUser.userId})}" class="nav-content-bttn open-font">
                             <i class="feather-user font-lg bg-primary btn-round-md text-white me-3"></i>
-                            <span>Author Profile </span></a>
+                            <span>Author Profile</span>
+                        </a>
                     </li>
                 </ul>
             </div>

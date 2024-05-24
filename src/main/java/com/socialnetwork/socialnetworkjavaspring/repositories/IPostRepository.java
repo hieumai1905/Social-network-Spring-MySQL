@@ -54,4 +54,64 @@ public interface IPostRepository extends JpaRepository<Post, String> {
             "                    WHERE pi.type = :interactType " +
             "                    AND pi.user_id = :userId)", nativeQuery = true)
     List<Post> findPostByInteractType(String interactType, String userId);
+
+    @Query(value = "SELECT p.* " +
+            "FROM posts p " +
+            "WHERE (p.user_id = :userId OR p.post_id IN " +
+            "(SELECT ut.post_id FROM user_tags ut WHERE ut.user_id = :userId)) " +
+            "  AND NOT EXISTS (SELECT 1 " +
+            "                  FROM post_interacts pi " +
+            "                  WHERE pi.user_id = :userId " +
+            "                    AND (pi.type = 'HIDDEN') " +
+            "                    AND pi.post_id = p.post_id) " +
+            "UNION " +
+            "SELECT p.* " +
+            "FROM posts p " +
+            "WHERE p.post_id IN (SELECT s.post_id " +
+            "                    FROM post_interacts s " +
+            "                    WHERE s.user_id = :userId " +
+            "                    AND s.type = 'SHARED') " +
+            "ORDER BY create_at DESC", nativeQuery = true)
+    List<Post> findAllByUserCurrent(String userId);
+
+    @Query(value = "SELECT * FROM (" +
+            "SELECT p.* " +
+            "FROM posts p " +
+            "WHERE (p.user_id = :userId OR p.post_id IN " +
+            "(SELECT ut.post_id FROM user_tags ut WHERE ut.user_id = :userId)) " +
+            "AND NOT EXISTS (SELECT 1 " +
+            "               FROM post_interacts pi " +
+            "               WHERE pi.user_id = :userId " +
+            "               AND (pi.type = 'HIDDEN') " +
+            "               AND pi.post_id = p.post_id) " +
+            "AND p.access = 'PUBLIC'" +
+            "UNION " +
+            "SELECT p.* " +
+            "FROM posts p " +
+            "WHERE p.post_id IN (SELECT s.post_id " +
+            "                    FROM post_interacts s " +
+            "                    WHERE s.user_id = :userId " +
+            "                    AND s.type = 'SHARED')) AS subquery " +
+            "ORDER BY subquery.create_at DESC", nativeQuery = true)
+    List<Post> findAllByUser(String userId);
+
+    @Query(value = "SELECT p.* " +
+            "FROM posts p " +
+            "WHERE (p.user_id = :userId OR p.post_id IN " +
+            "(SELECT ut.post_id FROM user_tags ut WHERE ut.user_id = :userId)) " +
+            "AND NOT EXISTS (SELECT 1 " +
+            "               FROM post_interacts pi " +
+            "               WHERE pi.user_id = :userId " +
+            "               AND (pi.type = 'HIDDEN') " +
+            "               AND pi.post_id = p.post_id) " +
+            "AND (p.access = 'PUBLIC' OR p.access = 'FRIEND') " +
+            "UNION " +
+            "SELECT p.* " +
+            "FROM posts p " +
+            "WHERE p.post_id IN (SELECT s.post_id " +
+            "                    FROM post_interacts s " +
+            "                    WHERE s.user_id = :userId " +
+            "                    AND s.type = 'SHARED') " +
+            "ORDER BY create_at DESC", nativeQuery = true)
+    List<Post> findAllByUserFriend(String userId);
 }

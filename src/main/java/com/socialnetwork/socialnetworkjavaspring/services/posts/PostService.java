@@ -54,6 +54,19 @@ public class PostService extends PostGeneralService implements IPostService {
     }
 
     @Override
+    public List<Post> findAllPostForProfileMe(String userId) {
+        return postRepository.findAllByUserCurrent(userId);
+    }
+
+    @Override
+    public List<Post> findAllPostForProfileOther(String userId, Boolean isFriend) {
+        if (isFriend)
+            return postRepository.findAllByUserFriend(userId);
+
+        return postRepository.findAllPostForNewsFeed(userId);
+    }
+
+    @Override
     public PostResponseDTO save(PostRequestDTO request, List<MultipartFile> files, User user) {
         Post post = new Post();
         post.setPostContent(request.getContent());

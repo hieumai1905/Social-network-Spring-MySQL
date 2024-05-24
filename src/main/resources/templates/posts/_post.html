@@ -3,7 +3,9 @@
 <body>
 <div th:fragment="fragment-posts" class="col-xl-8 col-xxl-9 col-lg-8">
     <!-- create post block here-->
-    <div th:replace="~{/posts/_header_create::fragment-new-post}"></div>
+    <div th:if="${#strings.isEmpty(author)} or ${author}">
+        <div th:replace="~{/posts/_header_create::fragment-new-post}"></div>
+    </div>
     <!-- create post block here-->
 
     <!-- post here-->
@@ -11,7 +13,7 @@
         <div th:replace="~{/posts/_posts::fragment-post-list}"></div>
     </div>
     <!-- post here-->
-    <div class="card w-100 text-center shadow-xss rounded-xxl border-0 p-4 mb-3 mt-3">
+    <div class="card w-100 text-center shadow-xss rounded-xxl border-0 p-4 mb-3 mt-3" th:if="${posts.size() > 0}">
         <div class="snippet mt-2 ms-auto me-auto" data-title=".dot-typing">
             <div class="stage">
                 <div class="dot-typing"></div>
