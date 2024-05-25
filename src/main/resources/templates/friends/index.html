@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/layouts/application:: application_layout(false)}" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:fragment="page_title">Friends</title>
+</head>
+<body>
+<!-- main content -->
+<div th:fragment="main_content" class="main-content right-chat-active">
+    <div class="middle-sidebar-bottom">
+        <div class="middle-sidebar-left">
+            <div class="col-xl-12">
+                <div class="card shadow-xss w-100 d-block d-flex border-0 p-4 mb-3">
+                    <div class="card-body d-flex align-items-center p-0">
+                        <h2 class="fw-700 mb-0 mt-0 font-md text-grey-900">Friends</h2>
+                        <div class="search-form-2 ms-auto">
+                            <i class="ti-search font-xss"></i>
+                            <input type="text"
+                                   class="form-control text-grey-500 mb-0 bg-greylight theme-dark-bg border-0"
+                                   placeholder="Search here.">
+                        </div>
+                    </div>
+                </div>
+                <div class="row ps-2 pe-2">
+                    <div th:replace="~{/friends/_user::fragment-friend-list}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- main content -->
+</body>
+</html>

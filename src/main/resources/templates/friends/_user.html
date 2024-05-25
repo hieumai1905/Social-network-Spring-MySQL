@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<div th:fragment="fragment-friend-list" class="col-md-6 col-sm-6 pe-2 ps-2" th:each="user: ${friends}">
+    <div class="card d-block border-0 shadow-xss rounded-3 mb-3">
+        <div class="card-body w-100 row">
+            <div class="col-md-2 col-sm-2">
+                <figure class="avatar position-relative w65 ">
+                    <img th:src="${user.avatar}" alt="image"
+                         class="float-right p-0 bg-white rounded-circle w-100 shadow-xss">
+                </figure>
+            </div>
+            <div class="col-md-8 col-sm-8 mt-2">
+                <a th:href="@{/profile(user-id=${user.userId})}" class="fw-700 font-xsss text-dark"
+                   th:text="${user.fullName}"></a>
+                <p class="fw-500 font-xsssss text-grey-500 mt-0 mb-3" th:if="${user.mutualFriendCount >0}"
+                   th:text="${user.mutualFriendCount} + ' mutual friends'"></p>
+            </div>
+            <div class="col-md-2 col-sm-2 mt-2">
+                <a href="#" class="ms-3" th:unless="${user.isFriend}">
+                    <i class="fa fa-user-plus text-white bg-primary btn-round-md bg-greylight font-xss"></i>
+                </a>
+                <a href="#" class="ms-3" th:if="${user.isRequested}">
+                    <i class="fa fa-user-times text-white bg-primary btn-round-md bg-greylight font-xss"></i>
+                </a>
+                <a href="#" class="ms-3" th:id="'dd-friend-' + ${user.userId}"
+                   data-bs-toggle="dropdown" th:if="${user.isFriend}"
+                   aria-expanded="false">
+                    <i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i>
+                </a>
+                <div class="dropdown-menu p-1 rounded-xxxl cursor-pointer border-0 shadow-lg"
+                     th:aria-labelledby="'dd-friend-' + ${user.userId}" th:if="${user.isFriend}">
+                    <div class="card-body p-1 dropdown-item rounded-xxxl d-flex"
+                         th:unless="${user.isFollowing}">
+                        <i class="fa fa-plus-square font-lg mt-1 ms-2" aria-hidden="true"></i>
+                        <h4 class="fw-600 text-grey-900 font-xsss mt-2 ms-2 fw-bold">Follow</h4>
+                    </div>
+                    <div class="card-body p-1 dropdown-item rounded-xxxl d-flex"
+                         th:if="${user.isFollowing}">
+                        <i class="fa fa-window-close font-sm mt-1 ms-2" aria-hidden="true"></i>
+                        <h4 class="fw-600 text-grey-900 font-xsss mt-2 ms-2 fw-bold">Unfollow</h4>
+                    </div>
+
+                    <div class="card-body p-1 dropdown-item rounded-xxxl d-flex" th:if="${user.isFriend}">
+                        <i class="fa fa-user-times font-sm mt-1 ms-2" aria-hidden="true"></i>
+                        <h4 class="fw-600 text-grey-900 font-xsss mt-2 ms-2 fw-bold">Unfriend</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
