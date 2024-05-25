@@ -8,6 +8,7 @@ import com.socialnetwork.socialnetworkjavaspring.models.enums.RelationType;
 import com.socialnetwork.socialnetworkjavaspring.services.IGeneralService;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IRelationService extends IGeneralService<Relation, Long> {
 
