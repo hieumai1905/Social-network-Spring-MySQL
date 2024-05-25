@@ -269,7 +269,7 @@
         </div>
     </div>
     <a th:href="@{/}" class="p-0 ms-3 menu-icon">
-        <img th:src="@{/assets/images/profile-4.png}" alt="user" class="w40 mt--1"/></a>
+        <img th:src="@{${currentUser.avatar}}" alt="user" class="custom-avatar-50 rounded-circle current-user-avatar mt--1"/></a>
 </div>
 </body>
 </html>

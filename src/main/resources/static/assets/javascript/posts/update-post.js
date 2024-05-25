@@ -1,4 +1,3 @@
-
 function findPostById(postId){
     $.ajax({
         url: '/api/posts/' + postId,
@@ -39,10 +38,9 @@ function displayMediaToUI(response) {
     postModal.modal('show');
     const medias = response.data.medias;
     const filePromises = medias.map(media => {
-        const url = '/assets/files-upload/' + media;
-        return createBlobFromUrl(url)
+        return createBlobFromUrl(media)
             .then(blob => {
-                const fileName = extractFileNameFromUrl(url);
+                const fileName = extractFileNameFromUrl(media);
                 return blobToFile(blob, fileName);
             })
             .catch(error => {

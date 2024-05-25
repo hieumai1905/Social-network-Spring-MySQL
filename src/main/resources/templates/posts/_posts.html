@@ -6,7 +6,7 @@
     <div class="card-body p-0 d-flex">
         <input type="hidden" th:value="${item.postId}" class="current-post-id">
         <figure class="avatar me-3"><img th:src="${item.user.avatar}" alt="image"
-                                         class="shadow-sm rounded-circle w45"></figure>
+                                         class="shadow-sm rounded-circle custom-avatar-50 current-user-avatar"></figure>
         <h4 class="fw-700 text-grey-900 font-xssss mt-1">
             <span th:text="${item.user.fullName}"></span>
             <span th:if="${not #lists.isEmpty(item.userTags)}">
@@ -60,7 +60,7 @@
                 <a th:href="${image.url}" data-lightbox="roadtrip"
                    th:if="${iterStat.count} <= 3"
                    th:classappend="${iterStat.count} == 3 and ${item.medias.size()} > 3 ? 'position-relative d-block' : ''">
-                    <img th:src="@{'/assets/files-upload/' + ${image.url}}" class="rounded-3 w-100" alt="image">
+                    <img th:src="@{${image.url}}" class="rounded-3 w-100" alt="image">
                     <span th:if="${iterStat.count == 3 and item.medias.size() > 3}"
                           class="img-count font-sm text-white ls-3 fw-600">
                         <b>+[[${item.medias.size() - 3}]]</b>

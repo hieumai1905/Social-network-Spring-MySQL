@@ -22,7 +22,7 @@ public class SearchController extends ApplicationController{
             return handleSearchPeople(q);
         else if(type.equals(Constants.SEARCH_TYPE_POST))
             return handleSearchPosts();
-        return null;
+        return new ModelAndView("/errors/404");
     }
 
     private ModelAndView handleSearchPosts() {
@@ -35,6 +35,6 @@ public class SearchController extends ApplicationController{
                 .findByFullNameLikeIgnoreCaseAndAccents(new SearchPeopleRequestDTO(q), currentUser.getUserId());
         modelAndView.addObject("users", searchPeopleResponseDTO.getUserResponses());
         modelAndView.addObject("search_value", q);
-        return modelAndView;
+        return setAuthor(modelAndView);
     }
 }

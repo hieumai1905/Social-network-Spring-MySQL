@@ -5,6 +5,7 @@ import com.socialnetwork.socialnetworkjavaspring.DTOs.posts.PostResponseDTO;
 import com.socialnetwork.socialnetworkjavaspring.DTOs.users.UserResponseDTO;
 import com.socialnetwork.socialnetworkjavaspring.models.*;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.InteractType;
+import com.socialnetwork.socialnetworkjavaspring.models.enums.PostType;
 import com.socialnetwork.socialnetworkjavaspring.models.key.PostHashtagId;
 import com.socialnetwork.socialnetworkjavaspring.models.key.UserTagId;
 import com.socialnetwork.socialnetworkjavaspring.repositories.IHashtagRepository;
@@ -13,9 +14,13 @@ import com.socialnetwork.socialnetworkjavaspring.repositories.IUserRepository;
 import com.socialnetwork.socialnetworkjavaspring.services.likes.ILikeService;
 import com.socialnetwork.socialnetworkjavaspring.services.medias.IMediaService;
 import com.socialnetwork.socialnetworkjavaspring.services.post_interacts.IPostInteractService;
+import com.socialnetwork.socialnetworkjavaspring.services.sessions.SessionService;
 import com.socialnetwork.socialnetworkjavaspring.utils.ConvertUtils;
 import com.socialnetwork.socialnetworkjavaspring.utils.DateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,6 +42,12 @@ public class PostService extends PostGeneralService implements IPostService {
 
     @Autowired
     private IPostInteractService postInteractService;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    private SessionService sessionService;
 
     @Override
     public List<Post> findAllPostForNewsFeed(String userId) {
@@ -83,7 +94,7 @@ public class PostService extends PostGeneralService implements IPostService {
         postRepository.save(post);
 
         List<String> medias = mediaService.saveList(files, post.getPostId(), user.getUserId());
-
+        changeUserPhoto(request, user, medias);
         PostResponseDTO postResponseDTO = ConvertUtils.convert(post, PostResponseDTO.class);
         postResponseDTO.setCreateAt(DateTimeUtils.dateToString(new Date(), DateTimeUtils.FORMAT_DATE_TIME5,
                 DateTimeUtils.TIMEZONE_VN));
@@ -92,6 +103,28 @@ public class PostService extends PostGeneralService implements IPostService {
         postResponseDTO.setAuthor(ConvertUtils.convert(user, UserResponseDTO.class));
 
         return postResponseDTO;
+    }
+
+    private void changeUserPhoto(PostRequestDTO request, User user, List<String> medias) {
+        if(request.getPostType() != null && !request.getPostType().equals(PostType.POST)){
+            User existingUser = userRepository.findById(user.getUserId()).orElseThrow(() -> new NullPointerException("User not found!"));
+            if(request.getPostType().equals(PostType.CHANGE_AVATAR)) {
+                existingUser.setAvatar(medias.get(0));
+                user.setAvatar(medias.get(0));
+            }
+            else if(request.getPostType().equals(PostType.CHANGE_COVER)) {
+                existingUser.setCoverPhoto(medias.get(0));
+                user.setCoverPhoto(medias.get(0));
+            }
+            userRepository.save(existingUser);
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            existingUser.getEmail(),
+                            existingUser.getPassword()
+                    )
+            );
+            sessionService.login(authentication);
+        }
     }
 
     private List<UserResponseDTO> setUserTags(Post post, List<String> userTagIds) {

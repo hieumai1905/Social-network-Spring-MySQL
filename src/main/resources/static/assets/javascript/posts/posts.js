@@ -26,6 +26,7 @@ function registerModalEvent() {
         let postModal = $("#createPostModal");
         $("#content").val("");
         $("#file-list").empty();
+        files = [];
         $("#post-id").val("");
         resetUsersTag();
         postModal.find(".modal-title").text("Create post");

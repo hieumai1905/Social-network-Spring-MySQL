@@ -34,7 +34,7 @@ public class MediaService implements IMediaService{
             if (!file.isEmpty()) {
                 String fileName = file.getOriginalFilename();
                 try {
-                    File destFile = new File(CONTEXT_PATH_DIR + UPLOAD_DIR + File.separator + userId + File.separator + fileName);
+                    File destFile = new File(CONTEXT_PATH_DIR + UPLOAD_DIR + File.separator + fileName);
                     destFile.getParentFile().mkdirs();
                     file.transferTo(destFile);
 
@@ -49,7 +49,7 @@ public class MediaService implements IMediaService{
                     }
 
                     Media media = new Media();
-                    media.setUrl(userId + Constants.FILE_SEPARATOR + fileName);
+                    media.setUrl("/assets/files-upload" + Constants.FILE_SEPARATOR + fileName);
                     media.setPost(new Post());
                     media.getPost().setPostId(postId);
                     media.setType(mediaType);

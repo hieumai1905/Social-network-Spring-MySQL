@@ -195,7 +195,7 @@ function handleCreatCommentSuccess(data, index, postId) {
     <div class="comment" data-comment-id="${data.commentId}">
         <div class="card-body p-0 d-flex">
             <figure class="avatar me-3">
-                <img src="${currentUserAvatar}" alt="image" class="shadow-sm rounded-circle w45"></figure>
+                <img src="${currentUserAvatar}" alt="image" class="shadow-sm rounded-circle custom-avatar-50"></figure>
             <div class="bg-comment rounded-xxxl px-2">
                 <h4 class="fw-700 text-grey-900 font-xssss mt-2">${currentUserName}</h4>
                 <p>${data.content}</p>
