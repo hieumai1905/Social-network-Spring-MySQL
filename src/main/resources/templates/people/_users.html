@@ -5,12 +5,12 @@
   <div class="card d-block border-0 shadow-xss rounded-3 overflow-hidden mb-3">
     <div class="card-body w-100 ps-3 pb-4 row">
       <div class="col-md-1">
-        <figure class="avatar ms-auto me-auto mb-0 w65 z-index-1">
-          <img th:src="${user.avatar}" alt="image" class="float-right p-0 bg-white rounded-circle w-100 shadow-xss">
+        <figure class="avatar ms-auto me-auto mb-0 z-index-1">
+          <img th:src="${user.avatar}" alt="image" class="p-0 bg-white rounded-circle custom-avatar-65 shadow-xss">
         </figure>
       </div>
       <div class="col-md-9">
-        <span class="fw-700 font-xsss mt-3 mb-1" th:text="${user.fullName}"></span>
+        <span class="fw-700 font-xss mt-5 ms-3 text-grey-900" th:text="${user.fullName}"></span>
         <p class="custom-text-overflow">
         </p>
       </div>

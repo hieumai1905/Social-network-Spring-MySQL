@@ -4,14 +4,32 @@
 <div class="col-lg-12 mb-3" th:fragment="fragment-cover-photo">
     <div class="card w-100 border-0 p-0 bg-white shadow-xss rounded-xxl">
         <div class="card-body h250 p-0 rounded-xxl overflow-hidden m-3">
-                <img th:src="${user_info.coverPhoto}" class="w-100" style="max-height: 350px"
-                     alt="image">
-        </div>
+            <img id="currentUserCoverPhoto" th:data-cover-photo="${user_info.coverPhoto}"
+                 th:src="${user_info.coverPhoto}" class="w-100" style="max-height: 350px"
+                 alt="image"></div>
         <div class="card-body p-0 position-relative">
-            <figure class="avatar position-absolute w100 z-index-1" style="top:-40px; left: 30px;">
-                    <img th:src="${user_info.avatar}" alt="image"
-                         class="float-right p-1 bg-white rounded-circle w-100">
-            </figure>
+            <figure th:if="${user_info.userId != currentUser.userId}" class="avatar position-absolute w100 z-index-1"
+                    style="top:-40px; left: 30px;">
+                <img th:src="${user_info.avatar}" alt="image"
+                     class="float-right p-1 bg-white rounded-circle custom-avatar-100 current-user-avatar"></figure>
+            <figure th:if="${user_info.userId == currentUser.userId}" id="avatarDropdownMenu" data-bs-toggle="dropdown"
+                    aria-expanded="false" class="avatar position-absolute w100 z-index-1"
+                    style="top:-40px; left: 30px;">
+                <img th:src="${user_info.avatar}" alt="image"
+                     class="float-right p-1 bg-white rounded-circle custom-avatar-100 current-user-avatar"></figure>
+            <div th:if="${user_info.userId == currentUser.userId}"
+                 class="dropdown-menu dropdown-menu-end p-2 rounded-xxxl cursor-pointer border-0 shadow-lg"
+                 aria-labelledby="avatarDropdownMenu">
+                <div id="update-avatar" th:data-avatar="${user_info.avatar}"
+                     class=" card-body p-2 dropdown-item rounded-xxxl d-flex">
+                    <i class="fa fa-file-image-o text-grey-500 me-2 fw-600 font-sm"></i>
+                    <h4 class="fw-600 text-grey-900 font-xsss mt-1">Update avatar</h4>
+                </div>
+                <!--                                <div class=" card-body p-2 dropdown-item rounded-xxxl d-flex">-->
+                <!--                                    <i class="fa fa-user-circle-o text-grey-500 me-2 fw-600 font-sm"></i>-->
+                <!--                                    <h4 class="fw-600 text-grey-900 font-xsss mt-1">View avatar</h4>-->
+                <!--                                </div>-->
+            </div>
             <h4 class="fw-700 font-sm mt-2 mb-lg-5 mb-4 pl-15" th:text="${user_info.fullName}">
             </h4>
             <div class="d-flex align-items-center justify-content-center position-absolute-md right-15 top-0 me-2">

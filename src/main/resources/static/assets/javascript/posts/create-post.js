@@ -65,7 +65,7 @@ function savePostToUI(post, isNewPost) {
             mediaHtml += `
                 <div class="col-xs-4 col-sm-4 p-1">
                     <a href="${image}" data-lightbox="roadtrip" class="${index === 2 && post.medias.length > 3 ? 'position-relative d-block' : ''}">
-                        <img src="/assets/files-upload/${image}" class="rounded-3 w-100" alt="image">
+                        <img src="${image}" class="rounded-3 w-100" alt="image">
                         ${index === 2 && post.medias.length > 3 ? `<span class="img-count font-sm text-white ls-3 fw-600"><b>+${post.medias.length - 3}</b></span>` : ''}
                     </a>
                 </div>`;
@@ -76,7 +76,7 @@ function savePostToUI(post, isNewPost) {
         <div id="post-${post.postId}" class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
             <div class="card-body p-0 d-flex">
                 <input type="hidden" value="${post.postId}" class="current-post-id">
-                <figure class="avatar me-3"><img src="${post.author.avatar}" alt="image" class="shadow-sm rounded-circle w45"></figure>
+                <figure class="avatar me-3"><img src="${post.author.avatar}" alt="image" class="shadow-sm rounded-circle current-user-avatar custom-avatar-50"></figure>
                 <h4 class="fw-700 text-grey-900 font-xssss mt-1">
                     <span>${post.author.fullName}</span>
                     ${userTag ? `<i class="fa fa-caret-right" aria-hidden="true"></i> <span>${userTag}</span>` : ''}
@@ -132,7 +132,7 @@ function savePostToUI(post, isNewPost) {
             <hr>
             <div class="card-body p-0 mt-1 position-relative">
                 <figure class="avatar position-absolute ms-2 mt-1 top-5">
-                    <img src="${post.author.avatar}" alt="image" class="shadow-sm rounded-circle w30">
+                    <img src="${post.author.avatar}" alt="image" class="shadow-sm rounded-circle current-user-avatar custom-avatar-40">
                 </figure>
                 <textarea comment-input-post-id="${post.postId}"
                         class="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-700 fw-500 comment-input border-light-md theme-dark-bg"
@@ -219,7 +219,7 @@ function displayFriendsView() {
             const img = $("<img>").attr({
                 src: user.avatar,
                 alt: "image"
-            }).addClass("shadow-sm rounded-circle w45");
+            }).addClass("shadow-sm rounded-circle custom-avatar-50");
             figure.append(img);
 
             const h4 = $("<h4>").addClass("fw-700 text-grey-900 font-xssss mt-2").text(user.fullName);

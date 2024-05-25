@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="fragment-photo-modal" class="modal fade" id="photoModal" tabindex="-1"
+     aria-labelledby="photoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title fw-bold" id="photoModalLabel"></h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex">
+                    <label for="postAccess" class="text-grey-900 font-xs">Post access: </label>
+                    <select id="postAccess" class="form-select form-select-sm w-25 ms-2 mb-3">
+                        <option value="PUBLIC">Public</option>
+                        <option value="PRIVATE">Private</option>
+                        <option value="FRIEND">Friends</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <div class="custom-file-input">
+                        <input type="file" id="photo-file" accept=".jpg,.png,.jpeg" class="custom-file-input__input d-none">
+                        <label for="photo-file" class="btn text-grey-900 bg-grey border custom-file-input__label">Choose file</label>
+                    </div>
+                    <br/>
+                    <img id="previewPhoto" class="bg-white mt-3" width="150" height="150"/>
+                </div>
+            </div>
+            <div class="modal-footer text-light">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
+                <button id="btnUpdatePhoto" type="button" class="btn btn-primary ms-3 text-white">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

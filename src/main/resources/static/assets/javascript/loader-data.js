@@ -66,4 +66,7 @@ window.onload = () => {
     if (typeof loadComment === 'function') {
         loadComment();
     }
+    if (typeof registerUpdatePhotoEvents === 'function') {
+        registerUpdatePhotoEvents();
+    }
 };

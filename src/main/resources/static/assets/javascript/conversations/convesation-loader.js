@@ -45,7 +45,7 @@ function renderConversation(conversationId, conversationName, conversationAvatar
       <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0 d-flex align-items-center">
         <figure class="avatar float-left mb-0 me-2">
           <p class="d-none conversation">${conversationId}</p>
-          <img src="${conversationAvatar}" alt="image" class="w35">
+          <img src="${conversationAvatar}" alt="image" class="custom-avatar-50">
         </figure>
         <h3 class="fw-700 mb-0 mt-0">
           <a class="font-xssss text-grey-600 d-block text-dark model-popup-chat" href="#">
