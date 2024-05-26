@@ -81,6 +81,9 @@ function savePostToUI(post, isNewPost) {
                     <span>${post.author.fullName}</span>
                     ${userTag ? `<i class="fa fa-caret-right" aria-hidden="true"></i> <span>${userTag}</span>` : ''}
                     ${additionalTags ? `<span>${additionalTags}</span>` : ''}
+                    <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-700">
+                        <i class="fa fa-users" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="${post.access}"></i>
+                    </span>
                     <span class="createAtSpan d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">${createAt}</span>
                 </h4>
                 <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown"
