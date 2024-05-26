@@ -1625,6 +1625,7 @@
     color: #eee !important
 }
 
+
 .theme-dark .header-wrapper .logo .light {
     display: none
 }
@@ -17395,6 +17396,13 @@ select.sort {
     height: 40px;
 }
 
+.custom-avatar-35{
+    max-width: 35px;
+    max-height: 35px;
+    width: 35px;
+    height: 35px;
+}
+
 .custom-avatar-50{
     max-width: 50px;
     max-height: 50px;
@@ -17406,4 +17414,8 @@ select.sort {
     max-height: 65px;
     width: 65px;
     height: 65px;
+}
+
+.custom-mh-330{
+    max-height: 330px;
 }

@@ -1,5 +1,6 @@
 let conversationPrivate = $('#conversations-private');
 let conversationGroup = $('#conversations-group');
+let popupChat = $('#modal-popup-chat')
 
 function displayConversations() {
     let htmlPrivate = '';
@@ -42,13 +43,14 @@ function fetchPersonalConversation(conversation) {
 
 function renderConversation(conversationId, conversationName, conversationAvatar, isGroup) {
     const commonHtml = `
-      <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0 d-flex align-items-center">
+      <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0 d-flex align-items-center"
+      onclick="showMessageConversation(${conversationId})">
         <figure class="avatar float-left mb-0 me-2">
           <p class="d-none conversation">${conversationId}</p>
-          <img src="${conversationAvatar}" alt="image" class="custom-avatar-50">
+          <img src="${conversationAvatar}" alt="image" class="custom-avatar-50 image-conversation" data-conversation-id="${conversationId}">
         </figure>
         <h3 class="fw-700 mb-0 mt-0">
-          <a class="font-xssss text-grey-600 d-block text-dark model-popup-chat" href="#">
+          <a class="font-xssss text-grey-600 d-block text-dark model-popup-chat" href="#" data-conversation-id="${conversationId}">
             ${conversationName}
 <!--               <span class="badge-primary text-white badge-pill fw-500 mt-0"></span>-->
           </a>
