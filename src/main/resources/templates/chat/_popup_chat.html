@@ -16,56 +16,15 @@
             </div>
         </div>
         <div class="modal-popup-body w-100 p-3 flex-grow-1 overflow-auto custom-mh-330" id="message-container">
-            <div class="message">
-                <div class="message-content font-xssss lh-24 fw-500">Hi, how can I help you?</div>
-            </div>
-            <div class="date-break font-xsssss lh-24 fw-500 text-grey-500 mt-2 mb-2">Mon 10:20am</div>
-            <div class="message self text-right mt-2">
-                <div class="message-content font-xssss lh-24 fw-500">I want those files for you. I want you to send 1
-                    PDF and 1 image file.
-                </div>
-            </div>
-            <div class="message">
-                <div class="message-content font-xssss lh-24 fw-500">Hi, how can I help you?</div>
-            </div>
-            <div class="date-break font-xsssss lh-24 fw-500 text-grey-500 mt-2 mb-2">Mon 10:20am</div>
-            <div class="message self text-right mt-2">
-                <div class="message-content font-xssss lh-24 fw-500">I want those files for you. I want you to send 1
-                    PDF and 1 image file.
-                </div>
-            </div>
-            <div class="message">
-                <div class="message-content font-xssss lh-24 fw-500">Hi, how can I help you?</div>
-            </div>
-            <div class="date-break font-xsssss lh-24 fw-500 text-grey-500 mt-2 mb-2">Mon 10:20am</div>
-            <div class="message self text-right mt-2">
-                <div class="message-content font-xssss lh-24 fw-500">I want those files for you. I want you to send 1
-                    PDF and 1 image file.
-                </div>
-            </div>
-            <div class="message">
-                <div class="message-content font-xssss lh-24 fw-500">Hi, how can I help you?</div>
-            </div>
-            <div class="date-break font-xsssss lh-24 fw-500 text-grey-500 mt-2 mb-2">Mon 10:20am</div>
-            <div class="message self text-right mt-2">
-                <div class="message-content font-xssss lh-24 fw-500">I want those files for you. I want you to send 1
-                    PDF and 1 image file.
-                </div>
-            </div>
-            <div class="snippet pt-3 ps-4 pb-2 pe-3 mt-2 bg-grey rounded-xl float-right" data-title=".dot-typing">
-                <div class="stage">
-                    <div class="dot-typing"></div>
-                </div>
-            </div>
-            <div class="clearfix"></div>
+            <!-- messages here-->
         </div>
         <div class="modal-popup-footer w-100 border-top">
             <div class="card p-3 d-block border-0 d-block">
                 <div class="form-group icon-right-input style1-input mb-0">
-                    <input type="text"
+                    <input type="text" id="input-message"
                            placeholder="Start typing.."
-                           class="form-control rounded-xl bg-greylight border-0 font-xssss fw-500 ps-3"><i
-                        class="feather-send text-grey-500 font-md"></i></div>
+                           class="form-control rounded-xl bg-greylight border-0 font-xssss fw-500 ps-3">
+                    <i class="feather-send text-grey-500 font-md cursor-pointer" onclick="sendMessageEvent()"></i></div>
             </div>
         </div>
     </div>
