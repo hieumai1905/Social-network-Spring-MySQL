@@ -72,12 +72,33 @@ function registerModalEvent() {
         let postId = $(this).data("postid");
         updatePostInteract('shared', postId, $(this));
     });
+    $(".report-post").on("click", function () {
+        let postId = $(this).data("postid");
+        $("#report-post-id").val(postId);
+        $("#reportModal").modal("show");
+    });
+    $("#btnReportPost").on("click", function () {
+        let postId =   $("#report-post-id").val();
+        updatePostInteract('report', postId, $(this));
+    });
 }
 
 function updatePostInteract(type, postId, element){
     let content = '';
     if(type === 'shared')
         content = $("#share-content-" + postId).val();
+    else if(type === 'report')
+    {
+        let selectedValues = [];
+        $('.reason-report:checked').each(function() {
+            selectedValues.push($(this).val());
+        });
+        content = selectedValues.join(', ');
+        if(content === '') {
+            $("#report-message").text("Please choose at least one reason to report!");
+            return;
+        }
+    }
     $.ajax({
         url: `/api/posts/${postId}/interact/${type}`,
         type: 'POST',
@@ -97,6 +118,12 @@ function updatePostInteract(type, postId, element){
                     switchDiv(element, false, postId);
                 else if(type === 'shared'){
                     $("#share-content-" + postId).val("");
+                }
+                else if(type === 'report'){
+                    $("#post-" + postId).remove();
+                    $("#reportModal").modal('hide');
+                    $("#report-message").text("");
+                    $('.reason-report').prop('checked', false);
                 }
             }
         },

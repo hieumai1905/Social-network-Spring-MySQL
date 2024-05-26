@@ -58,6 +58,11 @@
                 <h4 class="fw-600 text-grey-900 font-xsss mt-1">Delete Post
                 </h4>
             </div>
+            <div th:if="${currentUser.userId != item.user.userId}" th:data-postId="${item.postId}" class="report-post card-body p-2 dropdown-item rounded-xxxl d-flex">
+                <i class="fa fa-flag text-grey-500 me-2 fw-600 font-sm"></i>
+                <h4 class="fw-600 text-grey-900 font-xsss mt-1">Report Post
+                </h4>
+            </div>
         </div>
     </div>
     <div class="card-body p-0 me-lg-5">

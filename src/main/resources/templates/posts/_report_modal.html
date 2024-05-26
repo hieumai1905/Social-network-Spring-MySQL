@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<div th:fragment="fragment-report" class="modal fade" id="reportModal" tabindex="-1"
+     aria-labelledby="reportModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="text-center w-100 fw-bold" id="reportModalLabel">Report</h3>
+        <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>If you report this post, you will not see information about this post.</p>
+        <div class="form-check">
+          <input class="form-check-input reason-report" type="checkbox" value="Spam" id="Spam">
+          <label class="form-check-label" for="Spam">Spam</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input reason-report" type="checkbox" value="Inappropriate Content" id="InappropriateContent">
+          <label class="form-check-label" for="InappropriateContent">Inappropriate Content</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input reason-report" type="checkbox" value="Hate Speech" id="HateSpeech">
+          <label class="form-check-label" for="HateSpeech">Hate Speech</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input reason-report" type="checkbox" value="Violence" id="Violence">
+          <label class="form-check-label" for="Violence">Violence</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input reason-report" type="checkbox" value="Harassment" id="Harassment">
+          <label class="form-check-label" for="Harassment">Harassment</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input reason-report" type="checkbox" value="False Information" id="FalseInformation">
+          <label class="form-check-label" for="FalseInformation">False Information</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input reason-report" type="checkbox" value="Intellectual Property Violation" id="IPViolation">
+          <label class="form-check-label" for="IPViolation">Intellectual Property Violation</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input reason-report" type="checkbox" value="Nudity" id="Nudity">
+          <label class="form-check-label" for="Nudity">Nudity</label>
+        </div>
+        <p class="text-danger" id="report-message"></p>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" id="report-post-id"/>
+        <button id="btnReportPost" type="button"
+          class="btn btn-primary text-white text-center w-100">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
