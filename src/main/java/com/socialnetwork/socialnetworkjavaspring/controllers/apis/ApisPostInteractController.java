@@ -1,5 +1,6 @@
 package com.socialnetwork.socialnetworkjavaspring.controllers.apis;
 
+import com.socialnetwork.socialnetworkjavaspring.DTOs.common.StringDTO;
 import com.socialnetwork.socialnetworkjavaspring.controllers.ApplicationController;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.InteractType;
 import com.socialnetwork.socialnetworkjavaspring.services.post_interacts.IPostInteractService;
@@ -18,11 +19,11 @@ public class ApisPostInteractController extends ApplicationController {
 
     @PostMapping
     public ResponseEntity<ApiResponse> interactPost(@PathVariable("interact-type") String type,
-                                                    @PathVariable("post-id") String postId){
+                                                    @PathVariable("post-id") String postId, @RequestBody StringDTO stringDTO){
         try {
             InteractType interactType = InteractType.valueOf(type.toUpperCase());
             return responseApi(HttpStatus.OK,
-                    postInteractService.updatePostInteract(interactType, postId, currentUser));
+                    postInteractService.updatePostInteract(interactType, postId, currentUser, stringDTO.getContent()));
         }catch (IllegalArgumentException e) {
             return responseApi(HttpStatus.BAD_REQUEST, "Invalid interact type!");
         }catch (Exception e) {
