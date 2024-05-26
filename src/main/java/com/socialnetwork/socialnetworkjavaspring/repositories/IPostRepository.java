@@ -1,8 +1,11 @@
 package com.socialnetwork.socialnetworkjavaspring.repositories;
 
 import com.socialnetwork.socialnetworkjavaspring.models.Post;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -114,4 +117,17 @@ public interface IPostRepository extends JpaRepository<Post, String> {
             "                    AND s.type = 'SHARED') " +
             "ORDER BY create_at DESC", nativeQuery = true)
     List<Post> findAllByUserFriend(String userId);
+
+    @Query("SELECT DISTINCT p FROM Post p " +
+            "LEFT JOIN p.postHashtags ph " +
+            "LEFT JOIN ph.hashtag h " +
+            "WHERE (:postContent IS NULL OR p.postContent LIKE CONCAT('%',:postContent,'%')) " +
+            "AND (:#{#hashtags == null || #hashtags.isEmpty()} = true OR h.hashtag IN :hashtags) " +
+            "AND p.user.userId NOT IN (SELECT r.userTarget.userId FROM Relation r " +
+            "   WHERE r.user.userId = :userId AND r.type = 'BLOCK') " +
+            "AND p.postId NOT IN (SELECT pi.post.postId FROM PostInteract pi " +
+            "   WHERE pi.user.userId = :userId AND (pi.type = 'HIDDEN' OR pi.type = 'REPORT'))")
+    Page<Post> findByContentAndHashtags(@Param("postContent") String postContent,
+                                        @Param("hashtags") List<String> hashtags, @Param("userId") String userId,
+                                        Pageable pageable);
 }

@@ -41,9 +41,9 @@ function savePost(postId) {
         success: function(response) {
             console.log('Save successfully:', response);
             if(response.code === 201 && postId === "") {
-                savePostToUI(response.data, true);
+                savePostToUI(response.data, true, false);
             }else if(response.code === 200 && postId !== ""){
-                savePostToUI(response.data, false);
+                savePostToUI(response.data, false, false);
             }
             clearForm();
         },
@@ -53,13 +53,19 @@ function savePost(postId) {
     });
 }
 
-function savePostToUI(post, isNewPost) {
-    const postContainer = $('#post-container');
+function savePostToUI(post, isNewPost, isSearch) {
+    const postContainer = $(isSearch ? '#search-results' : '#post-container');
     const userTags = post.userTags || [];
     const userTag = userTags.length > 0 ? userTags[0].fullName : '';
     const additionalTags = userTags.length > 1 ? `và ${userTags.length - 1} người khác` : '';
     let createAt = formatTime(new Date(post.createAt));
     let mediaHtml = '';
+    let accessIcon = `<i class="fa fa-users" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="${post.access}"></i>`;
+    if(post.access === 'PUBLIC')
+        accessIcon = `<i class="fa fa-globe" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="${post.access}"></i>`;
+    else if(post.access === 'PRIVATE')
+        accessIcon = `<i class="fa fa-lock" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="${post.access}"></i>`
+
     post.medias.forEach((image, index) => {
         if (index < 3) {
             mediaHtml += `
@@ -82,7 +88,7 @@ function savePostToUI(post, isNewPost) {
                     ${userTag ? `<i class="fa fa-caret-right" aria-hidden="true"></i> <span>${userTag}</span>` : ''}
                     ${additionalTags ? `<span>${additionalTags}</span>` : ''}
                     <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-700">
-                        <i class="fa fa-users" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="${post.access}"></i>
+                        ${accessIcon}
                     </span>
                     <span class="createAtSpan d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">${createAt}</span>
                 </h4>
@@ -152,7 +158,10 @@ function savePostToUI(post, isNewPost) {
             </div>
         </div>`;
     if (isNewPost) {
-        postContainer.prepend(postHtml);
+        if(isSearch)
+            postContainer.append(postHtml);
+        else
+            postContainer.prepend(postHtml);
     } else {
         $(`#post-${post.postId}`).replaceWith(postHtml);
     }
@@ -168,7 +177,8 @@ function savePostToUI(post, isNewPost) {
     $(document).on('click', `#hide-post-${post.postId}`, function() {
         updatePostInteract('hidden', post.postId, $(this));
     });
-    loadComment();
+    if(!isSearch)
+        loadComment();
 }
 
 function clearForm(){

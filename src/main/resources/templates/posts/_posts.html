@@ -15,8 +15,14 @@
                 <span th:if="${item.userTags.size() > 1}"
                       th:text="'và ' + ${item.userTags.size() - 1} + ' người khác'"></span>
             </span>
-            <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-700">
+            <span th:if="${item.access.name() == 'FRIEND'}" class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-700">
                 <i class="fa fa-users" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" th:title="${item.access}"></i>
+            </span>
+            <span th:if="${item.access.name() == 'PUBLIC'}" class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-700">
+                <i class="fa fa-globe" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" th:title="${item.access}"></i>
+            </span>
+            <span th:if="${item.access.name() == 'PRIVATE'}" class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-700">
+                <i class="fa fa-lock" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" th:title="${item.access}"></i>
             </span>
             <span class="createAtSpan d-block font-xssss fw-500 mt-1 lh-3 text-grey-500"
                   th:data-createAt="${item.createAt}"></span>

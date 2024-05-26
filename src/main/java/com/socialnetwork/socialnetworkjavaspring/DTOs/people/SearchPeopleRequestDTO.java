@@ -1,7 +1,7 @@
 package com.socialnetwork.socialnetworkjavaspring.DTOs.people;
 
 import com.socialnetwork.socialnetworkjavaspring.utils.Constants;
-import com.socialnetwork.socialnetworkjavaspring.DTOs.common.SearchRequest;
+import com.socialnetwork.socialnetworkjavaspring.DTOs.common.SearchRequestDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class SearchPeopleRequestDTO extends SearchRequest {
+public class SearchPeopleRequestDTO extends SearchRequestDTO {
     private String fullName;
     private String type;
 
