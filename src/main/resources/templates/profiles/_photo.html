@@ -3,10 +3,9 @@
 <body>
 <div class="col-lg-12 mb-3" th:fragment="fragment-cover-photo">
     <div class="card w-100 border-0 p-0 bg-white shadow-xss rounded-xxl">
-        <div class="card-body h250 p-0 rounded-xxl overflow-hidden m-3">
+        <div class="card-body h400 p-0 rounded-xxl overflow-hidden m-3">
             <img id="currentUserCoverPhoto" th:data-cover-photo="${user_info.coverPhoto}"
-                 th:src="${user_info.coverPhoto}" class="w-100" style="max-height: 350px"
-                 alt="image"></div>
+                 th:src="${user_info.coverPhoto}" class="w-100 custom-mh-400 h-100" alt="image"></div>
         <div class="card-body p-0 position-relative">
             <figure th:if="${user_info.userId != currentUser.userId}" class="avatar position-absolute w100 z-index-1"
                     style="top:-40px; left: 30px;">

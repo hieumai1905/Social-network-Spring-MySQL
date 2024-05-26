@@ -17419,3 +17419,14 @@ select.sort {
 .custom-mh-330{
     max-height: 330px;
 }
+
+.custom-mh-400{
+    max-height: 400px;
+}
+
+.custom-avatar-200{
+    width: 200px;
+    height: 200px;
+    max-width: 200px;
+    max-height: 200px;
+}
