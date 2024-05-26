@@ -137,6 +137,18 @@ function savePostToUI(post, isNewPost, isSearch) {
                     <span class="d-none-xss comment-count" count-comment-post-id="${post.postId}"></span>
                     &nbsp; Comment
                 </a>
+                <a href="#" id="shareDropdownMenu" data-bs-toggle="dropdown" aria-expanded="false"
+                   class="ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i
+                        class="feather-share-2 text-grey-900 text-dark btn-round-sm font-lg"></i><span
+                        class="d-none-xs">Share</span></a>
+                <div class="dropdown-menu dropdown-menu-end p-3 rounded-xxl border-0 shadow-lg"
+                     aria-labelledby="shareDropdownMenu" style="width: 400px">
+                    <textarea id="share-content-${post.postId}" placeholder="Say something..." type="text"
+                              class="bg-grey text-grey-800 font-xssss border-0 lh-32 p-2 font-xssss fw-600 rounded-3 w-100 theme-dark-bg"></textarea>
+                    <div th:data-postId="${post.postId}" class="btn-share-post card-body p-0 rounded-xxxl d-flex float-right">
+                        <h4 class="fw-600 text-white font-xsss mt-1 btn btn-primary">Share</h4>
+                    </div>
+                </div>
             </div>
             <hr>
             <div class="card-body p-0 mt-1 position-relative">
@@ -176,6 +188,10 @@ function savePostToUI(post, isNewPost, isSearch) {
     });
     $(document).on('click', `#hide-post-${post.postId}`, function() {
         updatePostInteract('hidden', post.postId, $(this));
+    });
+    $('.btn-share-post').off('click');
+    $(".btn-share-post").on("click", function () {
+        updatePostInteract('shared', post.postId, $(this));
     });
     if(!isSearch)
         loadComment();

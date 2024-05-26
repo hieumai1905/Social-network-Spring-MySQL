@@ -68,12 +68,21 @@ function registerModalEvent() {
         let postId = $(this).data("postid");
         findPostById(postId);
     });
+    $(".btn-share-post").on("click", function () {
+        let postId = $(this).data("postid");
+        updatePostInteract('shared', postId, $(this));
+    });
 }
 
 function updatePostInteract(type, postId, element){
+    let content = '';
+    if(type === 'shared')
+        content = $("#share-content-" + postId).val();
     $.ajax({
         url: `/api/posts/${postId}/interact/${type}`,
         type: 'POST',
+        contentType: "application/json",
+        data: JSON.stringify(content),
         success: function(response) {
             console.log('Success:', response);
             if(response.code === 200){
@@ -86,6 +95,9 @@ function updatePostInteract(type, postId, element){
                     $('#post-' + postId).remove();
                 else if(type === 'saved')
                     switchDiv(element, false, postId);
+                else if(type === 'shared'){
+                    $("#share-content-" + postId).val("");
+                }
             }
         },
         error: function(xhr, status, error) {

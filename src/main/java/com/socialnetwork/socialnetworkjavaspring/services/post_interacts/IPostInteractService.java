@@ -6,7 +6,7 @@ import com.socialnetwork.socialnetworkjavaspring.models.User;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.InteractType;
 
 public interface IPostInteractService {
-    String updatePostInteract(InteractType interactType, String postId, User user);
+    String updatePostInteract(InteractType interactType, String postId, User user, String content);
 
     void deletePostInteract(InteractType interactType, String postId, User currentUser);
     PostInteract checkExistPostInteract(Post post, InteractType interactType, String userId);

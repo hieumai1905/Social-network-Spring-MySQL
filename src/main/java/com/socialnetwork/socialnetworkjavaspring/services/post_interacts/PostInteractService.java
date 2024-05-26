@@ -21,16 +21,35 @@ public class PostInteractService implements IPostInteractService {
     private IPostRepository postRepository;
 
     @Override
-    public String updatePostInteract(InteractType interactType, String postId, User user) {
+    public String updatePostInteract(InteractType interactType, String postId, User user, String content) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new NullPointerException("Post not found!"));
         PostInteract existedPostInteract = checkExistPostInteract(post, interactType, user.getUserId());
-        if(existedPostInteract == null){
-            PostInteract postInteract = new PostInteract(post, user, interactType, new Date());
+        if(existedPostInteract == null || interactType.equals(InteractType.SHARED)){
+            PostInteract postInteract = new PostInteract(post, user, interactType, new Date(), content);
             postInteractRepository.save(postInteract);
-            return interactType == InteractType.SAVED ? "Save post successfully!" : "Hide post successfully!";
+            return getInteractionMessage(interactType, false);
         }
-        return interactType == InteractType.SAVED ? "Post is already saved!" : "Post is already hidden!";
+        return getInteractionMessage(interactType, true);
     }
+
+    private String getInteractionMessage(InteractType interactType, boolean isAlreadyDone) {
+        if (isAlreadyDone) {
+            if (interactType.equals(InteractType.SAVED))
+                return "Post is already saved!";
+            else if (interactType.equals(InteractType.HIDDEN))
+                return "Post is already hidden!";
+            else
+                return "Post is already shared!";
+        } else {
+            if (interactType.equals(InteractType.SAVED))
+                return "Save post successfully!";
+            else if (interactType.equals(InteractType.HIDDEN))
+                return "Hide post successfully!";
+            else
+                return "Share post successfully!";
+        }
+    }
+
 
     @Override
     public void deletePostInteract(InteractType interactType, String postId, User user) {
