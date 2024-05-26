@@ -16,12 +16,14 @@
                 <p class="fw-500 font-xsssss text-grey-500 mt-0 mb-3" th:if="${user.mutualFriendCount >0}"
                    th:text="${user.mutualFriendCount} + ' mutual friends'"></p>
             </div>
-            <div class="col-md-2 col-sm-2 mt-2">
-                <a href="#" class="ms-3" th:unless="${user.isFriend}">
-                    <i class="fa fa-user-plus text-white bg-primary btn-round-md bg-greylight font-xss"></i>
-                </a>
-                <a href="#" class="ms-3" th:if="${user.isRequested}">
-                    <i class="fa fa-user-times text-white bg-primary btn-round-md bg-greylight font-xss"></i>
+            <div class="col-md-2 col-sm-2 mt-2 container-options" th:attr="data-user-id=${user.userId}">
+                <a href="#" class="ms-3 btn-action"
+                   th:attr="data-user-id=${user.userId}, data-is-requested=${user.isRequested}"
+                   th:unless="${user.isFriend}"
+                   th:classappend="${user.isRequested} ? 'btn-cancel-request' : 'btn-add-friend'"
+                   th:onclick="${user.isRequested} ? '_cancelRequest(this)' : '_addFriend(this)'">
+                    <i class="fa" aria-hidden="true"
+                       th:classappend="${user.isRequested} ? 'fa-user-times text-grey-700 bg-grey btn-round-md bg-greylight font-xss' : 'fa-user-plus text-white bg-primary btn-round-md bg-greylight font-xss'"></i>
                 </a>
                 <a href="#" class="ms-3" th:id="'dd-friend-' + ${user.userId}"
                    data-bs-toggle="dropdown" th:if="${user.isFriend}"
@@ -30,18 +32,15 @@
                 </a>
                 <div class="dropdown-menu p-1 rounded-xxxl cursor-pointer border-0 shadow-lg"
                      th:aria-labelledby="'dd-friend-' + ${user.userId}" th:if="${user.isFriend}">
-                    <div class="card-body p-1 dropdown-item rounded-xxxl d-flex"
-                         th:unless="${user.isFollowing}">
-                        <i class="fa fa-plus-square font-lg mt-1 ms-2" aria-hidden="true"></i>
-                        <h4 class="fw-600 text-grey-900 font-xsss mt-2 ms-2 fw-bold">Follow</h4>
+                    <div class="card-body p-1 dropdown-item rounded-xxxl d-flex" onclick="_toggleFollow(this)"
+                         th:attr="data-user-id=${user.userId}, data-is-following=${user.isFollowing}">
+                        <i class="fa font-lg mt-1 ms-2" aria-hidden="true"
+                           th:classappend="${user.isFollowing} ? 'fa-window-close' : 'fa-plus-square'"></i>
+                        <h4 class="fw-600 text-grey-900 font-xsss mt-2 ms-2 fw-bold"
+                            th:text="${user.isFollowing} ? 'Unfollow' : 'Follow'"></h4>
                     </div>
-                    <div class="card-body p-1 dropdown-item rounded-xxxl d-flex"
-                         th:if="${user.isFollowing}">
-                        <i class="fa fa-window-close font-sm mt-1 ms-2" aria-hidden="true"></i>
-                        <h4 class="fw-600 text-grey-900 font-xsss mt-2 ms-2 fw-bold">Unfollow</h4>
-                    </div>
-
-                    <div class="card-body p-1 dropdown-item rounded-xxxl d-flex" th:if="${user.isFriend}">
+                    <div class="card-body p-1 dropdown-item rounded-xxxl d-flex" onclick="_unFriend_(this)"
+                         th:attr="unfriend-user-id=${user.userId}" th:if="${user.isFriend}">
                         <i class="fa fa-user-times font-sm mt-1 ms-2" aria-hidden="true"></i>
                         <h4 class="fw-600 text-grey-900 font-xsss mt-2 ms-2 fw-bold">Unfriend</h4>
                     </div>

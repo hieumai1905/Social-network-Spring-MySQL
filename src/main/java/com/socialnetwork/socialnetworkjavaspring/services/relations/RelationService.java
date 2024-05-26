@@ -61,9 +61,8 @@ public class RelationService implements IRelationService {
     }
 
     @Override
-    public Relation findByUserIdAndUserTargetIdAndType(String userId, String userTargetId, RelationType type) throws Exception {
-        return relationRepository.findByUserIdAndUserTargetIdAndType(userId, userTargetId, String.valueOf(type))
-                .orElseThrow(() -> new Exception("Relation not found"));
+    public Optional<Relation> findByUserIdAndUserTargetIdAndType(String userId, String userTargetId, RelationType type){
+        return relationRepository.findByUserIdAndUserTargetIdAndType(userId, userTargetId, String.valueOf(type));
     }
 
     @Transactional
