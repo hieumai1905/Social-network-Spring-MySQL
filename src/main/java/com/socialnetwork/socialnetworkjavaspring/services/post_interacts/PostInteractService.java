@@ -6,6 +6,7 @@ import com.socialnetwork.socialnetworkjavaspring.models.User;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.InteractType;
 import com.socialnetwork.socialnetworkjavaspring.repositories.IPostInteractRepository;
 import com.socialnetwork.socialnetworkjavaspring.repositories.IPostRepository;
+import com.socialnetwork.socialnetworkjavaspring.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,8 @@ public class PostInteractService implements IPostInteractService {
     public String updatePostInteract(InteractType interactType, String postId, User user, String content) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new NullPointerException("Post not found!"));
         PostInteract existedPostInteract = checkExistPostInteract(post, interactType, user.getUserId());
-        if(existedPostInteract == null || interactType.equals(InteractType.SHARED)){
+        if(existedPostInteract == null || interactType.equals(InteractType.SHARED)
+                || interactType.equals(InteractType.REPORT)){
             PostInteract postInteract = new PostInteract(post, user, interactType, new Date(), content);
             postInteractRepository.save(postInteract);
             return getInteractionMessage(interactType, false);
@@ -38,16 +40,17 @@ public class PostInteractService implements IPostInteractService {
                 return "Post is already saved!";
             else if (interactType.equals(InteractType.HIDDEN))
                 return "Post is already hidden!";
-            else
-                return "Post is already shared!";
         } else {
             if (interactType.equals(InteractType.SAVED))
                 return "Save post successfully!";
             else if (interactType.equals(InteractType.HIDDEN))
                 return "Hide post successfully!";
-            else
+            else if (interactType.equals(InteractType.SHARED))
                 return "Share post successfully!";
+            else if (interactType.equals(InteractType.REPORT))
+                return "Report post successfully!";
         }
+        return Constants.EMPTY_STRING;
     }
 
 
