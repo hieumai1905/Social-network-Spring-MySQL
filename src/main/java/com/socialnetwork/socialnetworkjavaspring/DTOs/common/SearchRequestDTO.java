@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchRequest {
+public class SearchRequestDTO {
     private Integer pageIndex;
     private Integer pageSize;
 

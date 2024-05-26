@@ -1,10 +1,13 @@
 package com.socialnetwork.socialnetworkjavaspring.controllers.apis;
 
 import com.socialnetwork.socialnetworkjavaspring.DTOs.posts.PostRequestDTO;
+import com.socialnetwork.socialnetworkjavaspring.DTOs.posts.SearchPostRequestDTO;
 import com.socialnetwork.socialnetworkjavaspring.controllers.ApplicationController;
+import com.socialnetwork.socialnetworkjavaspring.models.Post;
 import com.socialnetwork.socialnetworkjavaspring.services.posts.IPostService;
 import com.socialnetwork.socialnetworkjavaspring.utils.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +58,17 @@ public class ApisPostController extends ApplicationController {
         try{
             return responseApi(HttpStatus.OK, "Find post by id successfully!",
                     postService.findPostResponseById(postId));
+        }catch (Exception ex){
+            return responseApi(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<ApiResponse> searchPosts(@RequestBody SearchPostRequestDTO request){
+        try{
+            Page<Post> posts = postService.findByContentAndHashtags(request, currentUser);
+            return responseApi(HttpStatus.OK, "Search posts successfully!",
+                    postService.convertPostsToSearchPostResponseDTO(posts, request));
         }catch (Exception ex){
             return responseApi(HttpStatus.BAD_REQUEST, ex.getMessage());
         }

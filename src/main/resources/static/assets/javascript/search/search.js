@@ -1,6 +1,6 @@
-let pageIndex = 0, totalElements = 0, pageSize = 0;
-let isFetching = false, isRemainResults = true;
-let searchContainer = null;
+let pageIndex = 1, totalElements = 0, pageSize = 0;
+let isFetching = false, isRemainResults = true, isChangeConditionSearch = false;
+let searchContainer = null, selectSearchType = 'post';
 
 function initSearch() {
     searchContainer = $('#search-results');
@@ -10,10 +10,73 @@ function initSearch() {
         searchContainer.empty();
         pageIndex = 0;
         isRemainResults = true;
-        findUsersByFullName();
+        isChangeConditionSearch = true;
+        handleSearch();
+    });
+
+    $('.search-results-by').on('click', function () {
+        selectSearchType = $(this).attr('data-search-by');
+        searchContainer.empty();
+        pageIndex = 0;
+        isRemainResults = true;
+        isChangeConditionSearch = true;
+        handleSearch();
     });
 
     registerScrollEvents();
+}
+
+function handleSearch(){
+    let newUrl = `/search?type=${selectSearchType}&q=${$('#search-input').val()}`;
+    history.pushState(null, '', newUrl);
+    $("#searchBy").text(selectSearchType);
+    if(selectSearchType === 'people') {
+        findUsersByFullName();
+    }else if(selectSearchType === 'post'){
+        findPostByContentAndHashtags();
+    }
+}
+
+function findPostByContentAndHashtags(){
+    isFetching = true;
+    let content = $('#search-input').val();
+    $.ajax({
+        url: "api/posts/search",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(setSearchPostRequest(content)),
+        success: function(response) {
+            console.log(response);
+            handleLoadSearchResults(response.data, 'post');
+            if(isChangeConditionSearch){
+                pageIndex++;
+                isChangeConditionSearch = false;
+            }
+        },
+        error: function(xhr, status, error) {
+            console.log('error: ', xhr.responseText);
+        }
+    });
+    isFetching = false;
+}
+
+function setSearchPostRequest(inputText) {
+    const words = inputText.trim().split(/\s+/);
+    const searchPostRequestDTO = {
+        hashtags: [],
+        content: "",
+        pageIndex: pageIndex
+    };
+    const contentBuilder = [];
+    words.forEach(word => {
+        if (word.startsWith("#")) {
+            searchPostRequestDTO.hashtags.push(word);
+        } else {
+            contentBuilder.push(word);
+        }
+    });
+    searchPostRequestDTO.content = contentBuilder.join(" ").trim();
+    return searchPostRequestDTO;
 }
 
 function scrollToTop() {
@@ -27,7 +90,7 @@ function registerScrollEvents(){
         if($(window).scrollTop() + $(window).height() === $(document).height()) {
             let remainElements = totalElements - pageIndex * pageSize;
             if (!isFetching && (pageIndex === 0 || remainElements > 0)) {
-                findUsersByFullName();
+                handleSearch();
                 pageIndex++;
             }else{
                 if ($('#search-results #no-user-remaining').length === 0) {
@@ -52,7 +115,11 @@ function findUsersByFullName() {
         data: formData,
         success: function (data) {
             console.log(data);
-            handleLoadUsers(data.data);
+            handleLoadSearchResults(data.data, 'people');
+            if(isChangeConditionSearch){
+                pageIndex++;
+                isChangeConditionSearch = false;
+            }
         },
         error: function (xhr, status, error) {
             console.error(error);
@@ -61,15 +128,26 @@ function findUsersByFullName() {
     isFetching = false;
 }
 
-function handleLoadUsers(data) {
+function handleLoadSearchResults(data, type) {
     pageSize = data?.pageSize;
     totalElements = data?.totalElements;
-    if(data?.userResponses === null || data?.userResponses.length === 0) {
-        searchContainer.append(`<div class="text-center">No Results Found!</div>`);
-    }else{
-        data?.userResponses?.forEach(function(user) {
-            searchContainer.append(createUserCard(user));
-        });
+    if(type === 'people') {
+        if(data?.userResponses === null || data?.userResponses.length === 0) {
+            searchContainer.append(`<div class="text-center">No Results Found!</div>`);
+        }else {
+            data?.userResponses?.forEach(function (user) {
+                searchContainer.append(createUserCard(user));
+            });
+        }
+    }
+    else if(type === 'post'){
+        if(data?.postResponseDTOS === null || data?.postResponseDTOS.length === 0) {
+            searchContainer.append(`<div class="text-center">No Results Found!</div>`);
+        }else {
+            data?.postResponseDTOS?.forEach(post => {
+                savePostToUI(post, true, true);
+            });
+        }
     }
 }
 function createUserCard(user) {

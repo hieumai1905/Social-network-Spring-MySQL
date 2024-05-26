@@ -60,7 +60,7 @@ function updatePhoto(type) {
         success: function(response) {
             console.log('Save successfully:', response);
             if(response.code === 201) {
-                savePostToUI(response.data, true);
+                savePostToUI(response.data, true, false);
                 if(type === "CHANGE_AVATAR") {
                     $(".current-user-avatar").attr("src", response.data.medias[0]);
                     $("#update-avatar").attr("data-avatar", response.data.medias[0]);

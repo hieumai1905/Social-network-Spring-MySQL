@@ -2,6 +2,8 @@ package com.socialnetwork.socialnetworkjavaspring.services.posts;
 
 import com.socialnetwork.socialnetworkjavaspring.DTOs.posts.PostRequestDTO;
 import com.socialnetwork.socialnetworkjavaspring.DTOs.posts.PostResponseDTO;
+import com.socialnetwork.socialnetworkjavaspring.DTOs.posts.SearchPostRequestDTO;
+import com.socialnetwork.socialnetworkjavaspring.DTOs.posts.SearchPostResponseDTO;
 import com.socialnetwork.socialnetworkjavaspring.DTOs.users.UserResponseDTO;
 import com.socialnetwork.socialnetworkjavaspring.models.*;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.InteractType;
@@ -18,6 +20,8 @@ import com.socialnetwork.socialnetworkjavaspring.services.sessions.SessionServic
 import com.socialnetwork.socialnetworkjavaspring.utils.ConvertUtils;
 import com.socialnetwork.socialnetworkjavaspring.utils.DateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -57,6 +61,49 @@ public class PostService extends PostGeneralService implements IPostService {
     @Override
     public List<Post> findAllPostForProfileMe(String userId) {
         return postRepository.findAllByUserCurrent(userId);
+    }
+
+    @Override
+    public Page<Post> findByContentAndHashtags(SearchPostRequestDTO request, User user) {
+        request.validateInput();
+        return postRepository.findByContentAndHashtags(request.getContent(), request.getHashtags(),
+                user.getUserId(), PageRequest.of(request.getPageIndex(), request.getPageSize()));
+    }
+    @Override
+    public SearchPostResponseDTO convertPostsToSearchPostResponseDTO(Page<Post> posts, SearchPostRequestDTO request){
+        SearchPostResponseDTO searchPostResponseDTO = new SearchPostResponseDTO();
+        List<PostResponseDTO> postResponseDTOS = new ArrayList<>();
+        for (Post post : posts) {
+            PostResponseDTO postResponseDTO = ConvertUtils.convert(post, PostResponseDTO.class);
+            setMediaAndUserTagsAndAuthor(post, postResponseDTO);
+            postResponseDTOS.add(postResponseDTO);
+        }
+        searchPostResponseDTO.setPostResponseDTOS(postResponseDTOS);
+        searchPostResponseDTO.setTotalElements(posts.getTotalElements());
+        searchPostResponseDTO.setPageIndex(request.getPageIndex());
+        searchPostResponseDTO.setPageSize(request.getPageSize());
+        return searchPostResponseDTO;
+    }
+
+    private void setMediaAndUserTagsAndAuthor(Post post, PostResponseDTO postResponseDTO) {
+        postResponseDTO.setAuthor(ConvertUtils.convert(post.getUser(), UserResponseDTO.class));
+        if(post.getMedias() != null){
+            postResponseDTO.setMedias(new ArrayList<>());
+            for (Media media : post.getMedias()) {
+                postResponseDTO.getMedias().add(media.getUrl());
+            }
+        }
+        if(post.getUserTags() != null){
+            postResponseDTO.setUserTags(new ArrayList<>());
+            for (UserTag userTag : post.getUserTags()) {
+                postResponseDTO.getUserTags().add(new UserResponseDTO(
+                        userTag.getUser().getUserId(),
+                        userTag.getUser().getFullName(),
+                        userTag.getUser().getAvatar(),
+                        null
+                ));
+            }
+        }
     }
 
     @Override
@@ -176,24 +223,7 @@ public class PostService extends PostGeneralService implements IPostService {
     public PostResponseDTO findPostResponseById(String postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new NullPointerException("Post not found!"));
         PostResponseDTO postResponseDTO = ConvertUtils.convert(post, PostResponseDTO.class);
-        postResponseDTO.setAuthor(ConvertUtils.convert(post.getUser(), UserResponseDTO.class));
-        if(post.getMedias() != null){
-            postResponseDTO.setMedias(new ArrayList<>());
-            for (Media media : post.getMedias()) {
-                postResponseDTO.getMedias().add(media.getUrl());
-            }
-        }
-        if(post.getUserTags() != null){
-            postResponseDTO.setUserTags(new ArrayList<>());
-            for (UserTag userTag : post.getUserTags()) {
-                postResponseDTO.getUserTags().add(new UserResponseDTO(
-                        userTag.getUser().getUserId(),
-                        userTag.getUser().getFullName(),
-                        userTag.getUser().getAvatar(),
-                        null
-                ));
-            }
-        }
+        setMediaAndUserTagsAndAuthor(post, postResponseDTO);
         return postResponseDTO;
     }
 
