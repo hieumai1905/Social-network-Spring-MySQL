@@ -69,4 +69,7 @@ window.onload = () => {
     if (typeof registerUpdatePhotoEvents === 'function') {
         registerUpdatePhotoEvents();
     }
+    if (typeof initMessage === 'function') {
+        initMessage();
+    }
 };

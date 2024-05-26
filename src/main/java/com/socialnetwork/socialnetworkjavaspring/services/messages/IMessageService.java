@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface IMessageService{
     List<Message> findAllByConversationId(Long conversationId);
+
+    Optional<Message> save(Message object);
 }

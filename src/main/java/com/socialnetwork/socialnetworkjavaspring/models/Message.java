@@ -39,4 +39,10 @@ public class Message {
     protected void onCreate() {
         this.sendAt = new Date();
     }
+
+    public Message(String content, Conversation conversation, User sender) {
+        this.content = content;
+        this.conversation = conversation;
+        this.sender = sender;
+    }
 }
