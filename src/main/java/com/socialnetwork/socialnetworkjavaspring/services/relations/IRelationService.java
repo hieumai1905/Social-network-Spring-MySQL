@@ -22,7 +22,7 @@ public interface IRelationService extends IGeneralService<Relation, Long> {
 
     List<RelationResponseObjectDTO> findRelationDTOWithMutualFriendCount(String userId, List<Relation> relations);
 
-    Relation findByUserIdAndUserTargetIdAndType(String userId, String userTargetId, RelationType type) throws Exception;
+    Optional<Relation> findByUserIdAndUserTargetIdAndType(String userId, String userTargetId, RelationType type);
 
     void acceptFriend(User userRequest, User user) throws Exception;
 }

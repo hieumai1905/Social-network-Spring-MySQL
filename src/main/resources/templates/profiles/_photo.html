@@ -33,18 +33,24 @@
             <h4 class="fw-700 font-sm mt-2 mb-lg-5 mb-4 pl-15" th:text="${user_info.fullName}">
             </h4>
             <div class="d-flex align-items-center justify-content-center position-absolute-md right-15 top-0 me-2">
+
                 <a href="#"
-                   class="d-none d-lg-block bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3"
-                   th:if="${!author && !isFriend}" style="margin-right: 8px;">Add Friend</a>
+                   class="d-none d-lg-block p-3 z-index-1 rounded-3 font-xsssss text-uppercase fw-700 ls-3 me-2"
+                   th:if="${!author}"
+                   th:attr="data-user-id=${user_info.userId}, data-is-friend=${isFriend}, data-is-requested=${isRequested}"
+                   th:classappend="${isFriend} ? 'bg-grey text-grey-900' : (${isRequested} ? 'bg-grey text-grey-900' : 'bg-success text-white')"
+                   th:text="${isFriend} ? 'Cancel Friend' : (${isRequested} ? 'Cancel Request' : 'Add Friend')"
+                   onclick="_toggleFriend(this)">
+                </a>
                 <a href="#"
-                   class="d-none d-lg-block bg-grey p-3 z-index-1 rounded-3 text-grey-900 font-xsssss text-uppercase fw-700 ls-3"
-                   th:if="${!author && isFriend}" style="margin-right: 8px;"> Cancel Friend</a>
-                <a href="#"
-                   class="d-none d-lg-block bg-grey p-3 z-index-1 rounded-3 text-grey-900 font-xsssss text-uppercase fw-700 ls-3"
-                   th:if="${!author && isFollow}" th:text="UnFollow"></a>
-                <a href="#"
-                   class="d-none d-lg-block bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3"
-                   th:if="${!author && !isFollow}" th:text="Follow"></a>
+                   class="d-none d-lg-block p-3 z-index-1 rounded-3 font-xsssss text-uppercase fw-700 ls-3 btn btn-follow-profile"
+                   th:if="${!author}"
+                   th:attr="data-user-id=${user_info.userId}, data-is-following=${isFollow}"
+                   th:classappend="${isFollow} ? 'bg-grey text-grey-900' : 'bg-primary text-white'"
+                   th:text="${isFollow} ? 'Unfollow' : 'Follow'"
+                   onclick="_toggleFollow(this)">
+                </a>
+
                 <a href="#" id="dropdownMenu4"
                    class="d-none d-lg-block btn-round-lg ms-2 rounded-3 text-grey-700 bg-greylight"
                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
@@ -58,7 +64,8 @@
                     </div>
                     <div class="card-body p-0 d-flex mt-2">
                         <i class="feather-lock text-grey-500 me-3 font-lg"></i>
-                        <a href="#" class="fw-600 text-grey-900 font-xssss mt-1 me-0">Block</a>
+                        <a href="#" class="fw-600 text-grey-900 font-xssss mt-1 me-0"
+                           th:attr="data-user-id=${user_info.userId}" onclick="_blockUser(this)">Block</a>
                     </div>
                 </div>
 
@@ -73,6 +80,7 @@
             </div>
         </div>
     </div>
+    <script th:src="@{/assets/javascript/users/user-handle.js}"></script>
 </div>
 </body>
 </html>
