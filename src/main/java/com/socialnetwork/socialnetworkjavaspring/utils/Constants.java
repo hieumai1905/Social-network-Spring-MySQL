@@ -17,4 +17,8 @@ public final class Constants {
     public static final String DOT = ".";
     public static final String[] allowExtensionImages = {"jpg", "png", "jpeg", "gif"};
     public static final String[] allowExtensionVideos = {"mp4", "avi", "mov", "mkv"};
+
+    public static final String TAB_ACCOUNT = "account";
+    public static final String TAB_EMAIL = "email";
+    public static final String TAB_PASSWORD = "password";
 }

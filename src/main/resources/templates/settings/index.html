@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/layouts/application:: application_layout(false)}" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:fragment="page_title">Settings</title>
+</head>
+<body>
+<!-- main content -->
+<div th:fragment="main_content" class="main-content right-chat-active">
+    <div class="middle-sidebar-bottom">
+        <div class="middle-sidebar-left">
+            <div class="row feed-body">
+                <!-- account info content-->
+                <div th:if="${account}">
+                    <div th:replace="~{/settings/_account::fragment-account-info}"></div>
+                </div>
+                <!-- account info-->
+
+                <!-- settings content-->
+                <div th:if="${setting}">
+                    <div th:replace="~{/settings/_settings::fragment-settings}"></div>
+                </div>
+                <!-- settings content-->
+
+                <!-- update email-->
+                <div th:if="${email}">
+                    <div th:replace="~{/settings/_update_email::fragment-update-email}"></div>
+                </div>
+                <!-- update email-->
+
+                <!-- update password-->
+                <div th:if="${password}">
+                    <div th:replace="~{/settings/_update_password::fragment-update-password}"></div>
+                </div>
+                <!-- update password-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- main content -->
+</body>
+</html>
