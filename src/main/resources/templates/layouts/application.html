@@ -36,6 +36,10 @@
     <div th:replace="~{/shared/_right_chat::fragment-chat}">
     </div>
     <!-- right chat -->
+
+    <!-- popup chat -->
+    <div th:replace="~{/chat/_popup_chat::fragment-popup-chat}"></div>
+    <!-- popup chat -->
 </div>
 <!--fragments-->
 <div th:if="${isFragments}">
@@ -49,6 +53,7 @@
 <script th:src="@{/assets/javascript/validates.js}"></script>
 <script th:src="@{/assets/javascript/formatter.js}"></script>
 <script th:src="@{/assets/javascript/loader-data.js}"></script>
+<script th:src="@{/assets/javascript/messages/message-handle.js}"></script>
 <script th:src="@{/assets/javascript/conversations/convesation-loader.js}"></script>
 <script th:src="@{/assets/javascript/conversations/conversation-handle.js}"></script>
 </body>

@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/relations")
-public class ApiRelationController extends ApplicationController {
+public class ApisRelationController extends ApplicationController {
     @Autowired
     private IRelationService relationService;
 
