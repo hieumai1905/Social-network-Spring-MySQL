@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/layouts/admin::admin_layout(true)}" lang="en">
+
+<body>
+<div th:fragment="main_content" class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-lg-4 col-md-12">
+        <div class="white-box analytics-info">
+          <h3 class="box-title">Total Users</h3>
+          <ul class="list-inline two-part d-flex align-items-center mb-0">
+            <li>
+              <div id="sparklinedash"><canvas width="67" height="30"
+                                              style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+              </div>
+            </li>
+            <li class="ms-auto"><span id="totalUsers" class="counter text-success">659</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-12">
+        <div class="white-box analytics-info">
+          <h3 class="box-title">Total Posts</h3>
+          <ul class="list-inline two-part d-flex align-items-center mb-0">
+            <li>
+              <div id="sparklinedash2"><canvas width="67" height="30"
+                                               style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+              </div>
+            </li>
+            <li class="ms-auto"><span id="totalPosts" class="counter text-purple">869</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-12">
+        <div class="white-box analytics-info">
+          <h3 class="box-title">Total Reports</h3>
+          <ul class="list-inline two-part d-flex align-items-center mb-0">
+            <li>
+              <div id="sparklinedash3"><canvas width="67" height="30"
+                                               style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+              </div>
+            </li>
+            <li class="ms-auto"><span id="totalReports" class="counter text-info">911</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- PRODUCTS YEARLY SALES -->
+    <!-- ============================================================== -->
+    <div class="row">
+      <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+        <div class="white-box">
+          <h3 class="box-title">Statistic new users and new posts</h3>
+          <div class="d-md-flex">
+            <ul class="list-inline d-flex ms-auto">
+              <li class="ps-3">
+                <select id="selectYear" class="p-1">
+                </select>
+              </li>
+              <li class="ps-3">
+                <h5><i class="fa fa-circle me-1 text-info"></i>Posts</h5>
+              </li>
+              <li class="ps-3">
+                <h5><i class="fa fa-circle me-1 text-inverse"></i>Users</h5>
+              </li>
+            </ul>
+          </div>
+          <div id="ct-visits" style="height: 405px;">
+            <div class="chartist-tooltip" style="top: -17px; left: -12px;"><span
+                    class="chartist-tooltip-value">6</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!-- ============================================================== -->
+  <!-- Three charts -->
+  <!-- ============================================================== -->
+</div>
+</body>
+</html>
