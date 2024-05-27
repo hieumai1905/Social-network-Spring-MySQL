@@ -17,10 +17,15 @@
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/admin/plugins/images/favicon.png}">
     <!-- Custom CSS -->
     <link th:href="@{/assets/admin/css/style.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/admin/css/custom-style.css}" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <link th:href="@{/assets/admin/plugins/bower_components/chartist/dist/chartist.min.css}" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/assets/admin/plugins/bower_components/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css}">
+
+    <!--    data table-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <!--    data table-->
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -56,13 +61,13 @@
                     <!-- Logo icon -->
                     <b class="logo-icon">
                         <!-- Dark Logo icon -->
-                        <img th:src="@{assets/admin/plugins/images/logo-icon.png}" alt="homepage" />
+                        <img th:src="@{/assets/admin/plugins/images/logo-icon.png}" alt="homepage" />
                     </b>
                     <!--End Logo icon -->
                     <!-- Logo text -->
                     <span class="logo-text">
                             <!-- dark Logo text -->
-                            <img th:src="@{assets/admin/plugins/images/logo-text.png}" alt="homepage" />
+                            <img th:src="@{/assets/admin/plugins/images/logo-text.png}" alt="homepage" />
                         </span>
                 </a>
                 <!-- ============================================================== -->
@@ -129,17 +134,17 @@
                 <ul id="sidebarnav">
                     <!-- User Profile-->
                     <li class="sidebar-item pt-2">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="dashboard.html"
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/"
                            aria-expanded="false">
                             <i class="far fa-clock" aria-hidden="true"></i>
                             <span class="hide-menu">Dashboard</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="profile.html"
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/users"
                            aria-expanded="false">
                             <i class="fa fa-user" aria-hidden="true"></i>
-                            <span class="hide-menu">Profile</span>
+                            <span class="hide-menu">Users</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -147,34 +152,6 @@
                            aria-expanded="false">
                             <i class="fa fa-table" aria-hidden="true"></i>
                             <span class="hide-menu">Basic Table</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="fontawesome.html"
-                           aria-expanded="false">
-                            <i class="fa fa-font" aria-hidden="true"></i>
-                            <span class="hide-menu">Icon</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="map-google.html"
-                           aria-expanded="false">
-                            <i class="fa fa-globe" aria-hidden="true"></i>
-                            <span class="hide-menu">Google Map</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="blank.html"
-                           aria-expanded="false">
-                            <i class="fa fa-columns" aria-hidden="true"></i>
-                            <span class="hide-menu">Blank Page</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="404.html"
-                           aria-expanded="false">
-                            <i class="fa fa-info-circle" aria-hidden="true"></i>
-                            <span class="hide-menu">Error 404</span>
                         </a>
                     </li>
                 </ul>
@@ -218,11 +195,14 @@
 <script th:src="@{/assets/admin/js/waves.js}"></script>
 <!--Menu sidebar -->
 <script th:src="@{/assets/admin/js/sidebarmenu.js}"></script>
+<!--data table-->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 <!--Custom JavaScript -->
 <script th:src="@{/assets/admin/js/custom.js}"></script>
 <script th:src="@{/assets/admin/plugins/bower_components/chartist/dist/chartist.min.js}"></script>
 <script th:src="@{/assets/admin/plugins/bower_components/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
 <script th:src="@{/assets/admin/js/pages/dashboards/dashboard1.js}"></script>
+<script th:src="@{/assets/admin/js/users.js}"></script>
 </body>
 </html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/layouts/admin::admin_layout(true)}" lang="en">
+<body>
+<div th:fragment="main_content" class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="white-box">
+        <h3 class="box-title">Users</h3>
+        <div class="table-responsive">
+          <table id="userTable" class="table text-nowrap">
+            <thead>
+            <tr>
+              <th class="border-top-0">#</th>
+              <th class="border-top-0">Full Name</th>
+              <th class="border-top-0">Email</th>
+              <th class="border-top-0">Status</th>
+              <th class="border-top-0">Role</th>
+              <th class="border-top-0">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr th:each="user, index : ${users}">
+                <td th:text="${index.index + 1}"></td>
+                <td th:text="${user.fullName}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:id="'status-' + ${user.userId}" th:text="${user.status}"></td>
+                <td>
+                  <button th:data-userId="${user.userId}" th:if="${user.userRole.name() == 'ROLE_ADMIN'}"
+                          class="btn btn-primary btn-change-role text-white w-68">Admin</button>
+                  <button th:data-userId="${user.userId}" th:if="${user.userRole.name() == 'ROLE_USER'}"
+                          class="btn btn-secondary btn-change-role text-white w-68">User</button>
+                </td>
+                <td>
+                  <button th:data-userId="${user.userId}" th:if="${user.status.name() == 'ACTIVE'}"
+                          class="btn btn-danger btn-lock-user text-white w-68">Lock</button>
+                  <button th:data-userId="${user.userId}" th:if="${user.status.name() == 'INACTIVE' || user.status.name() == 'LOCKED'}"
+                          class="btn btn-success btn-active-user text-white w-68">Active</button>
+                </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
