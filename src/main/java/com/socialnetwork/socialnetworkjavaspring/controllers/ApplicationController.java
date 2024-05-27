@@ -5,6 +5,7 @@ import com.socialnetwork.socialnetworkjavaspring.models.Post;
 import com.socialnetwork.socialnetworkjavaspring.models.Relation;
 import com.socialnetwork.socialnetworkjavaspring.models.User;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.RelationType;
+import com.socialnetwork.socialnetworkjavaspring.models.enums.RoleUser;
 import com.socialnetwork.socialnetworkjavaspring.services.new_feeds.NewsFeedService;
 import com.socialnetwork.socialnetworkjavaspring.services.relations.IRelationService;
 import com.socialnetwork.socialnetworkjavaspring.services.sessions.SessionService;
@@ -40,6 +41,9 @@ public class ApplicationController {
     @GetMapping(value = {"/", "/index"})
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView("index");
+        if(currentUser.getUserRole().equals(RoleUser.ROLE_ADMIN)){
+            return setAuthor(new ModelAndView("admin/index"));
+        }
         String currentUserId = currentUser.getUserId();
         List<Post> posts = newsFeedService.getNewsFeed(currentUserId);
         modelAndView.addObject("posts", posts);
