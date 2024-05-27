@@ -190,3 +190,13 @@ function deletePostInteract(type, postId, element){
         }
     });
 }
+
+function copyLink(element){
+    let postId = element.getAttribute('data-post-id');
+    let link = window.location.origin + '/details/posts?id=' + postId;
+    let tempInput = $('<input>');
+    $('body').append(tempInput);
+    tempInput.val(link).select();
+    document.execCommand('copy');
+    tempInput.remove();
+}

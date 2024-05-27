@@ -43,10 +43,10 @@ public class ApplicationController {
         String currentUserId = currentUser.getUserId();
         List<Post> posts = newsFeedService.getNewsFeed(currentUserId);
         modelAndView.addObject("posts", posts);
-
         List<Relation> relations = relationService.findByUserTargetIdAndType(currentUserId, RelationType.REQUEST);
         List<RelationResponseObjectDTO> relationDTOs = relationService.findRelationDTOWithMutualFriendCount(currentUserId, relations);
         modelAndView.addObject("requestsFriend", relationDTOs);
+        modelAndView.addObject("page_title", "News Feed");
         return setAuthor(modelAndView);
     }
 
