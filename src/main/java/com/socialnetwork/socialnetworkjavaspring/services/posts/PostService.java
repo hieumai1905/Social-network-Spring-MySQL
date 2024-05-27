@@ -87,13 +87,13 @@ public class PostService extends PostGeneralService implements IPostService {
 
     private void setMediaAndUserTagsAndAuthor(Post post, PostResponseDTO postResponseDTO) {
         postResponseDTO.setAuthor(ConvertUtils.convert(post.getUser(), UserResponseDTO.class));
-        if(post.getMedias() != null){
+        if (post.getMedias() != null) {
             postResponseDTO.setMedias(new ArrayList<>());
             for (Media media : post.getMedias()) {
                 postResponseDTO.getMedias().add(media.getUrl());
             }
         }
-        if(post.getUserTags() != null){
+        if (post.getUserTags() != null) {
             postResponseDTO.setUserTags(new ArrayList<>());
             for (UserTag userTag : post.getUserTags()) {
                 postResponseDTO.getUserTags().add(new UserResponseDTO(

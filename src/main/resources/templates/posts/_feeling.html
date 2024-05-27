@@ -33,6 +33,9 @@
         <div th:data-postId="${item.postId}" class="btn-share-post card-body p-0 rounded-xxxl d-flex float-right">
             <h4 class="fw-600 text-white font-xsss mt-1 btn btn-primary">Share</h4>
         </div>
+        <div class="card-body p-0 rounded-xxxl me-2 d-flex float-right">
+            <h4 class="fw-600 text-grey-700 font-xsss mt-1 btn btn-outline-warning" onclick="copyLink(this)" th:attr="data-post-id=${item.postId}">Copy link</h4>
+        </div>
     </div>
 </div>
 </body>

@@ -17424,6 +17424,10 @@ select.sort {
     max-height: 400px;
 }
 
+.custom-mh-500{
+    max-height: 500px;
+}
+
 .custom-avatar-200{
     width: 200px;
     height: 200px;

@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IPostRepository extends JpaRepository<Post, String> {
@@ -77,26 +78,26 @@ public interface IPostRepository extends JpaRepository<Post, String> {
             "ORDER BY create_at DESC", nativeQuery = true)
     List<Post> findAllByUserCurrent(String userId);
 
-    @Query(value = "SELECT * FROM (" +
-            "SELECT p.* " +
+    @Query(value = "SELECT p.* " +
             "FROM posts p " +
-            "WHERE (p.user_id = :userId OR p.post_id IN " +
-            "(SELECT ut.post_id FROM user_tags ut WHERE ut.user_id = :userId)) " +
-            "AND NOT EXISTS (SELECT 1 " +
-            "               FROM post_interacts pi " +
-            "               WHERE pi.user_id = :userId " +
-            "               AND (pi.type = 'HIDDEN') " +
-            "               AND pi.post_id = p.post_id) " +
-            "AND p.access = 'PUBLIC'" +
-            "UNION " +
-            "SELECT p.* " +
-            "FROM posts p " +
-            "WHERE p.post_id IN (SELECT s.post_id " +
-            "                    FROM post_interacts s " +
-            "                    WHERE s.user_id = :userId " +
-            "                    AND s.type = 'SHARED')) AS subquery " +
-            "ORDER BY subquery.create_at DESC", nativeQuery = true)
-    List<Post> findAllByUser(String userId);
+            "WHERE p.post_id = :postId " +
+            "  AND NOT EXISTS (SELECT 1 " +
+            "                  FROM relations r " +
+            "                  WHERE r.user_id = :userId " +
+            "                    AND r.user_target_id = p.user_id " +
+            "                    AND r.type = 'BLOCK') " +
+            "  AND NOT EXISTS (SELECT 1 " +
+            "                  FROM post_interacts pi " +
+            "                  WHERE pi.user_id = :userId " +
+            "                    AND (pi.type = 'HIDDEN' OR pi.type = 'REPORT') " +
+            "                    AND pi.post_id = p.post_id) " +
+            "  AND (p.access = 'PUBLIC' " +
+            "       OR (p.access = 'FRIEND' AND EXISTS (SELECT 1 " +
+            "                                            FROM relations r " +
+            "                                            WHERE r.user_id = :userId " +
+            "                                              AND r.user_target_id = p.user_id " +
+            "                                              AND r.type = 'FRIEND')))", nativeQuery = true)
+    Optional<Post> findPostByIdAndNotHiddenOrReportedOrBlockedOrPrivate(@Param("postId") String postId, @Param("userId") String userId);
 
     @Query(value = "SELECT p.* " +
             "FROM posts p " +
