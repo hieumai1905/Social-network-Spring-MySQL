@@ -36,7 +36,7 @@ public class ApisPostController extends ApplicationController {
     public ResponseEntity<ApiResponse> delete(@PathVariable String postId){
         try{
             return responseApi(HttpStatus.OK, "Delete post successfully!",
-                    postService.delete(postId, currentUser.getUserId()));
+                    postService.delete(postId, currentUser));
         }catch (Exception ex){
             return responseApi(HttpStatus.BAD_REQUEST, ex.getMessage());
         }

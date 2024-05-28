@@ -23,7 +23,7 @@ public interface IPostService{
 
     List<Post> findPostByInteractType(InteractType interactType, String userId);
 
-    String delete(String postId, String userId);
+    String delete(String postId, User user);
 
     List<Post> findAllPostForProfileOther(String userId, Boolean isFriend);
 

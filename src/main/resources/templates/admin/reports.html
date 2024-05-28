@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/layouts/admin::admin_layout('reports')}" lang="en">
+
+<body>
+<div th:fragment="main_content" class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="white-box">
+        <h3 class="box-title">Reports</h3>
+        <div class="table-responsive">
+          <table id="reportTable" class="table text-nowrap">
+            <thead>
+            <tr>
+              <th class="border-top-0">#</th>
+              <th class="border-top-0">Content</th>
+              <th class="border-top-0">Created at</th>
+              <th class="border-top-0">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="report, index : ${reports}" th:id="'tr-post-' + ${report.post.postId}">
+              <td th:text="${index.index + 1}"></td>
+              <td>
+                <p class="overflow-auto" th:text="${report.content}"></p>
+              </td>
+              <td th:text="${report.interactAt}"></td>
+              <td>
+                <a class="ms-auto show" id="reportDropdownMenu" data-bs-toggle="dropdown" aria-expanded="true">
+                  <i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end p-2 rounded-xxxl cursor-pointer border-0 shadow-lg"
+                     aria-labelledby="reportDropdownMenu">
+                  <div th:data-postId="${report.post.postId}" class="view-post card-body p-2 dropdown-item rounded-xxxl d-flex">
+                    <i class="fa fa-file-image-o text-grey-500 me-2 fw-600 font-sm"></i>
+                    <h4 class="fw-600 text-grey-900 font-xsss mt-1">View post</h4>
+                  </div>
+                  <div th:data-postId="${report.post.postId}" class="delete-post card-body p-2 dropdown-item rounded-xxxl d-flex">
+                      <i class="fa fa-user-circle-o text-grey-500 me-2 fw-600 font-sm"></i>
+                      <h4 class="fw-600 text-grey-900 font-xsss mt-1">Delete post</h4>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

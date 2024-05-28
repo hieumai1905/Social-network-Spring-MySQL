@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:fragment="admin_layout(isFragments)" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="admin_layout(page)" lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -148,10 +148,10 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="basic-table.html"
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/reports"
                            aria-expanded="false">
-                            <i class="fa fa-table" aria-hidden="true"></i>
-                            <span class="hide-menu">Basic Table</span>
+                            <i class="fa fa-flag" aria-hidden="true"></i>
+                            <span class="hide-menu">Reports</span>
                         </a>
                     </li>
                 </ul>
@@ -199,10 +199,12 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 <!--Custom JavaScript -->
 <script th:src="@{/assets/admin/js/custom.js}"></script>
+<script th:src="@{/assets/javascript/formatter.js}"></script>
 <script th:src="@{/assets/admin/plugins/bower_components/chartist/dist/chartist.min.js}"></script>
 <script th:src="@{/assets/admin/plugins/bower_components/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
-<script th:src="@{/assets/admin/js/pages/dashboards/dashboard1.js}"></script>
-<script th:src="@{/assets/admin/js/users.js}"></script>
+<script th:if="${page == 'index'}" th:src="@{/assets/admin/js/pages/dashboards/dashboard1.js}"></script>
+<script th:if="${page == 'users'}" th:src="@{/assets/admin/js/users.js}"></script>
+<script th:if="${page == 'reports'}" th:src="@{/assets/admin/js/reports.js}"></script>
 </body>
 </html>
