@@ -8,6 +8,7 @@ import com.socialnetwork.socialnetworkjavaspring.DTOs.users.UserResponseDTO;
 import com.socialnetwork.socialnetworkjavaspring.models.*;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.InteractType;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.PostType;
+import com.socialnetwork.socialnetworkjavaspring.models.enums.RoleUser;
 import com.socialnetwork.socialnetworkjavaspring.models.key.PostHashtagId;
 import com.socialnetwork.socialnetworkjavaspring.models.key.UserTagId;
 import com.socialnetwork.socialnetworkjavaspring.repositories.IHashtagRepository;
@@ -228,9 +229,9 @@ public class PostService extends PostGeneralService implements IPostService {
     }
 
     @Override
-    public String delete(String postId, String userId) {
+    public String delete(String postId, User user) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new NullPointerException("Post not found!"));
-        if(!post.getUser().getUserId().equals(userId))
+        if(!post.getUser().getUserId().equals(user.getUserId()) && !user.getUserRole().equals(RoleUser.ROLE_ADMIN))
             throw new RuntimeException("This post is not your!");
         postRepository.delete(post);
         return postId;
