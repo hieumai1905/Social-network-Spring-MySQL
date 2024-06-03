@@ -1,61 +1,59 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{/layouts/application:: application_layout(false)}" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title th:fragment="page_title">Search</title>
+    <meta charset="UTF-8">
+    <title th:fragment="page_title">Search</title>
 </head>
 <body>
 
 <!-- main content -->
 <div th:fragment="main_content" class="main-content right-chat-active">
-  <div class="middle-sidebar-bottom">
-    <div class="middle-sidebar-left pe-0">
-      <div class="row">
-        <div class="col-xl-12">
-          <div class="card shadow-xss w-100 d-block d-flex border-0 p-4 mb-3">
-            <div class="card-body d-flex align-items-center p-0">
-              <h2 class="fw-700 mb-0 mt-0 font-md text-grey-900">
-                Search results by <span id="searchBy" th:text="${search_type}"></span>
-              </h2>
-<!--              <div class="search-form-2 float-right">-->
-<!--                <select id="search-type" class="form-control text-grey-900 mb-0 bg-greylight theme-dark-bg border-0">-->
-<!--                  <option value="post" th:selected="${search_type == 'post'}">Post</option>-->
-<!--                  <option value="people" th:selected="${search_type == 'people'}">People</option>-->
-<!--                </select>-->
-<!--              </div>-->
-              <div class="search-form-2 ms-auto">
-                  <i class="ti-search font-xss"></i>
-                  <input id="search-input" type="text" th:value="${search_value}"
-                         class="form-control text-grey-900 mb-0 bg-greylight theme-dark-bg border-0"
-                         placeholder="Search here.">
-              </div>
-              <a id="searchDropdownMenu" data-bs-toggle="dropdown"
-                 aria-expanded="false" class="btn-round-md ms-2 bg-greylight theme-dark-bg rounded-3">
-                <i class="feather-filter font-xss text-grey-500"></i>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end p-2 rounded-xxxl cursor-pointer border-0 shadow-lg"
-                   aria-labelledby="searchDropdownMenu">
-                <div th:data-search-by="post" class="search-results-by card-body p-2 dropdown-item rounded-xxxl d-flex">
-                  <i class="fa fa-file-text-o text-grey-800 me-2 fw-600 font-sm"></i>
-                  <h4 class="fw-600 text-grey-900 font-xsss mt-1">Post</h4>
+    <div class="middle-sidebar-bottom">
+        <div class="middle-sidebar-left pe-0">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card shadow-xss w-100 d-block d-flex border-0 p-4 mb-3">
+                        <div class="card-body d-flex align-items-center p-0">
+                            <h2 class="fw-700 mb-0 mt-0 font-md text-grey-900">
+                                Search results by <span id="searchBy" th:text="${search_type}"></span>
+                            </h2>
+                            <div class="search-form-2 ms-auto">
+                                <i class="ti-search font-xss"></i>
+                                <input id="search-input" type="text" th:value="${search_value}"
+                                       class="form-control text-grey-900 mb-0 bg-greylight theme-dark-bg border-0"
+                                       placeholder="Search here.">
+                            </div>
+                            <a id="searchDropdownMenu" data-bs-toggle="dropdown"
+                               aria-expanded="false" class="btn-round-md ms-2 bg-greylight theme-dark-bg rounded-3">
+                                <i class="feather-filter font-xss text-grey-500"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end p-2 mt-1 rounded-xxxl cursor-pointer border-0 shadow-lg"
+                                 aria-labelledby="searchDropdownMenu">
+                                <div th:data-search-by="post"
+                                     class="search-results-by card-body p-2 dropdown-item rounded-xxxl d-flex">
+                                    <i class="fa fa-file-text-o text-grey-800 me-2 fw-600 font-sm"></i>
+                                    <h4 class="fw-600 text-grey-900 font-xsss mt-1">Post</h4>
+                                </div>
+                                <div th:data-search-by="people"
+                                     class="search-results-by card-body p-2 dropdown-item rounded-xxxl d-flex">
+                                    <i class="fa fa-users text-grey-800 me-2 fw-600 font-sm"></i>
+                                    <h4 class="fw-600 text-grey-900 font-xsss mt-1">People</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="search-results" class="row ps-2 pe-2">
+                        <div th:if="${search_type == 'people'}"
+                             th:replace="~{/people/_users :: fragment-user-list}"></div>
+                        <div th:if="${search_type == 'post'}" th:replace="~{/posts/_posts :: fragment-post-list}"></div>
+                    </div>
                 </div>
-                <div th:data-search-by="people" class="search-results-by card-body p-2 dropdown-item rounded-xxxl d-flex">
-                    <i class="fa fa-users text-grey-800 me-2 fw-600 font-sm"></i>
-                    <h4 class="fw-600 text-grey-900 font-xsss mt-1">People</h4>
-                </div>
-              </div>
-            </div>
-          </div>
-            <div id="search-results" class="row ps-2 pe-2">
-                <div th:if="${search_type == 'people'}" th:replace="~{/people/_users :: fragment-user-list}"></div>
-                <div th:if="${search_type == 'post'}" th:replace="~{/posts/_posts :: fragment-post-list}"></div>
             </div>
         </div>
-      </div>
     </div>
-  </div>
-  <script th:src="@{/assets/javascript/posts/create-post.js}"></script>
-  <script th:src="@{/assets/javascript/search/search.js}"></script>
+    <script th:src="@{/assets/javascript/posts/create-post.js}"></script>
+    <script th:src="@{/assets/javascript/search/search.js}"></script>
+    <script th:src="@{/assets/javascript/users/user-handle.js}"></script>
 </div>
 <!-- main content -->
 
