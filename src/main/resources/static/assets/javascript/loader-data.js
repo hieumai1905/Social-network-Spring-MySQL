@@ -9,7 +9,9 @@ function loadConversations() {
         url: '/api/conversations', type: 'GET', success: function (data) {
             conversations = data;
             console.log('Conversations loaded');
-            displayConversations();
+            displayConversations().then(r => {
+                console.log('Conversations displayed');
+            });
         }, error: function (data) {
             console.log('Error loading conversations');
         }
