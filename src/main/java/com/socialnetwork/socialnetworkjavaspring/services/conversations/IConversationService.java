@@ -13,4 +13,6 @@ public interface IConversationService extends IGeneralService<Conversation, Long
     Optional<Conversation> findById(Long key);
 
     Boolean isType(Long conversationId, ConversationType type);
+
+    Conversation findByPersonalTypeAndUserIdAndUserTargetId(String userId, String userTargetId) throws Exception;
 }

@@ -23,29 +23,40 @@ public class ApisUserController extends ApplicationController {
     private IUserService userService;
 
     @GetMapping("/friends")
-    public ResponseEntity<ApiResponse> findUsersFriend(){
+    public ResponseEntity<ApiResponse> findUsersFriend() {
         List<User> usersFriend = userService.findUsersByRelationType(currentUser.getUserId(), RelationType.FRIEND);
         List<UserResponseDTO> userResponseDTOs = ConvertUtils.convertList(usersFriend, UserResponseDTO.class);
         return responseApi(HttpStatus.OK, "Search people successfully!", userResponseDTOs);
     }
 
     @PutMapping("/change-status-user")
-    public ResponseEntity<ApiResponse> changeStatusUser(@RequestBody ChangeStatusOrRoleUserRequestDTO request){
-        try{
+    public ResponseEntity<ApiResponse> changeStatusUser(@RequestBody ChangeStatusOrRoleUserRequestDTO request) {
+        try {
             userService.changeStatusUser(request);
             return responseApi(HttpStatus.OK, "Change status user successfully!");
-        }catch (Exception e){
+        } catch (Exception e) {
             return responseApi(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @PutMapping("/change-role-user")
-    public ResponseEntity<ApiResponse> changeRoleUser(@RequestBody ChangeStatusOrRoleUserRequestDTO request){
-        try{
+    public ResponseEntity<ApiResponse> changeRoleUser(@RequestBody ChangeStatusOrRoleUserRequestDTO request) {
+        try {
             userService.changeRoleUser(request);
             return responseApi(HttpStatus.OK, "Change role user successfully!");
-        }catch (Exception e){
+        } catch (Exception e) {
             return responseApi(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse> show(@RequestParam("id") String userId) {
+        try {
+            User user = userService.findById(userId);
+            UserResponseDTO userResponseDTO = ConvertUtils.convert(user, UserResponseDTO.class);
+            return responseApi(HttpStatus.OK, "Get user successfully!", userResponseDTO);
+        } catch (Exception e) {
+            return responseApi(HttpStatus.NOT_FOUND, "User don't exist");
         }
     }
 }

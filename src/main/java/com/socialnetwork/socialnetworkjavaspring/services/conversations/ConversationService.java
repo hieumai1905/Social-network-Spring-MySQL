@@ -28,7 +28,7 @@ public class ConversationService implements IConversationService {
 
     @Override
     public List<Conversation> getConversationJoinedByUserId(String userId) {
-        return conversationRepository.findAllByUserId_AndStatus(userId, ParticipantStatus.JOINED.toString());
+        return conversationRepository.findAllByUserId_AndStatusOrderByLatestMessageTime(userId, ParticipantStatus.JOINED.toString());
     }
 
     @Override
@@ -44,5 +44,11 @@ public class ConversationService implements IConversationService {
             isType = conversation.get().getType().equals(type);
         }
         return isType;
+    }
+
+    @Override
+    public Conversation findByPersonalTypeAndUserIdAndUserTargetId(String userId, String userTargetId) throws Exception {
+        return conversationRepository.getPersonalConversation(userId, userTargetId)
+                .orElseThrow(() -> new Exception("Conversation not found"));
     }
 }
