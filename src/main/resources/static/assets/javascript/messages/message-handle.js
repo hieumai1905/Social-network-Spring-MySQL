@@ -4,6 +4,7 @@ let stompClient = null;
 let userCurrentId = null;
 let room = null;
 let prevMessageTime = null;
+let userTargetId = null;
 
 function setHeaderPopup(conversationId) {
     let avatar = $('.image-conversation[data-conversation-id=' + conversationId + ']').attr('src');
@@ -54,7 +55,7 @@ function setMessage(messages) {
         prevMessageTime = currentMessageTime;
     });
     let messageContainer = $('#message-container');
-    if(html === '') {
+    if (html === '') {
         html = '<div class="text-center mt-5" id="no-message">No messages!</div>';
     }
     messageContainer.html(html);
@@ -101,7 +102,7 @@ function onError(error) {
 }
 
 function onMessageReceived(payload) {
-    let avatarUser = $('#current_user_avatar').val();
+    loadConversations();
     let messageContainer = $('#message-container');
     let message = JSON.parse(payload.body);
     if (message === null) {
@@ -144,16 +145,38 @@ function onMessageReceived(payload) {
 function sendMessageEvent() {
     let inputMessage = $('#input-message');
     let content = inputMessage.val().trim();
-    if (content && stompClient) {
-        let chatMessage = {
-            senderId: userCurrentId,
-            content: content
-        };
-        stompClient.send("/app/chat.sendMessage/" + room,
-            {},
-            JSON.stringify(chatMessage));
-        inputMessage.val('');
+    if (content) {
+        if (stompClient) {
+            let chatMessage = {
+                senderId: userCurrentId,
+                content: content
+            };
+            stompClient.send("/app/chat.sendMessage/" + room,
+                {},
+                JSON.stringify(chatMessage));
+            inputMessage.val('');
+        } else {
+            handleForNewConversation();
+        }
     }
+}
+
+function handleForNewConversation() {
+    $.ajax({
+        url: '/api/conversations/target/users/' + userTargetId,
+        type: 'POST',
+        success: function (response) {
+            if (response.code === 200) {
+                console.log(response.message);
+                room = response.data.conversationId;
+                connectChatSocket();
+                sendMessageEvent();
+            }
+        },
+        error: function (data) {
+            console.log('Error loading messages');
+        }
+    });
 }
 
 function initMessage() {
@@ -162,6 +185,48 @@ function initMessage() {
     inputMessage.on('keydown', function (event) {
         if (event.keyCode === 13) {
             sendMessageEvent();
+        }
+    });
+}
+
+function showConversationInProfile(element) {
+    let userId = element.getAttribute('data-user-id');
+    $.ajax({
+        url: '/api/conversations/target/users?id=' + userId,
+        type: 'GET',
+        success: function (response) {
+            if (response.code === 200) {
+                console.log(response.message);
+                showMessageConversation(response.data.conversationId);
+            } else if (response.code === 404) {
+                handleForConversationNotFound(userId);
+            }
+        },
+        error: function (data) {
+            console.log('Error loading messages');
+        }
+    });
+}
+
+function handleForConversationNotFound(userId) {
+    $.ajax({
+        url: '/api/users?id=' + userId,
+        type: 'GET',
+        success: function (response) {
+            if (response.code === 200) {
+                console.log(response.message);
+                let avatar = response.data.avatar;
+                let name = response.data.fullName;
+                let conversationImage = $('#conversation-image-chat');
+                let conversationName = $('#conversation-name-chat');
+                conversationImage.attr('src', avatar);
+                conversationName.text(name);
+                popupChat.addClass('d-block');
+                userTargetId = response.data.userId;
+            }
+        },
+        error: function (data) {
+            console.log('Error loading messages');
         }
     });
 }

@@ -24,14 +24,15 @@
                     <i class="fa fa-file-image-o text-grey-500 me-2 fw-600 font-sm"></i>
                     <h4 class="fw-600 text-grey-900 font-xsss mt-1">Update avatar</h4>
                 </div>
-                <!--                                <div class=" card-body p-2 dropdown-item rounded-xxxl d-flex">-->
-                <!--                                    <i class="fa fa-user-circle-o text-grey-500 me-2 fw-600 font-sm"></i>-->
-                <!--                                    <h4 class="fw-600 text-grey-900 font-xsss mt-1">View avatar</h4>-->
-                <!--                                </div>-->
             </div>
             <h4 class="fw-700 font-sm mt-2 mb-lg-5 mb-4 pl-15" th:text="${user_info.fullName}">
             </h4>
             <div class="d-flex align-items-center justify-content-center position-absolute-md right-15 top-0 me-2">
+
+                <a href="#" th:attr="data-user-id=${user_info.userId}" th:if="${!author}"
+                   class="d-none d-lg-block p-3 z-index-1 rounded-3 font-xsssss bg-grey text-grey-900 text-uppercase fw-700 ls-3 me-2"
+                   onclick="showConversationInProfile(this)"> Message
+                </a>
 
                 <a href="#"
                    class="d-none d-lg-block p-3 z-index-1 rounded-3 font-xsssss text-uppercase fw-700 ls-3 me-2"

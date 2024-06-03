@@ -49,6 +49,5 @@ public class Conversation {
     @PrePersist
     protected void onCreate() {
         this.createdAt = new Date();
-        this.avatar = null;
     }
 }

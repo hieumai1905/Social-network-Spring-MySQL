@@ -2,28 +2,26 @@ let conversationPrivate = $('#conversations-private');
 let conversationGroup = $('#conversations-group');
 let popupChat = $('#modal-popup-chat')
 
-function displayConversations() {
+async function displayConversations() {
     let htmlPrivate = '';
     let htmlGroup = '';
-    const promises = conversations.map(conversation => {
+
+    for (let i = 0; i < conversations.length; i++) {
+        const conversation = conversations[i];
         if (conversation.type === 'GROUP') {
             htmlGroup += renderConversation(conversation.conversationId, conversation.name, conversation.avatar, true);
         } else {
-            return fetchPersonalConversation(conversation)
-                .then(data => {
-                    htmlPrivate += renderConversation(conversation.conversationId, data.nickName, data.avatar, false);
-                })
-                .catch(error => {
-                    console.log('Error loading participants');
-                });
+            try {
+                const data = await fetchPersonalConversation(conversation);
+                htmlPrivate += renderConversation(conversation.conversationId, data.nickName, data.avatar, false);
+            } catch (error) {
+                console.log('Error loading participants');
+            }
         }
-    });
+    }
 
-    Promise.all(promises)
-        .then(() => {
-            conversationPrivate.html(htmlPrivate);
-            conversationGroup.html(htmlGroup);
-        });
+    conversationPrivate.html(htmlPrivate);
+    conversationGroup.html(htmlGroup);
 }
 
 function fetchPersonalConversation(conversation) {
