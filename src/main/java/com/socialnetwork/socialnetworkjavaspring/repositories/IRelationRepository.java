@@ -32,4 +32,6 @@ public interface IRelationRepository extends JpaRepository<Relation, Long> {
             "AND r1.type = 'FRIEND' AND r2.type = 'FRIEND'",
             nativeQuery = true)
     Long countMutualFriends(String userId, String userTargetId);
+
+    Long countByUserTarget_UserIdAndType(String userTargetId, RelationType type);
 }
