@@ -50,6 +50,11 @@ public class RelationService implements IRelationService {
     }
 
     @Override
+    public Long countFollower(String userId) {
+        return relationRepository.countByUserTarget_UserIdAndType(userId, RelationType.FOLLOW);
+    }
+
+    @Override
     public List<RelationResponseObjectDTO> findRelationDTOWithMutualFriendCount(String userId, List<Relation> relations) {
         List<RelationResponseObjectDTO> relationDTOs = ConvertUtils.convertList(relations, RelationResponseObjectDTO.class);
         for (RelationResponseObjectDTO relationResponseObjectDTO : relationDTOs) {

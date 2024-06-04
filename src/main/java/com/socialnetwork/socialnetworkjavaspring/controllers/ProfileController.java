@@ -47,6 +47,8 @@ public class ProfileController extends ApplicationController {
                 posts = setForProfileOther(modelAndView, userId);
             }
             List<User> users = userService.findUsersByRelationType(userId, RelationType.FRIEND);
+            Long followers = relationService.countFollower(userId);
+            modelAndView.addObject("followers", followers);
             modelAndView.addObject("number_of_friends", users.size());
         } catch (Exception e) {
             modelAndView.setViewName("/errors/404");

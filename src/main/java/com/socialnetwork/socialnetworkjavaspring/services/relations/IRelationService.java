@@ -20,6 +20,8 @@ public interface IRelationService extends IGeneralService<Relation, Long> {
 
     Long countMutualFriends(String userId, String userTargetId);
 
+    Long countFollower(String userId);
+
     List<RelationResponseObjectDTO> findRelationDTOWithMutualFriendCount(String userId, List<Relation> relations);
 
     Optional<Relation> findByUserIdAndUserTargetIdAndType(String userId, String userTargetId, RelationType type);
