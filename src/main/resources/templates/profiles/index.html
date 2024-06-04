@@ -37,8 +37,8 @@
                         <div class="card-body d-flex pt-0">
                             <i class="feather-users text-grey-500 me-3 font-lg"></i>
                             <h4 class="fw-500 font-xssss mt-1">
-                                <a href="/friends" class="text-grey-900">
-                                    <span th:text="${number_of_friends}" th:if="${number_of_friends >0}"></span>&nbsp;
+                                <a th:href="@{/friends(user-id=${user_info.userId})}" class="text-grey-900">
+                                    <span th:text="${number_of_friends}" th:if="${number_of_friends > 0}"></span>&nbsp;
                                     Friends
                                 </a>
                             </h4>
