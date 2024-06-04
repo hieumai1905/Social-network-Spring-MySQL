@@ -5,6 +5,7 @@ let searchContainer = null, selectSearchType = 'people';
 function initSearch() {
     searchContainer = $('#search-results');
     scrollToTop();
+    findUsersByFullName();
 
     $('#search-input').on('change', function () {
         searchContainer.empty();
@@ -54,12 +55,12 @@ function findPostByContentAndHashtags() {
                 pageIndex++;
                 isChangeConditionSearch = false;
             }
+            isFetching = false;
         },
         error: function (xhr, status, error) {
             console.log('error: ', xhr.responseText);
         }
     });
-    isFetching = false;
 }
 
 function setSearchPostRequest(inputText) {
@@ -89,7 +90,8 @@ function scrollToTop() {
 
 function registerScrollEvents() {
     $(window).scroll(function () {
-        if ($(window).scrollTop() + $(window).height() === $(document).height()) {
+        if ($(window).scrollTop() + $(window).height() + 100 >= $(document).height()) {
+            if (isFetching) return;
             let remainElements = totalElements - pageIndex * pageSize;
             if (!isFetching && (pageIndex === 0 || remainElements > 0)) {
                 handleSearch();
@@ -122,12 +124,12 @@ function findUsersByFullName() {
                 pageIndex++;
                 isChangeConditionSearch = false;
             }
+            isFetching = false;
         },
         error: function (xhr, status, error) {
             console.error(error);
         }
     });
-    isFetching = false;
 }
 
 function handleLoadSearchResults(data, type) {
