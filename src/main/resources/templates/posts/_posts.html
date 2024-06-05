@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <body>
-<div th:fragment="fragment-post-list" class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3"
+<div th:fragment="fragment-post-list" class="card w-100 shadow-xss rounded-xxl border-0 p-4 pb-2 mb-3"
      th:each="item: ${posts}" th:id="'post-' + ${item.postId}">
     <div class="card-body p-0 d-flex">
         <input type="hidden" th:value="${item.postId}" class="current-post-id">
@@ -105,6 +105,13 @@
     <!-- input comment here-->
     <div th:replace="~{/comments/_new::fragment-comment-new}"></div>
     <!-- input comment here-->
+
+    <!-- options comment here-->
+    <p class="m-0 p-0 font-xssss text-center option-comment d-none" th:id="'option-comment-' + ${item.postId}">
+        <span></span>
+        <a class="cursor-pointer btn-cancel-option-comment" th:attr="data-post-id=${item.postId}">Cancel</a>
+    </p>
+    <!-- options comment here-->
 </div>
 </body>
 </html>

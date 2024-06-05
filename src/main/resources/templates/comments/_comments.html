@@ -9,18 +9,19 @@
             </figure>
             <div class="bg-comment rounded-xxxl px-2">
                 <h4 class="fw-700 text-grey-900 font-xssss mt-2" th:text="${comment.user.fullName}"></h4>
-                <p th:text="${comment.content}"></p>
+                <p class="content-comment" th:text="${comment.content}"></p>
             </div>
             <a href="#" class="ms-2" th:id="'dd-comment-' + ${comment.commentId}" data-bs-toggle="dropdown"
-               aria-expanded="false" th:if="${comment.user.userId == currentUser.userId}">
+               aria-expanded="false"
+               th:if="${comment.user.userId == currentUser.userId || currentUser.userId == comment.post.user.userId}">
                 <i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i>
             </a>
             <div class="dropdown-menu p-1 rounded-xxxl border-0 shadow-lg"
-                 th:aria-labelledby="'dd-comment-' + ${comment.commentId}"
-                 th:if="${comment.user.userId == currentUser.userId}">
+                 th:aria-labelledby="'dd-comment-' + ${comment.commentId}">
                 <input type="hidden" th:value="${comment.commentId}" class="comment-id">
                 <h4 class="fw-600 w-100 cursor-pointer p-1 text-grey-900 font-xsss dropdown-item mt-0 me-4
-                hover-bg-light-gray btn-edit-comment" th:attr="data-comment-post-id=${comment.post.postId}">Edit</h4>
+                hover-bg-light-gray btn-edit-comment" th:attr="data-comment-post-id=${comment.post.postId}"
+                th:if="${comment.user.userId == currentUser.userId}">Edit</h4>
                 <h4 class="fw-600 w-100 cursor-pointer p-1 text-grey-900 font-xsss dropdown-item mt-0 me-4 btn-delete-comment">
                     Delete</h4>
             </div>
@@ -41,14 +42,17 @@
                     <span th:text="${comment.likes.size()}" th:if="${comment.likes.size() > 0}"></span> &nbsp;
                     <span class="link-hover">Like</span>
                 </a>
-                <a href="#"
-                   class="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss">
+                <a class="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss cursor-pointer btn-reply-comment"
+                   th:attr="data-user-comment=${comment.user.userId}, data-full-name=${comment.user.fullName}, data-comment-id=${comment.commentId}">
                     <i class="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg"></i>
-                    <span class="d-none-xss" th:text="${comment.commentReplies.size()}"
-                          th:if="${comment.commentReplies.size() >0}">
-                    </span> &nbsp; <span class="link-hover">Reply</span>
+                    <span class="d-none-xss count-comment-reply" th:attr="data-comment-id=${comment.commentId}"
+                          th:text="${comment.commentReplies.size()}"
+                          th:if="${comment.commentReplies.size() != 0}"></span>
+                    <span class="d-none-xss count-comment-reply" th:attr="data-comment-id=${comment.commentId}"
+                          th:if="${comment.commentReplies.size() == 0}"></span> &nbsp; <span
+                        class="link-hover">Reply</span>
                 </a>
-                <div class="cursor-pointer mt-1" th:if="${comment.commentReplies.size() >0}">
+                <div class="cursor-pointer mt-1 view-more" th:classappend="${comment.commentReplies.size() == 0} ? 'd-none' : ''" th:attr="data-comment-id=${comment.commentId}">
                     <a class="link-hover btn-comment-reply ms-2 text-decoration-underline d-flex text-grey-900
                             text-dark lh-26 font-xssss">
                         View more
@@ -57,6 +61,8 @@
             </div>
         </div>
         <div th:replace="~{comment_replies/_comment_replies::fragment-comment-reply-list(${comment})}"></div>
+        <div class="input-comment-reply" th:attr="data-comment-id=${comment.commentId}">
+        </div>
     </div>
 </div>
 </body>

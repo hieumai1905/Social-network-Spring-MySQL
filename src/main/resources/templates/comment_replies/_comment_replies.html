@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="application_layout" lang="en">
 <body>
-<div th:fragment="fragment-comment-reply-list(comment)" class="comments-reply-list ms-5 d-none custom-overflow" th:if="${comment.commentReplies.size() >0}">
-    <div class="ms-6 mt-2" th:each="commentReply: ${comment.commentReplies}">
+<div th:fragment="fragment-comment-reply-list(comment)" class="comments-reply-list ms-5 d-none custom-overflow"
+     th:attr="data-comment-id=${comment.commentId}">
+    <div class="ms-6 mt-2 comment-reply" th:each="commentReply: ${comment.commentReplies}" th:attr="data-comment-reply-id=${commentReply.commentReplyId}">
         <div class="card-body p-0 d-flex">
             <figure class="avatar me-3">
                 <img th:src="${commentReply.user.avatar}" alt="image" class="shadow-sm rounded-circle custom-avatar-50">
@@ -10,17 +11,21 @@
             <div class="bg-comment rounded-xxxl px-2">
                 <h4 class="fw-700 text-grey-900 font-xssss mt-1"
                     th:text="${commentReply.user.fullName}"></h4>
-                <p th:text="${commentReply.content}"></p>
+                <p class="content-comment-reply" th:text="${commentReply.content}"></p>
             </div>
             <a href="#" class="ms-2" th:id="'dd-comment-reply-' + ${commentReply.commentReplyId}" data-bs-toggle="dropdown"
-               aria-expanded="false">
+               aria-expanded="false"  th:if="${commentReply.user.userId == currentUser.userId || commentReply.comment.post.user.userId == currentUser.userId}">
                 <i class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i>
             </a>
             <div class="dropdown-menu p-1 rounded-xxxl border-0 shadow-lg"
                  th:aria-labelledby="'dd-comment-reply-' + ${commentReply.commentReplyId}">
-                <h4 class="fw-600 w-100 cursor-pointer p-1 text-grey-900 font-xsss dropdown-item mt-0 me-4 hover-bg-light-gray">Edit
+                <h4 class="fw-600 w-100 cursor-pointer p-1 text-grey-900 font-xsss dropdown-item mt-0 me-4 hover-bg-light-gray btn-edit-comment-reply"
+                    th:if="${commentReply.user.userId == currentUser.userId}" th:attr="data-comment-reply-id=${commentReply.commentReplyId}, data-comment-id=${commentReply.comment.commentId}">
+                    Edit
                 </h4>
-                <h4 class="fw-600 w-100 cursor-pointer p-1 text-grey-900 font-xsss dropdown-item mt-0 me-4">Delete
+                <h4 class="fw-600 w-100 cursor-pointer p-1 text-grey-900 font-xsss dropdown-item mt-0 me-4 btn-delete-comment-reply"
+                    th:attr="data-comment-reply-id=${commentReply.commentReplyId}, data-comment-id=${commentReply.comment.commentId}">
+                    Delete
                 </h4>
             </div>
         </div>
@@ -40,9 +45,11 @@
                           th:if="${commentReply.likes.size() > 0}"></span> &nbsp;
                     <span class="link-hover">Like</span>
                 </a>
-                <button class="link-hover d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss border-0 bg-white">
-                    Reply
-                </button>
+                <a class="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss cursor-pointer btn-reply-comment"
+                   th:attr="data-user-comment=${commentReply.user.userId}, data-full-name=${commentReply.user.fullName}, data-comment-id=${commentReply.comment.commentId}">
+                    <span
+                            class="link-hover">Reply</span>
+                </a>
             </div>
         </div>
     </div>
