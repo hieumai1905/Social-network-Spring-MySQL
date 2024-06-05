@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -28,7 +29,8 @@ public class ApisCommentReplyController extends ApplicationController {
 
     @PostMapping
     public ResponseEntity<ApiResponse> create(@RequestBody CommentReplyRequestDTO commentReplyRequestDTO) {
-        CommentReply newCommentReply = ConvertUtils.convert(commentReplyRequestDTO, CommentReply.class);
+        CommentReply newCommentReply = new CommentReply();
+        newCommentReply.setContent(commentReplyRequestDTO.getContent());
         Optional<Comment> comment = commentService.findById(commentReplyRequestDTO.getCommentId());
         if (comment.isEmpty()) {
             return responseApi(HttpStatus.NOT_FOUND, "Comment not found");
@@ -36,6 +38,7 @@ public class ApisCommentReplyController extends ApplicationController {
         newCommentReply.setComment(comment.get());
         User user = currentUser;
         newCommentReply.setUser(user);
+        newCommentReply.setReplyAt(new Date());
         Optional<CommentReply> commentReplyAdded = commentReplyService.save(newCommentReply);
         if (commentReplyAdded.isEmpty()) {
             return responseApi(HttpStatus.NOT_FOUND, "Create comment reply failed");
@@ -56,7 +59,7 @@ public class ApisCommentReplyController extends ApplicationController {
             return responseApi(HttpStatus.NOT_FOUND, "Update comment failed");
         }
         CommentReplyResponseDTO commentResponseDTO = ConvertUtils.convert(commentReplyUpdated.get(), CommentReplyResponseDTO.class);
-        return responseApi(HttpStatus.OK, String.format("Update comment %s successfully", commentReplyId), commentResponseDTO);
+        return responseApi(HttpStatus.NO_CONTENT, String.format("Update comment %s successfully", commentReplyId), commentResponseDTO);
     }
 
     @DeleteMapping("/{commentReplyId}")
