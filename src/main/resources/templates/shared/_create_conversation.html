@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<!-- Modal Tag Friends-->
+<div th:fragment="fragment-create-conversation" class="modal fade" id="createConversationModal" tabindex="-1" aria-labelledby="createConversationModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title font-lg fw-bold" id="createConversationModalLabel">Create Conversation</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <div class="container mt-4">
+            <div class="input-group mb-3">
+              <input type="text" id="name-conversation" class="form-control" placeholder="name conversation">
+            </div>
+            <div class="input-group mb-3">
+              <input type="file" accept="image/*" id="avatar-conversation" class="form-control">
+            </div>
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="fa fa-search text-dark" aria-hidden="true"></i>
+                </span>
+              <input type="text" id="search-friends-conversation" class="form-control" placeholder="Search">
+            </div>
+            <p class="m-2">Members:</p>
+            <div id="members" class="m-2 p-2 border border-1 custom-overflow">
+
+            </div>
+            <div id="list-friends-conversation" class="custom-overflow">
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer text-light">
+        <button id="createNewConversation" type="button" class="btn btn-primary text-white ms-3">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

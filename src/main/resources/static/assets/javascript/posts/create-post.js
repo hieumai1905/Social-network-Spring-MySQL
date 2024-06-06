@@ -1,4 +1,5 @@
-let userTags = [], selectedUser = [], searchUserTags = [];
+let selectedUser = [], searchUserTags = [];
+let userTags = [];
 function savePost(postId) {
     let formData = new FormData();
     let content = $('#content').val();
@@ -223,6 +224,9 @@ function getFriends() {
                     };
                 });
                 searchUserTags = userTags;
+                friendsConversation = userTags;
+                searchFriendConversation = userTags;
+                displayFriendsViewToConversation();
                 displayFriendsView();
             }
         },
