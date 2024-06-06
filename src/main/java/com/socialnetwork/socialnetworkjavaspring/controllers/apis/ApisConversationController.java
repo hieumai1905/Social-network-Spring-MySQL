@@ -1,5 +1,6 @@
 package com.socialnetwork.socialnetworkjavaspring.controllers.apis;
 
+import com.socialnetwork.socialnetworkjavaspring.DTOs.conversations.ConversationRequestDTO;
 import com.socialnetwork.socialnetworkjavaspring.DTOs.conversations.ConversationResponseDTO;
 import com.socialnetwork.socialnetworkjavaspring.controllers.ApplicationController;
 import com.socialnetwork.socialnetworkjavaspring.models.Conversation;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -54,6 +56,27 @@ public class ApisConversationController extends ApplicationController {
             return responseApi(HttpStatus.OK, "Get conversation personal successfully!", conversationResponseDTO);
         } catch (Exception e) {
             return responseApi(HttpStatus.NOT_FOUND, "Conversation don't exist");
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<ApiResponse> create(@ModelAttribute ConversationRequestDTO requestDTO,
+                                              @RequestPart(value = "file", required = false) MultipartFile file) {
+        try {
+            conversationService.createConversation(requestDTO, file, currentUser);
+            return responseApi(HttpStatus.OK, "Create conversation group successfully!");
+        } catch (Exception e) {
+            return responseApi(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("{conversationId}")
+    public ResponseEntity<ApiResponse> deleteConversation(@PathVariable Long conversationId) {
+        try {
+            conversationService.deleteConversation(conversationId, currentUser);
+            return responseApi(HttpStatus.OK, "Delete conversation group successfully!");
+        } catch (Exception e) {
+            return responseApi(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 

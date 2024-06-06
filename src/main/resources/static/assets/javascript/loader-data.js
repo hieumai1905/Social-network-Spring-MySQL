@@ -18,6 +18,24 @@ function loadConversations() {
     });
 }
 
+
+function registerConversationsEvents(){
+    btnCreateConversation.on("click", function(){
+        createConversationModal.modal("show");
+    });
+    $("#search-friends-conversation").on("input", function () {
+        let text = $(this).val().toLowerCase().trim();
+        searchFriendConversation = friendsConversation.filter(function (user) {
+            return user.fullName.toLowerCase().includes(text);
+        });
+        displayFriendsViewToConversation();
+    });
+
+    $("#createNewConversation").on("click", function() {
+        createConversation();
+    });
+}
+
 function replaceTimeFormat() {
     let createAtSpans = $(".createAtSpan");
     Array.from(createAtSpans).forEach(function (span) {
@@ -41,6 +59,7 @@ function invertScrollbar(element) {
 }
 
 window.onload = () => {
+    registerConversationsEvents();
     if (typeof loadConversations === 'function') {
         loadConversations();
     }
