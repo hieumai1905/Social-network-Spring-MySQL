@@ -21,7 +21,7 @@
                 <input type="hidden" th:value="${comment.commentId}" class="comment-id">
                 <h4 class="fw-600 w-100 cursor-pointer p-1 text-grey-900 font-xsss dropdown-item mt-0 me-4
                 hover-bg-light-gray btn-edit-comment" th:attr="data-comment-post-id=${comment.post.postId}"
-                th:if="${comment.user.userId == currentUser.userId}">Edit</h4>
+                    th:if="${comment.user.userId == currentUser.userId}">Edit</h4>
                 <h4 class="fw-600 w-100 cursor-pointer p-1 text-grey-900 font-xsss dropdown-item mt-0 me-4 btn-delete-comment">
                     Delete</h4>
             </div>
@@ -31,15 +31,20 @@
                 <span class="createAtSpan d-flex align-items-center fw-600 text-grey-500 lh-26 font-xssss me-2"
                       th:data-createAt="${comment.commentAt}">
                 </span>
-                <a href="#"
-                   class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
+                <a class="emoji-bttn d-flex align-items-center cursor-pointer fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
                     <span th:if="${comment.isLiked}">
-                         <i class="bg-primary feather-thumbs-up text-white me-1 btn-round-xs font-xss"></i>
+                         <i class="bg-primary feather-thumbs-up text-white me-1 btn-round-xs font-xss btn-like-comment"
+                            th:attr="data-comment-id=${comment.commentId}"></i>
                     </span>
                     <span th:unless="${comment.isLiked}">
-                    <i class="text-grey-900 feather-thumbs-up text-white me-1 btn-round-xs font-xss"></i>
+                    <i class="text-grey-900 feather-thumbs-up text-white me-1 btn-round-xs font-xss btn-like-comment"
+                       th:attr="data-comment-id=${comment.commentId}"></i>
                     </span>
-                    <span th:text="${comment.likes.size()}" th:if="${comment.likes.size() > 0}"></span> &nbsp;
+                    <span th:text="${comment.likes.size()}" class="like-comment-count"
+                          th:attr="data-comment-id=${comment.commentId}" th:if="${comment.likes.size() != 0}"></span>
+                    <span class="like-comment-count"
+                          th:attr="data-comment-id=${comment.commentId}" th:if="${comment.likes.size() == 0}"></span>
+                    &nbsp;
                     <span class="link-hover">Like</span>
                 </a>
                 <a class="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss cursor-pointer btn-reply-comment"
@@ -52,7 +57,9 @@
                           th:if="${comment.commentReplies.size() == 0}"></span> &nbsp; <span
                         class="link-hover">Reply</span>
                 </a>
-                <div class="cursor-pointer mt-1 view-more" th:classappend="${comment.commentReplies.size() == 0} ? 'd-none' : ''" th:attr="data-comment-id=${comment.commentId}">
+                <div class="cursor-pointer mt-1 view-more"
+                     th:classappend="${comment.commentReplies.size() == 0} ? 'd-none' : ''"
+                     th:attr="data-comment-id=${comment.commentId}">
                     <a class="link-hover btn-comment-reply ms-2 text-decoration-underline d-flex text-grey-900
                             text-dark lh-26 font-xssss">
                         View more

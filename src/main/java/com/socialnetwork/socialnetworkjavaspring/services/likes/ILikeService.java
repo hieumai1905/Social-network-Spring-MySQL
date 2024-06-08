@@ -15,4 +15,8 @@ public interface ILikeService extends IGeneralService<Like, Long> {
     boolean existsByCommentReplyIdAndUserId(Long commentReplyId, String userId);
 
     Optional<Like> findByPostIdAndUserId(String postId, String userId);
+
+    Optional<Like> findByCommentIdAndUserId(Long commentId, String userId);
+
+    Optional<Like> findByCommentReplyIdAndUserId(Long commentReplyId, String userId);
 }
