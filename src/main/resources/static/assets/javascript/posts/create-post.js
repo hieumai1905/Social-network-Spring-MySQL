@@ -152,6 +152,8 @@ function savePostToUI(post, isNewPost, isSearch) {
                 </div>
             </div>
             <hr>
+            <div class="comments-list custom-overflow d-none">
+            </div>
             <div class="card-body p-0 mt-1 position-relative">
                 <figure class="avatar position-absolute ms-2 mt-1 top-5">
                     <img src="${post.author.avatar}" alt="image" class="shadow-sm rounded-circle current-user-avatar custom-avatar-40">
@@ -196,6 +198,7 @@ function savePostToUI(post, isNewPost, isSearch) {
     });
     if(!isSearch)
         loadComment();
+    registerLikePostEvents();
 }
 
 function clearForm(){

@@ -42,4 +42,14 @@ public class LikeService implements ILikeService {
     public Optional<Like> findByPostIdAndUserId(String postId, String userId) {
         return likeRepository.findByPost_PostIdAndUser_UserId(postId, userId);
     }
+
+    @Override
+    public Optional<Like> findByCommentIdAndUserId(Long commentId, String userId) {
+        return likeRepository.findByComment_CommentIdAndUser_UserId(commentId, userId);
+    }
+
+    @Override
+    public Optional<Like> findByCommentReplyIdAndUserId(Long commentReplyId, String userId) {
+        return likeRepository.findByCommentReply_CommentReplyIdAndUser_UserId(commentReplyId, userId);
+    }
 }
