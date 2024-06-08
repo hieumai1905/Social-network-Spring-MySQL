@@ -21,4 +21,18 @@ public interface IPostInteractRepository  extends JpaRepository<PostInteract, Lo
                                                                     @Param("userId") String userId);
     @Query("SELECT pi FROM PostInteract pi WHERE pi.type = :type")
     List<PostInteract> findAllByType(InteractType type);
+
+    @Query("SELECT pi "
+            + "FROM PostInteract pi "
+            + "WHERE pi.type = 'SHARED' "
+            + "AND (pi.user.userId = :userId "
+            + "     OR pi.user.userId IN (SELECT r.userTarget.userId FROM Relation r WHERE r.user.userId = :userId AND r.type = 'FOLLOW')) "
+            + "AND NOT EXISTS ("
+            + "    SELECT 1 "
+            + "    FROM Relation r "
+            + "    WHERE (r.user.userId = :userId AND r.userTarget.userId = pi.user.userId AND r.type = 'BLOCK') "
+            + "       OR (r.user.userId = pi.user.userId AND r.userTarget.userId = :userId AND r.type = 'BLOCK')"
+            + ") "
+            + "ORDER BY pi.interactAt DESC")
+    List<PostInteract> findAllSharedPostInteractsForUserAndFollowing(String userId);
 }

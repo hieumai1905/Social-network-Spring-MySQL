@@ -22,7 +22,7 @@
               th:if="${item.comments.size() == 0}"></span>
         &nbsp; Comment
     </a>
-    <a href="#" id="shareDropdownMenu" data-bs-toggle="dropdown" aria-expanded="false"
+    <a href="#" id="shareDropdownMenu" data-bs-toggle="dropdown" aria-expanded="false" th:if="${item.access.name == 'PUBLIC'}"
        class="ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i
             class="feather-share-2 text-grey-900 text-dark btn-round-sm font-lg"></i><span
             class="d-none-xs">Share</span></a>

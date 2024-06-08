@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -64,14 +65,20 @@ public class PostInteractService implements IPostInteractService {
         }
         postInteractRepository.delete(postInteract.get());
     }
+
     @Override
     public PostInteract checkExistPostInteract(Post post, InteractType interactType, String userId) {
-        if(post.getPostInteracts() != null && post.getPostInteracts().size() > 0){
+        if (post.getPostInteracts() != null && post.getPostInteracts().size() > 0) {
             for (PostInteract postInteract : post.getPostInteracts()) {
-                if(postInteract.getType().equals(interactType) && userId.equals(postInteract.getUser().getUserId()))
+                if (postInteract.getType().equals(interactType) && userId.equals(postInteract.getUser().getUserId()))
                     return postInteract;
             }
         }
         return null;
+    }
+
+    @Override
+    public List<PostInteract> findAllPostInteractShareByUserId(String userId) {
+        return postInteractRepository.findAllSharedPostInteractsForUserAndFollowing(userId);
     }
 }

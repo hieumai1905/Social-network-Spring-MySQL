@@ -5,7 +5,6 @@ import com.socialnetwork.socialnetworkjavaspring.models.Post;
 import com.socialnetwork.socialnetworkjavaspring.models.Relation;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.RelationType;
 import com.socialnetwork.socialnetworkjavaspring.services.new_feeds.INewsFeedService;
-import com.socialnetwork.socialnetworkjavaspring.services.posts.IPostService;
 import com.socialnetwork.socialnetworkjavaspring.services.relations.IRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/details/posts")
@@ -34,11 +34,17 @@ public class PostController extends ApplicationController {
             List<Relation> relations = relationService.findByUserTargetIdAndType(currentUser.getUserId(), RelationType.REQUEST);
             List<RelationResponseObjectDTO> relationDTOs = relationService.findRelationDTOWithMutualFriendCount(currentUser.getUserId(), relations);
             modelAndView.addObject("requestsFriend", relationDTOs);
-            Post post = newsFeedService.findById(postId, currentUser.getUserId());
             List<Post> posts = new ArrayList<>();
-            posts.add(post);
+            Post postCurrentUser = newsFeedService.findByIdCurrentUser(postId, currentUser.getUserId());
+            if (Objects.equals(postCurrentUser.getUser().getUserId(), currentUser.getUserId())) {
+                posts.add(postCurrentUser);
+                modelAndView.addObject("author", false);
+            } else {
+                Post postOther = newsFeedService.findById(postId, currentUser.getUserId());
+                modelAndView.addObject("author", false);
+                posts.add(postOther);
+            }
             modelAndView.addObject("posts", posts);
-            modelAndView.addObject("author", false);
             modelAndView.addObject("page_title", "Post Details");
         } catch (Exception e) {
             return new ModelAndView("errors/404");
