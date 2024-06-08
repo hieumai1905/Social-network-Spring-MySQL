@@ -3,11 +3,13 @@ package com.socialnetwork.socialnetworkjavaspring.services.posts;
 import com.socialnetwork.socialnetworkjavaspring.models.Comment;
 import com.socialnetwork.socialnetworkjavaspring.models.CommentReply;
 import com.socialnetwork.socialnetworkjavaspring.models.Post;
+import com.socialnetwork.socialnetworkjavaspring.models.PostInteract;
 import com.socialnetwork.socialnetworkjavaspring.services.likes.ILikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
+import java.util.List;
 
 @Service
 public abstract class PostGeneralService {

@@ -14,41 +14,20 @@ import java.util.Optional;
 @Repository
 public interface IPostRepository extends JpaRepository<Post, String> {
 
-    @Query(value = "SELECT p.* " +
-            "FROM posts p " +
-            "WHERE ( " +
-            "        (p.user_id = :userId AND p.access IN ('PUBLIC', 'FRIEND')" +
-            "            OR (p.user_id IN (SELECT r.user_target_id " +
-            "                              FROM relations r " +
-            "                              WHERE r.user_id = :userId " +
-            "                                AND r.type = 'FRIEND') " +
-            "                AND p.access IN ('PUBLIC', 'FRIEND')))" +
-            "        OR p.post_id IN (SELECT ut.post_id " +
-            "                         FROM user_tags ut " +
-            "                         WHERE ut.user_id = :userId)" +
-            "        OR (p.user_id IN (SELECT r.user_target_id " +
-            "                          FROM relations r " +
-            "                          WHERE r.user_id = :userId " +
-            "                            AND r.type = 'FOLLOW') " +
-            "        AND p.access = 'PUBLIC')" +
-            "    ) " +
-            "  AND NOT EXISTS (SELECT 1 " +
-            "                  FROM post_interacts pi " +
-            "                  WHERE pi.user_id = :userId " +
-            "                    AND (pi.type = 'HIDDEN' OR pi.type = 'REPORT') " +
-            "                    AND pi.post_id = p.post_id)" +
-            " " +
-            "UNION " +
-            " " +
-            "SELECT p.* " +
-            "FROM posts p " +
-            "WHERE p.post_id IN (SELECT s.post_id " +
-            "                    FROM post_interacts s " +
-            "                    WHERE s.user_id = :userId " +
-            "                    AND s.type = 'SHARED' " +
-            "                    )" +
-            " " +
-            "ORDER BY create_at DESC", nativeQuery = true)
+    @Query(value = "SELECT p.* "
+            + "FROM posts p "
+            + "WHERE ("
+            + "  (p.user_id = :userId)"
+            + "  OR (p.post_id IN (SELECT ut.post_id FROM user_tags ut WHERE ut.user_id = :userId " +
+            "AND NOT EXISTS (SELECT 1 FROM relations r1 WHERE r1.user_id = :userId AND r1.user_target_id = p.user_id AND r1.type = 'BLOCK') " +
+            "AND NOT EXISTS (SELECT 1 FROM relations r2 WHERE r2.user_id = p.user_id AND r2.user_target_id = :userId AND r2.type = 'BLOCK')) " +
+            "AND p.access IN ('FRIEND', 'PUBLIC'))"
+            + "  OR (p.access = 'PUBLIC' AND p.user_id IN (SELECT r.user_target_id FROM relations r WHERE r.user_id = :userId AND r.type = 'FOLLOW'))"
+            + "  OR (p.access = 'FRIEND' AND p.user_id IN (SELECT r1.user_target_id FROM relations r1 WHERE r1.user_id = :userId AND r1.type = 'FRIEND') " +
+            "AND p.user_id IN (SELECT r2.user_target_id FROM relations r2 WHERE r2.user_id = :userId AND r2.type = 'FOLLOW'))"
+            + ") "
+            + "AND NOT EXISTS (SELECT 1 FROM post_interacts pi WHERE pi.user_id = :userId AND (pi.type = 'HIDDEN' OR pi.type = 'REPORT') AND pi.post_id = p.post_id)"
+            + "ORDER BY p.create_at DESC", nativeQuery = true)
     List<Post> findAllPostForNewsFeed(String userId);
 
     @Query(value = "SELECT p.* " +

@@ -54,4 +54,17 @@ public class NewsFeedService extends PostGeneralService implements INewsFeedServ
         sortCommentsAndReplies(post);
         return post;
     }
+
+    @Override
+    public Post findByIdCurrentUser(String postId, String userId) {
+        Post post = postRepository.findById(postId).orElseThrow(() ->
+                new RuntimeException("Post not found"));
+        boolean isLiked = likeService.existsByPostIdAndUserId(post.getPostId(), userId);
+        PostInteract savedPostInteract = postInteractService.checkExistPostInteract(post, InteractType.SAVED, userId);
+        post.setLiked(isLiked);
+        post.setSaved(savedPostInteract != null);
+        setLikedStatusForCommentsAndReplies(post, userId);
+        sortCommentsAndReplies(post);
+        return post;
+    }
 }

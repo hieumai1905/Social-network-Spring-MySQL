@@ -8,4 +8,6 @@ public interface INewsFeedService {
     List<Post> getNewsFeed(String userId);
 
     Post findById(String postId, String userId);
+
+    Post findByIdCurrentUser(String postId, String userId);
 }

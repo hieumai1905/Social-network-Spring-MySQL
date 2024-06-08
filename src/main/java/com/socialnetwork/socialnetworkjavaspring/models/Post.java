@@ -33,10 +33,10 @@ public class Post {
     private boolean isLiked;
 
     @Transient
-    private boolean isMyPost;
+    private boolean isSaved;
 
     @Transient
-    private boolean isSaved;
+    private PostInteract shareInformation;
 
     @Transient
     private boolean isHidden;
@@ -70,6 +70,24 @@ public class Post {
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Media> medias;
+
+    public Post(Post post) {
+        this.postId = post.getPostId();
+        this.postContent = post.getPostContent();
+        this.createAt = post.getCreateAt();
+        this.isLiked = post.isLiked();
+        this.isSaved = post.isSaved();
+        this.isHidden = post.isHidden();
+        this.access = post.getAccess();
+        this.postType = post.getPostType();
+        this.user = post.getUser();
+        this.comments = post.getComments();
+        this.likes = post.getLikes();
+        this.postInteracts = post.getPostInteracts();
+        this.userTags = post.getUserTags();
+        this.postHashtags = post.getPostHashtags();
+        this.medias = post.getMedias();
+    }
 
     @PrePersist
     public void prePersist() {
