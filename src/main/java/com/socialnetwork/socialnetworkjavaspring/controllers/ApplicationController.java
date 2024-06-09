@@ -1,13 +1,11 @@
 package com.socialnetwork.socialnetworkjavaspring.controllers;
 
 import com.socialnetwork.socialnetworkjavaspring.DTOs.relations.RelationResponseObjectDTO;
-import com.socialnetwork.socialnetworkjavaspring.models.Post;
-import com.socialnetwork.socialnetworkjavaspring.models.PostInteract;
-import com.socialnetwork.socialnetworkjavaspring.models.Relation;
-import com.socialnetwork.socialnetworkjavaspring.models.User;
+import com.socialnetwork.socialnetworkjavaspring.models.*;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.RelationType;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.RoleUser;
 import com.socialnetwork.socialnetworkjavaspring.services.new_feeds.NewsFeedService;
+import com.socialnetwork.socialnetworkjavaspring.services.notifications.INotificationService;
 import com.socialnetwork.socialnetworkjavaspring.services.post_interacts.IPostInteractService;
 import com.socialnetwork.socialnetworkjavaspring.services.relations.IRelationService;
 import com.socialnetwork.socialnetworkjavaspring.services.sessions.SessionService;
@@ -39,6 +37,9 @@ public class ApplicationController {
 
     @Autowired
     private IPostInteractService postInteractService;
+
+    @Autowired
+    private INotificationService noticiationService;
 
     @ModelAttribute
     public void getCurrentUser() {
@@ -77,6 +78,8 @@ public class ApplicationController {
 
     protected ModelAndView setAuthor(ModelAndView modelAndView) {
         modelAndView.addObject("currentUser", currentUser);
+        List<Notification> notifications = noticiationService.findAllByUserId(currentUser.getUserId());
+        modelAndView.addObject("notifications", notifications);
         return modelAndView;
     }
 

@@ -58,6 +58,10 @@ function invertScrollbar(element) {
     }, 'slow');
 }
 
+function redirectToURL(url) {
+    window.location.href = url;
+}
+
 window.onload = () => {
     registerConversationsEvents();
     if (typeof loadConversations === 'function') {

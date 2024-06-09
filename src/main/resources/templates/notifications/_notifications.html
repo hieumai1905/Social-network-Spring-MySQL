@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<div th:fragment="fragment-notification"
+     class="dropdown-menu dropdown-menu-end p-3 rounded-3 border-0 shadow-lg custom-notification"
+     aria-labelledby="dd-notification">
+    <h4 class="fw-700 font-xs mb-1 d-block">
+        <span class="ms-2">Notifications</span>
+        <span class="font-xsssss fw-600 float-right mt-1 text-primary">
+            <a href="/notifications"
+               class="fw-bold link-hover text-grey-800 font-xssss">See all</a>
+        </span>
+    </h4>
+    <hr class="m-0 p-0 mb-2">
+    <div class="overflow-scroll custom-mh-400">
+        <div class="card custom-card-hover cursor-pointer pt-1 px-1 pb-1 bg-current-shade w-100 border-0 ps-5 mb-1"
+             th:each="item: ${notifications}"
+             th:data-urlRedirect="${item.urlRedirect}" onclick="redirectToURL(this.getAttribute('data-urlRedirect'))">
+            <img th:src="@{${item.image}}" alt="user" class="w50 position-absolute left-0 custom-avatar-50 rounded-circle">
+            <h5 class="font-xsss mb-1 mt-0 fw-700 d-block">
+                <span class="ms-2" th:text="${item.user.fullName}"></span>
+                <span class="createAtSpan font-xsssss fw-600 float-right mt-1 text-primary"
+                      th:data-createAt="${item.notificationAt}"></span>
+            </h5>
+            <h6 class="ms-2 text-grey-600 fw-500 font-xssss lh-4"
+                th:text="${item.user.gender.name() == 'MALE' ? 'He ' + item.content :
+              (item.user.gender.name() == 'FEMALE' ? 'She ' + item.content :
+               item.user.fullName + ' ' + item.content)}">
+            </h6>
+        </div>
+    </div>
+</div>
+</body>
+</html>
