@@ -17,6 +17,4 @@ public interface IUserService extends IGeneralService<User, String>, UserDetails
     User findById(String userId) throws Exception;
     void changeStatusUser(ChangeStatusOrRoleUserRequestDTO request);
     void changeRoleUser(ChangeStatusOrRoleUserRequestDTO request);
-
-    List<User> findAllUserBlocked(String userId);
 }
