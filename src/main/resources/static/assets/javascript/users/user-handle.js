@@ -225,8 +225,40 @@ function handleUnBlockUser(userId) {
     userBlockItem.remove();
 }
 
-function _blockUser(element) {
+function _blockUser(element, isBlock) {
     let userId = element.getAttribute('data-user-id');
+    let fullName = element.getAttribute('data-full-name');
+    let title = `Block ${fullName}?`;
+    let body = `<p>${fullName} will no longer be able to:</p>
+                 <div class="ms-3">
+                     <ol class="list-group list-group-numbered">
+                         <li>See your posts on your timeline</li>
+                         <li>Tag you</li>
+                         <li>Invite you to events or groups</li>
+                         <li>Message you</li>
+                         <li>Add you as a friend</li>
+                    </ol>
+                </div>`;
+    if(!isBlock){
+        title = `UnBlock ${fullName}`;
+        body = `<p>Are you sure you want to unblock ${fullName}?</p>
+               <div class="ms-3">
+                     <ol class="list-group list-group-numbered">
+                         <li>${fullName} may be able to see your timeline or contact you, depending on your privacy settings</li>
+                         <li>Tags you and ${fullName} previously added of each other may be restored</li>
+                         <li>You can remove tags of yourself on your activity log</li>
+                         <li>Please remember you'll have to wait 48 hours before you can re-block ${fullName}.</li>
+                    </ol>
+                </div>`;
+    }
+    setContentForConfirmModal({
+        title: title,
+        body: body,
+        btnText: "Confirm"
+    }, 'callApiBlockUser', userId);
+}
+
+function callApiBlockUser(userId) {
     $.ajax({
         url: "/api/relations/block?user-id=" + userId,
         type: "POST",

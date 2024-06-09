@@ -65,7 +65,8 @@
                     <div class="card-body p-0 d-flex mt-2">
                         <i class="feather-lock text-grey-500 me-3 font-lg"></i>
                         <a href="#" class="fw-600 text-grey-900 font-xssss mt-1 me-0"
-                           th:attr="data-user-id=${user_info.userId}" onclick="_blockUser(this)">Block</a>
+                           th:attr="data-user-id=${user_info.userId}, data-full-name=${user_info.fullName}"
+                           onclick="_blockUser(this, true)">Block</a>
                     </div>
                 </div>
 

@@ -62,7 +62,12 @@ function registerReplyCommentAction() {
             $(this).click(function () {
                 let commentReplyId = $(this).attr('data-comment-reply-id');
                 let commentId = $(this).attr('data-comment-id');
-                deleteCommentReply(commentReplyId, commentId);
+                setContentForConfirmModal({
+                    title: 'Delete Comment',
+                    body: 'Do you want to delete this comment?',
+                    btnText: 'Delete'
+                }, 'deleteCommentReply', commentReplyId, commentId);
+                // deleteCommentReply(commentReplyId, commentId);
             });
         });
     }
@@ -193,7 +198,12 @@ function registerCommentAction() {
     btnDeleteComments.each(function (index) {
         $(this).click(function () {
             let commentId = commentIds.eq(index).val();
-            deleteComment(commentId);
+            setContentForConfirmModal({
+                title: 'Delete Comment',
+                body: 'Do you want to delete this comment?',
+                btnText: 'Delete'
+            }, 'deleteComment', commentId);
+            // deleteComment(commentId);
         });
     });
 }
