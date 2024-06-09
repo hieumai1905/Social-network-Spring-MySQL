@@ -26,8 +26,4 @@ public interface IUserRepository extends JpaRepository<User, String> {
     @Query(value = "SELECT u.* FROM users u INNER JOIN relations r ON u.user_id = r.user_id WHERE " +
             "r.type = :type AND r.user_target_id = :userId", nativeQuery = true)
     List<User> findUsersByRelationType(String userId, String type);
-
-    @Query(value = "SELECT u.* FROM users u INNER JOIN relations r ON u.user_id = r.user_target_id WHERE " +
-            "r.type = 'BLOCK' AND r.user_id = :userId", nativeQuery = true)
-    List<User> findBlockedUsers(String userId);
 }

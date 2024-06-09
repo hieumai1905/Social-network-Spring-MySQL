@@ -135,11 +135,6 @@ public class UserService implements IUserService {
         }
     }
 
-    @Override
-    public List<User> findAllUserBlocked(String userId) {
-        return userRepository.findBlockedUsers(userId);
-    }
-
     private Boolean isFriendWithCurrentUser(List<Relation> relations, String userId) {
         if (relations != Constants.NULL_OBJECT && relations.size() > Constants.NUMBER_ZERO) {
             for (Relation relation : relations) {
