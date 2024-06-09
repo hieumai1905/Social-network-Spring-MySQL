@@ -90,6 +90,21 @@ function setContentForConfirmModal(content, functionName, ...args){
     _confirmModal.modal('show');
 }
 
+function setContentForNotifyModal(content){
+    _confirmModal.find(".modal-title").text(content.title);
+    _confirmModal.find(".modal-body").html(content.body);
+    let modalFooter = _confirmModal.find(".modal-footer");
+    modalFooter.empty();
+    let btnOk = $('<button>', {
+        type: 'button',
+        class: 'btn-ok btn btn-primary text-white',
+        'data-bs-dismiss': 'modal',
+        text: `${content.btnText}`
+    });
+    modalFooter.append(btnOk);
+    _confirmModal.modal('show');
+}
+
 window.onload = () => {
     registerConversationsEvents();
     _confirmModal = $("#_confirmModal");

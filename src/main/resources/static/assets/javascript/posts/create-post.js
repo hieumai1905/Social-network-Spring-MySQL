@@ -45,6 +45,14 @@ function savePost(postId) {
                 savePostToUI(response.data, true, false);
             }else if(response.code === 200 && postId !== ""){
                 savePostToUI(response.data, false, false);
+            }else if(response.code === 400){
+                setContentForNotifyModal({
+                    title: 'Notification',
+                    body: `${response.message}`,
+                    btnText: 'Ok'
+                });
+                $("#createPostModal").modal('hide');
+                return false;
             }
             clearForm();
         },

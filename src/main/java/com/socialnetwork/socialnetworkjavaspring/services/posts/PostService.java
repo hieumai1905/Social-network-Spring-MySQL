@@ -13,6 +13,7 @@ import com.socialnetwork.socialnetworkjavaspring.models.key.PostHashtagId;
 import com.socialnetwork.socialnetworkjavaspring.models.key.UserTagId;
 import com.socialnetwork.socialnetworkjavaspring.repositories.IHashtagRepository;
 import com.socialnetwork.socialnetworkjavaspring.repositories.IPostRepository;
+import com.socialnetwork.socialnetworkjavaspring.repositories.ISensitiveWordRepository;
 import com.socialnetwork.socialnetworkjavaspring.repositories.IUserRepository;
 import com.socialnetwork.socialnetworkjavaspring.services.likes.ILikeService;
 import com.socialnetwork.socialnetworkjavaspring.services.medias.IMediaService;
@@ -47,6 +48,9 @@ public class PostService extends PostGeneralService implements IPostService {
 
     @Autowired
     private IPostInteractService postInteractService;
+
+    @Autowired
+    private ISensitiveWordRepository sensitiveWordRepository;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -84,6 +88,18 @@ public class PostService extends PostGeneralService implements IPostService {
         searchPostResponseDTO.setPageIndex(request.getPageIndex());
         searchPostResponseDTO.setPageSize(request.getPageSize());
         return searchPostResponseDTO;
+    }
+
+    @Override
+    public Boolean checkValidContent(String content) {
+        if(content != null && !content.isEmpty()){
+            List<SensitiveWord> sensitiveWords = sensitiveWordRepository.findAll();
+            for (SensitiveWord sensitiveWord : sensitiveWords) {
+                if(content.contains(sensitiveWord.getValue()))
+                    return false;
+            }
+        }
+        return true;
     }
 
     private void setMediaAndUserTagsAndAuthor(Post post, PostResponseDTO postResponseDTO) {

@@ -25,6 +25,9 @@ public class ApisPostController extends ApplicationController {
     public ResponseEntity<ApiResponse> create(@ModelAttribute PostRequestDTO request,
                                                   @RequestPart(value = "files", required = false) List<MultipartFile> files){
         try{
+            Boolean isValid = postService.checkValidContent(request.getContent());
+            if(!isValid)
+                throw new Exception("The article was deleted because it contained inappropriate words!");
             return responseApi(HttpStatus.CREATED, "Create post successfully!",
                     postService.save(null, request, files, currentUser));
         }catch (Exception ex){
@@ -46,6 +49,9 @@ public class ApisPostController extends ApplicationController {
     public ResponseEntity<ApiResponse> update(@PathVariable String postId, @ModelAttribute PostRequestDTO request,
                                               @RequestPart(value = "files", required = false) List<MultipartFile> files){
         try{
+            Boolean isValid = postService.checkValidContent(request.getContent());
+            if(!isValid)
+                throw new Exception("The article was update failed because it contained inappropriate words!");
             return responseApi(HttpStatus.OK, "Update post successfully!",
                     postService.save(postId, request, files, currentUser));
         }catch (Exception ex){

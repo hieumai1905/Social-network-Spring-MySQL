@@ -32,4 +32,6 @@ public interface IPostService{
     Page<Post> findByContentAndHashtags(SearchPostRequestDTO request, User user);
 
     SearchPostResponseDTO convertPostsToSearchPostResponseDTO(Page<Post> posts, SearchPostRequestDTO request);
+
+    Boolean checkValidContent(String content);
 }

@@ -34,7 +34,7 @@ function displayMediaToUI(response) {
     $("#file-list").empty();
     files = [];
     let postModal = $("#createPostModal");
-    postModal.find(".modal-title").text('Update post');
+    postModal.find(".modal-title").text('UPDATE POST');
     postModal.modal('show');
     const medias = response.data.medias;
     const filePromises = medias.map(media => {
