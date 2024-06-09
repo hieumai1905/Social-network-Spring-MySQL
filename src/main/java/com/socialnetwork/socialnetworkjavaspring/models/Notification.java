@@ -21,21 +21,27 @@ public class Notification {
     private Long notificationId;
 
     @Column(name = "content", nullable = false)
-    private String notificationContent;
+    private String content;
 
     @Column(name = "seen", nullable = false)
     private Boolean seen;
 
-    @Column(name= "url_redirect", nullable = false)
+    private String image;
+
+    @Column(name = "url_redirect", nullable = false)
     private String urlRedirect;
 
-    @Column(name= "notification_at", nullable = false)
+    @Column(name = "notification_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date notificationAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "user_target_id", nullable = false)
+    private User userTarget;
 
     @PrePersist
     public void prePersist() {

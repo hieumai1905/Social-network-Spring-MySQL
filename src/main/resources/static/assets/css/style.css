@@ -17434,3 +17434,11 @@ select.sort {
     max-width: 200px;
     max-height: 200px;
 }
+
+.custom-notification{
+    width: 320px;
+}
+
+.custom-card-hover:hover {
+    background-color: #efeeee !important;
+}
