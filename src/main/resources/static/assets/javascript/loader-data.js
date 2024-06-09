@@ -3,6 +3,7 @@ let searchInput = null;
 let currentUserAvatar = null;
 let currentUserId = null;
 let currentUserName = null;
+let _confirmModal = null;
 
 function loadConversations() {
     $.ajax({
@@ -62,8 +63,36 @@ function redirectToURL(url) {
     window.location.href = url;
 }
 
+function setContentForConfirmModal(content, functionName, ...args){
+    _confirmModal.find(".modal-title").text(content.title);
+    _confirmModal.find(".modal-body").html(content.body);
+    let modalFooter = _confirmModal.find(".modal-footer");
+    modalFooter.empty();
+    let btnCancel = $('<button>', {
+        id: 'btnCancelModal',
+        type: 'button',
+        class: 'btn btn-dark',
+        'data-bs-dismiss': 'modal',
+        text: 'Cancel'
+    });
+    let btnOk = $('<button>', {
+        type: 'button',
+        class: 'btn-ok btn btn-primary text-white',
+        'data-bs-dismiss': 'modal',
+        text: `${content.btnText}`
+    });
+    modalFooter.append(btnCancel, btnOk);
+    btnOk.on('click', function() {
+        if (typeof window[functionName] === 'function') {
+            window[functionName].apply(null, args);
+        }
+    });
+    _confirmModal.modal('show');
+}
+
 window.onload = () => {
     registerConversationsEvents();
+    _confirmModal = $("#_confirmModal");
     if (typeof loadConversations === 'function') {
         loadConversations();
     }

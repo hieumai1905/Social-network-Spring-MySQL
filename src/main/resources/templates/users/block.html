@@ -36,8 +36,8 @@
                                     </figure>
                                     <h4 class="fw-700 font-xsss mt-2 mb-1" th:text="${item.fullName}"></h4>
                                     <a class="mt-1 cursor-pointer btn d-inline-block rounded-xxxxl
-                                    bg-danger font-xssss fw-700 ls-lg text-white" onclick="_blockUser(this)"
-                                       th:attr="data-user-id=${item.userId}">
+                                    bg-danger font-xssss fw-700 ls-lg text-white" onclick="_blockUser(this, false)"
+                                       th:attr="data-user-id=${item.userId}, data-full-name=${item.fullName}">
                                         Unblock</a>
                                 </div>
                             </div>
