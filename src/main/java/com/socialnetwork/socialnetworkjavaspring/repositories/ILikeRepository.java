@@ -17,4 +17,8 @@ public interface ILikeRepository extends JpaRepository<Like, Long> {
     boolean existsByCommentReply_CommentReplyIdAndUser_UserId(Long commentReplyId, String userId);
 
     Optional<Like> findByPost_PostIdAndUser_UserId(String postId, String userId);
+
+    Optional<Like> findByComment_CommentIdAndUser_UserId(Long commentId, String userId);
+
+    Optional<Like> findByCommentReply_CommentReplyIdAndUser_UserId(Long commentReplyId, String userId);
 }

@@ -281,9 +281,10 @@ function handleCreateReplyCommentSuccess(data, commentId) {
                                     <a href="#"
                                        class="emoji-btn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
                                         <span>
-                                                    <i class="feather-thumbs-up text-grey-900 me-1 btn-round-xs font-xss"></i>
-                                                </span>
-                                        <span></span> &nbsp;
+                                            <i class="feather-thumbs-up text-grey-900 me-1 btn-round-xs font-xss btn-like-comment-reply"
+                                                    data-comment-reply-id="${data.commentReplyId}"></i>
+                                        </span>
+                                        <span class="like-comment-reply-count" data-comment-reply-id="${data.commentReplyId}"></span> &nbsp;
                                         <span class="link-hover">Like</span>
                                     </a>
                                     <button class="link-hover d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss border-0 bg-white">
@@ -304,6 +305,7 @@ function handleCreateReplyCommentSuccess(data, commentId) {
         replyCount.text(parseInt(replyCount.text()) + 1);
     }
     registerReplyCommentAction();
+    registerLikeCommentReplyEvents();
 }
 
 function createReplyComment(val, commentId) {
@@ -492,12 +494,12 @@ function handleCreatCommentSuccess(data, index, postId) {
         <div class="ms-4">
             <div class="card-body d-flex p-0 mt-1">
                     <span class="d-flex align-items-center fw-600 text-grey-500 lh-26 font-xssss me-2">${formatTime(new Date())}</span>
-                <a href="#"
-                   class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
+                <a
+                   class="emoji-bttn d-flex align-items-center cursor-pointer fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
                     <span>
-                        <i class="feather-thumbs-up text-grey-900 me-1 btn-round-xs font-xss"></i>
+                        <i class="feather-thumbs-up text-grey-900 me-1 btn-round-xs font-xss btn-like-comment" data-comment-id="${data.commentId}"></i>
                     </span>
-                    <span></span> &nbsp; 
+                    <span class="like-comment-count" data-comment-id="${data.commentId}"></span> &nbsp; 
                     <span class="link-hover">Like</span>
                 </a>
                 <a class="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss cursor-pointer btn-reply-comment"
@@ -528,4 +530,5 @@ function handleCreatCommentSuccess(data, index, postId) {
     invertScrollbar(comments.eq(index));
     registerCommentAction();
     loadComment();
+    registerLikeCommentEvents();
 }

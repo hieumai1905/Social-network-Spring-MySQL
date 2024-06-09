@@ -220,6 +220,11 @@ function handleBlockUser() {
     window.location.href = "/";
 }
 
+function handleUnBlockUser(userId) {
+    let userBlockItem = $('.user-block[data-user-id="' + userId + '"]');
+    userBlockItem.remove();
+}
+
 function _blockUser(element) {
     let userId = element.getAttribute('data-user-id');
     $.ajax({
@@ -229,6 +234,9 @@ function _blockUser(element) {
             if (response.code === 201) {
                 console.log(response.message);
                 handleBlockUser();
+            } else if (response.code === 204) {
+                console.log(response.message);
+                handleUnBlockUser(userId);
             }
         },
         error: function (error) {

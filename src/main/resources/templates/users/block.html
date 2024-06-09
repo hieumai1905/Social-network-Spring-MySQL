@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/layouts/application:: application_layout(false)}" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:fragment="page_title">Blocking</title>
+</head>
+<body>
+
+<!-- main content -->
+<div th:fragment="main_content" class="main-content right-chat-active">
+    <div class="middle-sidebar-bottom">
+        <div class="middle-sidebar-left pe-0">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card shadow-xss w-100 d-block d-flex border-0 p-4 mb-3">
+                        <div class="card-body d-flex align-items-center p-0">
+                            <h2 class="fw-700 mb-0 mt-0 font-md text-grey-900">Blocking</h2>
+                            <div class="search-form-2 ms-auto">
+                                <i class="ti-search font-xss"></i>
+                                <input type="text"
+                                       class="form-control text-grey-500 mb-0 bg-greylight theme-dark-bg border-0"
+                                       placeholder="Search here.">
+                            </div>
+                            <a href="#" class="btn-round-md ms-2 bg-greylight theme-dark-bg rounded-3"><i
+                                    class="feather-filter font-xss text-grey-500"></i></a>
+                        </div>
+                    </div>
+                    <div class="row ps-2 pe-2">
+                        <div class="col-md-3 col-sm-4 pe-2 ps-2 user-block" th:each="item: ${blockedUsers}"
+                             th:attr="data-user-id=${item.userId}">
+                            <div class="card d-block border-0 shadow-xss rounded-3 overflow-hidden mb-3">
+                                <div class="card-body d-block w-100 ps-3 pe-3 pb-4 text-center">
+                                    <figure class="avatar ms-auto me-auto mb-0 position-relative w65 z-index-1 custom-avatar-65">
+                                        <img th:src="${item.avatar}" alt="image"
+                                             class="float-right p-0 bg-white rounded-circle w-100 shadow-xss">
+                                    </figure>
+                                    <h4 class="fw-700 font-xsss mt-2 mb-1" th:text="${item.fullName}"></h4>
+                                    <a class="mt-1 cursor-pointer btn d-inline-block rounded-xxxxl
+                                    bg-danger font-xssss fw-700 ls-lg text-white" onclick="_blockUser(this)"
+                                       th:attr="data-user-id=${item.userId}">
+                                        Unblock</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/assets/javascript/users/user-handle.js}"></script>
+</div>
+<!-- main content -->
+
+</body>
+</html>

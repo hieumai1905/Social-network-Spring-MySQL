@@ -43,4 +43,14 @@ public class Like {
         this.user = user;
         this.post = post;
     }
+
+    public Like(User user, Comment comment) {
+        this.user = user;
+        this.comment = comment;
+    }
+
+    public Like(User user, CommentReply commentReply) {
+        this.user = user;
+        this.commentReply = commentReply;
+    }
 }
