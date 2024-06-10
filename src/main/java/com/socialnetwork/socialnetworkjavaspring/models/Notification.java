@@ -46,5 +46,6 @@ public class Notification {
     @PrePersist
     public void prePersist() {
         this.notificationAt = new Date();
+        this.seen = false;
     }
 }

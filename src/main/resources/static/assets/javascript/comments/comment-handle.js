@@ -439,7 +439,7 @@ function createComment(content, index, postId) {
         success: function (response) {
             if (response.code === 201) {
                 console.log(response.message);
-                handleCreatCommentSuccess(response.data, index, postId);
+                handleCreateCommentSuccess(response.data, index, postId);
             }
         },
         error: function (error) {
@@ -479,7 +479,7 @@ function handleUpdateCommentSuccess(data) {
 }
 
 
-function handleCreatCommentSuccess(data, index, postId) {
+function handleCreateCommentSuccess(data, index, postId) {
     let html = `
     <div class="comment mt-1" data-comment-id="${data.commentId}">
         <div class="card-body p-0 d-flex">
@@ -487,7 +487,7 @@ function handleCreatCommentSuccess(data, index, postId) {
                 <img src="${currentUserAvatar}" alt="image" class="shadow-sm rounded-circle custom-avatar-50"></figure>
             <div class="bg-comment rounded-xxxl px-2">
                 <h4 class="fw-700 text-grey-900 font-xssss mt-2">${currentUserName}</h4>
-                <p class="content-comment">${data.content}</p>
+                <p class="content-comment" data-comment-id="${data.commentId}">${data.content}</p>
             </div>
             <a href="#" class="ms-2" id="dd-comment-${data.commentId}" data-bs-toggle="dropdown"
                    aria-expanded="false">
@@ -507,7 +507,8 @@ function handleCreatCommentSuccess(data, index, postId) {
                 <a
                    class="emoji-bttn d-flex align-items-center cursor-pointer fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
                     <span>
-                        <i class="feather-thumbs-up text-grey-900 me-1 btn-round-xs font-xss btn-like-comment" data-comment-id="${data.commentId}"></i>
+                        <i class="feather-thumbs-up text-grey-900 me-1 btn-round-xs font-xss btn-like-comment" data-comment-id="${data.commentId}"
+                        data-author-id="${data.userId}" data-post-id="${data.postId}"></i>
                     </span>
                     <span class="like-comment-count" data-comment-id="${data.commentId}"></span> &nbsp; 
                     <span class="link-hover">Like</span>

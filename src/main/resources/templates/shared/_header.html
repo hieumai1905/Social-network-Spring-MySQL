@@ -15,7 +15,8 @@
         <div class="form-group mb-0 icon-input">
             <i class="feather-search font-sm text-grey-400"></i>
             <input type="hidden" value="people" name="type"/>
-            <input id="search-text" type="text" th:value="${search_value}" placeholder="Start typing to search.." name="q"
+            <input id="search-text" type="text" th:value="${search_value}" placeholder="Start typing to search.."
+                   name="q"
                    class="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w350 theme-dark-bg"/>
         </div>
     </form>
@@ -30,7 +31,10 @@
             class="feather-user font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"></i></a>
     <a th:href="@{/}" class="p-2 text-center ms-auto menu-icon" id="dd-notification"
        data-bs-toggle="dropdown" aria-expanded="false">
-        <span class="dot-count bg-warning"></span><i class="feather-bell font-xl text-current"></i></a>
+        <span class="badge badge-warning float-right text-white badge-pill fw-500"
+              th:classappend="${notificationNotSeen > 0} ? '' : 'd-none'" id="notification-count" th:attr="data-user-id=${currentUser.userId}"
+              th:text="${notificationNotSeen}"></span>
+        <i class="feather-bell font-xl text-current"></i></a>
     <div th:replace="/notifications/_notifications::fragment-notification"></div>
     <a th:href="@{/}" class="p-2 text-center ms-3 menu-icon chat-active-btn"
     ><i class="feather-message-square font-xl text-current"></i
@@ -214,7 +218,8 @@
         </div>
     </div>
     <a th:href="@{/}" class="p-0 ms-3 menu-icon">
-        <img th:src="@{${currentUser.avatar}}" alt="user" class="custom-avatar-50 rounded-circle current-user-avatar mt--1"/></a>
+        <img th:src="@{${currentUser.avatar}}" alt="user"
+             class="custom-avatar-50 rounded-circle current-user-avatar mt--1"/></a>
 </div>
 </body>
 </html>

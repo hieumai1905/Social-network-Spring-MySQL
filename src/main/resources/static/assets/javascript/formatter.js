@@ -5,7 +5,7 @@ function formatTime(time) {
 
     if (minutesDiff < 60) {
         if (minutesDiff === 0) {
-            return "1m";
+            return "Just now";
         }
         return minutesDiff + "m";
     } else if (minutesDiff < 24 * 60) {

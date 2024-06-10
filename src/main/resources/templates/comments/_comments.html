@@ -9,7 +9,7 @@
             </figure>
             <div class="bg-comment rounded-xxxl px-2">
                 <h4 class="fw-700 text-grey-900 font-xssss mt-2" th:text="${comment.user.fullName}"></h4>
-                <p class="content-comment" th:text="${comment.content}"></p>
+                <p class="content-comment" th:text="${comment.content}" th:attr="data-comment-id=${comment.commentId}"></p>
             </div>
             <a href="#" class="ms-2" th:id="'dd-comment-' + ${comment.commentId}" data-bs-toggle="dropdown"
                aria-expanded="false"
@@ -34,11 +34,11 @@
                 <a class="emoji-bttn d-flex align-items-center cursor-pointer fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
                     <span th:if="${comment.isLiked}">
                          <i class="bg-primary feather-thumbs-up text-white me-1 btn-round-xs font-xss btn-like-comment"
-                            th:attr="data-comment-id=${comment.commentId}"></i>
+                            th:attr="data-comment-id=${comment.commentId}, data-author-id=${comment.user.userId}, data-post-id=${comment.post.postId}"></i>
                     </span>
                     <span th:unless="${comment.isLiked}">
                     <i class="text-grey-900 feather-thumbs-up text-white me-1 btn-round-xs font-xss btn-like-comment"
-                       th:attr="data-comment-id=${comment.commentId}"></i>
+                       th:attr="data-comment-id=${comment.commentId}, data-author-id=${comment.user.userId}, data-post-id=${comment.post.postId}"></i>
                     </span>
                     <span th:text="${comment.likes.size()}" class="like-comment-count"
                           th:attr="data-comment-id=${comment.commentId}" th:if="${comment.likes.size() != 0}"></span>

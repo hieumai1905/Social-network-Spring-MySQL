@@ -1,115 +1,114 @@
-let btnLikePosts = null;
-let btnLikeComments = null;
-let btnLikeCommentReplys = null;
+let btnLikePosts, btnLikeComments, btnLikeCommentReplys;
 
-function handleCreatLikePostSuccess(index) {
-    let likeCurrent = btnLikePosts.eq(index);
-    let likeCount = likeCurrent.find('.like-count');
-    if (likeCount.text() === "") {
-        likeCount.text(1);
+function handleLikePostSuccess(index, isLiked) {
+    const likeCurrent = btnLikePosts.eq(index);
+    const likeCount = likeCurrent.find('.like-count');
+    const likeIcon = likeCurrent.find('i');
+
+    if (isLiked) {
+        likeCount.text(parseInt(likeCount.text()) + 1 || 1);
+        likeIcon.addClass('bg-primary text-white').removeClass('text-grey-900');
     } else {
-        likeCount.text(parseInt(likeCount.text()) + 1);
+        likeCount.text(parseInt(likeCount.text()) - 1 || '');
+        likeIcon.removeClass('bg-primary text-white').addClass('text-grey-900');
     }
-    likeCurrent.find('i').addClass('bg-primary');
-    likeCurrent.find('i').removeClass('text-grey-900');
-    likeCurrent.find('i').addClass('text-white');
 }
 
-function handleDeleteLikePostSuccess(index) {
-    let likeCurrent = btnLikePosts.eq(index);
-    let likeCount = likeCurrent.find('.like-count');
-    if (likeCount.text() === "1") {
-        likeCount.text("");
-    } else {
-        likeCount.text(parseInt(likeCount.text()) - 1);
-    }
-    likeCurrent.find('i').removeClass('bg-primary');
-    likeCurrent.find('i').addClass('text-grey-900');
-    likeCurrent.find('i').removeClass('text-white');
+function sendNotificationLikePost(postId, userTargetId, content) {
+    const notificationContent = content !== null && content.length > 0 ? `liked your post: "${content}"` : 'liked your post';
+    sendNotificationEvent(notificationContent, userCurrentId, 'POST', userTargetId, postId);
 }
 
-function likePost(postId, index) {
+function likePost(postId, index, element) {
     $.ajax({
         type: "POST",
-        url: "/api/likes/posts/" + postId,
+        url: `/api/likes/posts/${postId}`,
         success: function (response) {
             console.log(response.message);
-            if (response.code === 201) {
-                handleCreatLikePostSuccess(index);
-            } else if (response.code === 204) {
-                handleDeleteLikePostSuccess(index);
+            const isLiked = response.code === 201;
+            handleLikePostSuccess(index, isLiked);
+            if (isLiked) {
+                let userTargetId = $(element).attr('data-author-id');
+                let postContent = $('.content-post-item[data-post-id="' + postId + '"]').text();
+                postContent = postContent.length > 12 ? postContent.substring(0, 12) + '...' : postContent;
+                sendNotificationLikePost(postId, userTargetId, postContent);
             }
-        }, error: function (xhr, status, error) {
+        },
+        error: function (xhr, status, error) {
             console.error(error);
         }
     });
 }
 
-function handleLikeCommentSuccess(commentId, element) {
-    $(element).addClass('bg-primary');
-    $(element).removeClass('text-grey-900');
-    $(element).addClass('text-white');
-    let likeCommentCount = $('.like-comment-count[data-comment-id="' + commentId + '"]');
-    if (likeCommentCount.text() === "") {
-        likeCommentCount.text(1);
+function handleLikeCommentSuccess(commentId, element, isLiked) {
+    const likeIcon = $(element);
+    const likeCommentCount = $(`.like-comment-count[data-comment-id="${commentId}"]`);
+
+    if (isLiked) {
+        likeIcon.addClass('bg-primary text-white').removeClass('text-grey-900');
+        likeCommentCount.text(parseInt(likeCommentCount.text()) + 1 || 1);
     } else {
-        likeCommentCount.text(parseInt(likeCommentCount.text()) + 1);
+        likeIcon.removeClass('bg-primary text-white').addClass('text-grey-900');
+        likeCommentCount.text(parseInt(likeCommentCount.text()) - 1 || '');
     }
 }
 
-function handleDeleteLikeCommentSuccess(commentId, element) {
-    $(element).removeClass('bg-primary');
-    $(element).addClass('text-grey-900');
-    $(element).removeClass('text-white');
-    let likeCommentCount = $('.like-comment-count[data-comment-id="' + commentId + '"]');
-    if (likeCommentCount.text() === "1") {
-        likeCommentCount.text("");
-    } else {
-        likeCommentCount.text(parseInt(likeCommentCount.text()) - 1);
-    }
+function sendNotificationLikeComment(postId, userTargetId, content) {
+    const notificationContent = content !== null && content.length > 0 ? `liked your comment: "${content}"` : 'liked your comment';
+    sendNotificationEvent(notificationContent, userCurrentId, 'POST', userTargetId, postId);
 }
 
 function likeComment(commentId, element) {
     $.ajax({
-        url: "/api/likes/comments/" + commentId,
+        url: `/api/likes/comments/${commentId}`,
         type: "POST",
         success: function (response) {
             console.log(response.message);
-            if (response.code === 201) {
-                handleLikeCommentSuccess(commentId, element);
-            } else if (response.code === 204) {
-                handleDeleteLikeCommentSuccess(commentId, element);
+            const isLiked = response.code === 201;
+            handleLikeCommentSuccess(commentId, element, isLiked);
+            if (isLiked) {
+                let userTargetId = $(element).attr('data-author-id');
+                let postId = $(element).attr('data-post-id');
+                let commentContent = $('.content-comment[data-comment-id="' + commentId + '"]').text();
+                commentContent = commentContent.length > 12 ? commentContent.substring(0, 12) + '...' : commentContent;
+                sendNotificationLikeComment(postId, userTargetId, commentContent);
             }
         }
     });
 }
 
+function handleLikeCommentReplySuccess(commentReplyId, element, isLiked) {
+    const likeIcon = $(element);
+    const likeCommentReplyCount = $(`.like-comment-reply-count[data-comment-reply-id="${commentReplyId}"]`);
+
+    if (isLiked) {
+        likeIcon.addClass('bg-primary text-white').removeClass('text-grey-900');
+        likeCommentReplyCount.text(parseInt(likeCommentReplyCount.text()) + 1 || 1);
+    } else {
+        likeIcon.removeClass('bg-primary text-white').addClass('text-grey-900');
+        likeCommentReplyCount.text(parseInt(likeCommentReplyCount.text()) - 1 || '');
+    }
+}
+
+function sendNotificationLikeCommentReply(postId, userTargetId, content) {
+    const notificationContent = content !== null && content.length > 0 ? `liked your comment reply: "${content}"` : 'liked your comment reply';
+    sendNotificationEvent(notificationContent, userCurrentId, 'POST', userTargetId, postId);
+}
+
 function likeCommentReply(commentReplyId, element) {
     $.ajax({
-        url: "/api/likes/comment-replies/" + commentReplyId,
+        url: `/api/likes/comment-replies/${commentReplyId}`,
         type: "POST",
         success: function (response) {
             console.log(response.message);
-            if (response.code === 201) {
-                $(element).addClass('bg-primary');
-                $(element).removeClass('text-grey-900');
-                $(element).addClass('text-white');
-                let likeCommentReplyCount = $('.like-comment-reply-count[data-comment-reply-id="' + commentReplyId + '"]');
-                if (likeCommentReplyCount.text() === "") {
-                    likeCommentReplyCount.text(1);
-                } else {
-                    likeCommentReplyCount.text(parseInt(likeCommentReplyCount.text()) + 1);
-                }
-            } else if (response.code === 204) {
-                $(element).removeClass('bg-primary');
-                $(element).addClass('text-grey-900');
-                $(element).removeClass('text-white');
-                let likeCommentReplyCount = $('.like-comment-reply-count[data-comment-reply-id="' + commentReplyId + '"]');
-                if (likeCommentReplyCount.text() === "1") {
-                    likeCommentReplyCount.text("");
-                } else {
-                    likeCommentReplyCount.text(parseInt(likeCommentReplyCount.text()) - 1);
-                }
+            const isLiked = response.code === 201;
+            handleLikeCommentReplySuccess(commentReplyId, element, isLiked);
+            if (isLiked) {
+                let userTargetId = $(element).attr('data-author-id');
+                let postId = $(element).attr('data-post-id');
+                let commentReplyContent = $('.content-comment-reply[data-comment-reply-id="' + commentReplyId + '"]').text();
+                commentReplyContent = commentReplyContent.length > 12 ? commentReplyContent.substring(0, 12) + '...' : commentReplyContent;
+                sendNotificationLikeCommentReply(postId, userTargetId, commentReplyContent);
             }
         }
     });
@@ -120,8 +119,8 @@ function registerLikePostEvents() {
     btnLikePosts.each(function (index) {
         $(this).click(function (event) {
             event.preventDefault();
-            let postId = postIds.eq(index).val();
-            likePost(postId, index);
+            const postId = postIds.eq(index).val();
+            likePost(postId, index, this);
         })
     });
 }
@@ -131,7 +130,7 @@ function registerLikeCommentEvents() {
     btnLikeComments.each(function () {
         $(this).click(function (event) {
             event.preventDefault();
-            let commentId = $(this).attr('data-comment-id');
+            const commentId = $(this).attr('data-comment-id');
             likeComment(commentId, this);
         })
     });
@@ -142,7 +141,7 @@ function registerLikeCommentReplyEvents() {
     btnLikeCommentReplys.each(function () {
         $(this).click(function (event) {
             event.preventDefault();
-            let commentReplyId = $(this).attr('data-comment-reply-id');
+            const commentReplyId = $(this).attr('data-comment-reply-id');
             likeCommentReply(commentReplyId, this);
         })
     });

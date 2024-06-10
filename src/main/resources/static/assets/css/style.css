@@ -17309,11 +17309,11 @@ select.sort {
     }
 }
 
-.bg-comment{
+.bg-comment {
     background-color: #e7e7e7;
 }
 
-.h250{
+.h250 {
     height: 250px;
 }
 
@@ -17375,70 +17375,75 @@ select.sort {
     font-weight: bold;
 }
 
-.media-profile{
+.media-profile {
     max-width: 120px;
     max-height: 120px;
     width: 120px;
     height: 120px;
 }
 
-.custom-avatar-100{
+.custom-avatar-100 {
     max-width: 100px;
     max-height: 100px;
     width: 100px;
     height: 100px;
 }
 
-.custom-avatar-40{
+.custom-avatar-40 {
     max-width: 40px;
     max-height: 40px;
     width: 40px;
     height: 40px;
 }
 
-.custom-avatar-35{
+.custom-avatar-35 {
     max-width: 35px;
     max-height: 35px;
     width: 35px;
     height: 35px;
 }
 
-.custom-avatar-50{
+.custom-avatar-50 {
     max-width: 50px;
     max-height: 50px;
     width: 50px;
     height: 50px;
 }
-.custom-avatar-65{
+
+.custom-avatar-65 {
     max-width: 65px;
     max-height: 65px;
     width: 65px;
     height: 65px;
 }
 
-.custom-mh-330{
+.custom-mh-330 {
     max-height: 330px;
 }
 
-.custom-mh-400{
+.custom-mh-400 {
     max-height: 400px;
 }
 
-.custom-mh-500{
+.custom-mh-500 {
     max-height: 500px;
 }
 
-.custom-avatar-200{
+.custom-avatar-200 {
     width: 200px;
     height: 200px;
     max-width: 200px;
     max-height: 200px;
 }
 
-.custom-notification{
+.custom-notification {
     width: 320px;
 }
 
 .custom-card-hover:hover {
     background-color: #efeeee !important;
+}
+
+.bg-noseen {
+    background-color: #f6efef !important;
 }
