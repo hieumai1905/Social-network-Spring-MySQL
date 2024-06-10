@@ -38,7 +38,7 @@ public class ApplicationController {
     private IPostInteractService postInteractService;
 
     @Autowired
-    private INotificationService noticiationService;
+    private INotificationService notificationService;
 
     @ModelAttribute
     public void getCurrentUser() {
@@ -77,7 +77,7 @@ public class ApplicationController {
 
     protected ModelAndView setAuthor(ModelAndView modelAndView) {
         modelAndView.addObject("currentUser", currentUser);
-        List<Notification> notifications = noticiationService.findAllByUserId(currentUser.getUserId());
+        List<Notification> notifications = notificationService.findAllByUserId(currentUser.getUserId());
         modelAndView.addObject("notifications", notifications);
         Long notificationNotSeen = notifications.stream().filter(notification -> !notification.getSeen()).count();
         modelAndView.addObject("notificationNotSeen", notificationNotSeen);

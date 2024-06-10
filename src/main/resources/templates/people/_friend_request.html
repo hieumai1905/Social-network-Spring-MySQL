@@ -9,21 +9,21 @@
             <span class="circle-count font-xssss bg-warning mt-0 text-white rounded ps-1 pe-1"
                   th:if="${requestsFriend.size() >0}" th:text="${requestsFriend.size()}"
                   id="request-friend-count"></span>
-            <a th:href="@{default-member.html}" class="fw-600 ms-auto font-xssss text-primary">See
+            <a th:href="@{/request-friend}" class="fw-600 ms-auto font-xssss text-primary">See
                 all</a>
         </div>
         <div class="block request-friend" th:each="request: ${requestsFriend}" th:if="${requestStat.count <= 2}"
              th:attr="data-request-id=${request.user.userId}">
             <div class="card-body d-flex ps-4 pe-4 pb-0 bor-0">
-                <figure class="avatar me-3">
+                <figure class="avatar me-2">
                     <img th:src="${request.user.avatar}" alt="image"
-                         class="shadow-sm rounded-circle custom-avatar-50">
+                         class="shadow-sm rounded-circle custom-avatar-55">
                 </figure>
                 <div class="flex-column">
                     <div class="d-flex">
                         <h3 class="fw-700 text-grey-900 font-xssss mt-1">
-                            <a class="fw-700 text-grey-900 font-xssss mt-1"
-                               th:href="'profile?user-id=' + ${request.user.userId}"
+                            <a class="fw-700 text-grey-900 font-xsss mt-1"
+                               th:href="@{/profile(user-id=${request.user.userId})}"
                                th:text="${request.user.fullName}">
                             </a>
                         </h3>
@@ -39,11 +39,11 @@
                 <a href="#"
                    class="p-2 lh-20 w100 bg-primary me-2 text-white text-center font-xsss fw-600 ls-1 rounded-xl"
                    th:attr="data-request-id=${request.user.userId}"
-                   onclick="confirmRequest(this)">Confirm</a>
+                   onclick="confirmRequest(this, false)">Confirm</a>
                 <a href="#"
                    class="p-2 lh-20 w100 bg-grey text-grey-800 text-center font-xsss fw-600 ls-1 rounded-xl"
                    th:attr="data-request-id=${request.user.userId}"
-                   onclick="deleteRequest(this)">Delete</a>
+                   onclick="deleteRequest(this, false)">Delete</a>
             </div>
         </div>
     </div>
