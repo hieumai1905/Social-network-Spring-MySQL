@@ -18,8 +18,8 @@ function addRequestFriendToContainer(requestFriend) {
           </div>
         </div>
         <div class="card-body d-flex align-items-center pt-0 ps-4 pe-4 border-bottom">
-          <a href="#" class="p-2 lh-20 w100 bg-primary me-2 text-white text-center font-xsss fw-600 ls-1 rounded-xl" data-request-id="${requestFriend.user.userId}" onclick="confirmRequest(this)">Confirm</a>
-          <a href="#" class="p-2 lh-20 w100 bg-grey text-grey-800 text-center font-xsss fw-600 ls-1 rounded-xl" data-request-id="${requestFriend.user.userId}" onclick="deleteRequest(this)">Delete</a>
+          <a href="#" class="p-2 lh-20 w100 bg-primary me-2 text-white text-center font-xsss fw-600 ls-1 rounded-xl" data-request-id="${requestFriend.user.userId}" onclick="confirmRequest(this, false)">Confirm</a>
+          <a href="#" class="p-2 lh-20 w100 bg-grey text-grey-800 text-center font-xsss fw-600 ls-1 rounded-xl" data-request-id="${requestFriend.user.userId}" onclick="deleteRequest(this, false)">Delete</a>
         </div>
       </div>
     `;
@@ -51,13 +51,18 @@ function updateContainerRequestFriend() {
     }
 }
 
-function handleDeleteRequestSuccess(userId) {
-    let requestElement = $('.request-friend[data-request-id=' + userId + ']');
-    requestElement.remove();
-    updateContainerRequestFriend();
+function handleDeleteRequestSuccess(userId, isPageRequest) {
+    if(isPageRequest) {
+        let requestElement = $('.request-friend-page[data-request-friend-id=' + userId + ']');
+        requestElement.remove();
+    }else{
+        let requestElement = $('.request-friend[data-request-id=' + userId + ']');
+        requestElement.remove();
+        updateContainerRequestFriend();
+    }
 }
 
-function deleteRequest(element) {
+function deleteRequest(element, isPageRequest) {
     let userId = element.getAttribute('data-request-id');
     $.ajax({
         url: "/api/relations/reject?user-id=" + userId,
@@ -65,7 +70,7 @@ function deleteRequest(element) {
         success: function (response) {
             if (response.code === 204) {
                 console.log(response.message);
-                handleDeleteRequestSuccess(userId);
+                handleDeleteRequestSuccess(userId, isPageRequest);
             }
         },
         error: function (error) {
@@ -74,13 +79,18 @@ function deleteRequest(element) {
     });
 }
 
-function handleConfirmRequestSuccess(userId) {
-    let requestElement = $('.request-friend[data-request-id=' + userId + ']');
-    requestElement.remove();
-    updateContainerRequestFriend();
+function handleConfirmRequestSuccess(userId, isPageRequest) {
+    if(isPageRequest) {
+        let requestElement = $('.request-friend-page[data-request-friend-id=' + userId + ']');
+        requestElement.remove();
+    }else{
+        let requestElement = $('.request-friend[data-request-id=' + userId + ']');
+        requestElement.remove();
+        updateContainerRequestFriend();
+    }
 }
 
-function confirmRequest(element) {
+function confirmRequest(element, isPageRequest) {
     let userId = element.getAttribute('data-request-id');
     $.ajax({
         url: "/api/relations/accept?user-id=" + userId,
@@ -88,7 +98,7 @@ function confirmRequest(element) {
         success: function (response) {
             if (response.code === 201) {
                 console.log(response.message);
-                handleConfirmRequestSuccess(userId);
+                handleConfirmRequestSuccess(userId, isPageRequest);
             }
         },
         error: function (error) {

@@ -17410,11 +17410,25 @@ select.sort {
     height: 50px;
 }
 
+.custom-avatar-55 {
+    max-width: 55px;
+    max-height: 55px;
+    width: 55px;
+    height: 55px;
+}
+
 .custom-avatar-65 {
     max-width: 65px;
     max-height: 65px;
     width: 65px;
     height: 65px;
+}
+
+.custom-avatar-85 {
+    max-width: 85px;
+    max-height: 85px;
+    width: 85px;
+    height: 85px;
 }
 
 .custom-mh-330 {
