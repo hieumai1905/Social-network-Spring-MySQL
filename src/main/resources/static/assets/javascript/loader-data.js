@@ -141,4 +141,7 @@ window.onload = () => {
     if (typeof initMessage === 'function') {
         initMessage();
     }
+    if(typeof loadNotification === 'function'){
+        loadNotification();
+    }
 };

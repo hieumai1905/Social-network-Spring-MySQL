@@ -93,7 +93,7 @@ function onConnected() {
     stompClient.subscribe('/conversations/' + room, onMessageReceived);
     stompClient.send("/app/chat.addUser/" + room,
         {},
-        JSON.stringify({senderId: userCurrentId, conversationId: room})
+        JSON.stringify({senderId: userCurrentId, conversationId: room, type: 'CHAT'})
     );
 }
 
@@ -102,12 +102,12 @@ function onError(error) {
 }
 
 function onMessageReceived(payload) {
-    loadConversations();
     let messageContainer = $('#message-container');
     let message = JSON.parse(payload.body);
     if (message === null) {
         return;
     }
+    loadConversations();
     const currentMessageTime = new Date(message.sendAt);
     $('#no-message').remove();
     let html = '';
@@ -141,7 +141,6 @@ function onMessageReceived(payload) {
     invertScrollbar(messageContainer);
 }
 
-
 function sendMessageEvent() {
     let inputMessage = $('#input-message');
     let content = inputMessage.val().trim();
@@ -149,7 +148,8 @@ function sendMessageEvent() {
         if (stompClient) {
             let chatMessage = {
                 senderId: userCurrentId,
-                content: content
+                content: content,
+                messageType: 'CHAT'
             };
             stompClient.send("/app/chat.sendMessage/" + room,
                 {},

@@ -9,7 +9,6 @@ import com.socialnetwork.socialnetworkjavaspring.services.notifications.INotific
 import com.socialnetwork.socialnetworkjavaspring.services.post_interacts.IPostInteractService;
 import com.socialnetwork.socialnetworkjavaspring.services.relations.IRelationService;
 import com.socialnetwork.socialnetworkjavaspring.services.sessions.SessionService;
-import com.socialnetwork.socialnetworkjavaspring.utils.ConvertUtils;
 import com.socialnetwork.socialnetworkjavaspring.utils.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -80,6 +79,8 @@ public class ApplicationController {
         modelAndView.addObject("currentUser", currentUser);
         List<Notification> notifications = noticiationService.findAllByUserId(currentUser.getUserId());
         modelAndView.addObject("notifications", notifications);
+        Long notificationNotSeen = notifications.stream().filter(notification -> !notification.getSeen()).count();
+        modelAndView.addObject("notificationNotSeen", notificationNotSeen);
         return modelAndView;
     }
 

@@ -3,7 +3,8 @@
 <body>
 <div th:fragment="fragment-feeling-post" class="card-body d-flex p-0 mt-3">
     <a href="#"
-       class="emoji-btn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2 btn-like-post">
+       class="emoji-btn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2 btn-like-post"
+       th:attr="data-author-id=${item.user.userId}">
             <span th:if="${item.isLiked}" class="btn-like">
                 <i class="bg-primary feather-thumbs-up text-white me-1 btn-round-xs font-xss"></i>
             </span>
@@ -15,14 +16,16 @@
     </a>
     <a class="cursor-pointer btn-show-comment d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss border-0">
         <i class="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg"></i>
-        <span class="d-none-xss comment-count" th:text="${item.comments.size()}" th:attr="count-comment-post-id=${item.postId}"
+        <span class="d-none-xss comment-count" th:text="${item.comments.size()}"
+              th:attr="count-comment-post-id=${item.postId}"
               th:if="${item.comments.size() != 0}"></span>
 
         <span class="d-none-xss comment-count" th:attr="count-comment-post-id=${item.postId}"
               th:if="${item.comments.size() == 0}"></span>
         &nbsp; Comment
     </a>
-    <a href="#" id="shareDropdownMenu" data-bs-toggle="dropdown" aria-expanded="false" th:if="${item.access.name == 'PUBLIC'}"
+    <a href="#" id="shareDropdownMenu" data-bs-toggle="dropdown" aria-expanded="false"
+       th:if="${item.access.name == 'PUBLIC'}"
        class="ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i
             class="feather-share-2 text-grey-900 text-dark btn-round-sm font-lg"></i><span
             class="d-none-xs">Share</span></a>
@@ -34,7 +37,8 @@
             <h4 class="fw-600 text-white font-xsss mt-1 btn btn-primary">Share</h4>
         </div>
         <div class="card-body p-0 rounded-xxxl me-2 d-flex float-right">
-            <h4 class="fw-600 text-grey-700 font-xsss mt-1 btn btn-outline-warning" onclick="copyLink(this)" th:attr="data-post-id=${item.postId}">Copy link</h4>
+            <h4 class="fw-600 text-grey-700 font-xsss mt-1 btn btn-outline-warning" onclick="copyLink(this)"
+                th:attr="data-post-id=${item.postId}">Copy link</h4>
         </div>
     </div>
 </div>

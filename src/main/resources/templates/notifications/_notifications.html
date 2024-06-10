@@ -12,11 +12,13 @@
         </span>
     </h4>
     <hr class="m-0 p-0 mb-2">
-    <div class="overflow-scroll custom-mh-400">
-        <div class="card custom-card-hover cursor-pointer pt-1 px-1 pb-1 bg-current-shade w-100 border-0 ps-5 mb-1"
-             th:each="item: ${notifications}"
-             th:data-urlRedirect="${item.urlRedirect}" onclick="redirectToURL(this.getAttribute('data-urlRedirect'))">
-            <img th:src="@{${item.image}}" alt="user" class="w50 position-absolute left-0 custom-avatar-50 rounded-circle">
+    <div class="overflow-scroll custom-mh-400" id="notification-container" th:attr="data-user-id=${currentUser.userId}">
+        <div class="card custom-card-hover cursor-pointer pt-2 px-1 pb-2 bg-current-shade w-100 border-0 ps-5 mb-1"
+             th:each="item: ${notifications}" th:classappend="${item.seen} ? '' : 'bg-noseen'"
+             th:data-notification-id="${item.notificationId}"
+             th:data-urlRedirect="${item.urlRedirect}" onclick="markAsSeenAndRedirect(this)">
+            <img th:src="@{${item.image != null ? item.image : item.user.avatar}}" alt="user"
+                 class="w50 position-absolute left-0 custom-avatar-50 rounded-circle">
             <h5 class="font-xsss mb-1 mt-0 fw-700 d-block">
                 <span class="ms-2" th:text="${item.user.fullName}"></span>
                 <span class="createAtSpan font-xsssss fw-600 float-right mt-1 text-primary"
@@ -28,6 +30,8 @@
                item.user.fullName + ' ' + item.content)}">
             </h6>
         </div>
+        <p class="text-center font-xsss mt-4" th:if="${notifications.size() == 0}" id="notification-not-data"
+           th:attr="data-user-id=${currentUser.userId}">!Not Notificaion</p>
     </div>
 </div>
 </body>

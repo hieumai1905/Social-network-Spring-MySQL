@@ -12,7 +12,8 @@
             <div class="bg-comment rounded-xxxl px-2">
                 <h4 class="fw-700 text-grey-900 font-xssss mt-1"
                     th:text="${commentReply.user.fullName}"></h4>
-                <p class="content-comment-reply" th:text="${commentReply.content}"></p>
+                <p class="content-comment-reply" th:text="${commentReply.content}"
+                   th:attr="data-comment-reply-id=${commentReply.commentReplyId}"></p>
             </div>
             <a href="#" class="ms-2" th:id="'dd-comment-reply-' + ${commentReply.commentReplyId}"
                data-bs-toggle="dropdown"
@@ -40,11 +41,11 @@
                 <a class="emoji-btn d-flex align-items-center cursor-pointer fw-600 text-grey-900 text-dark lh-26 font-xssss me-2">
                             <span th:if="${commentReply.isLiked}">
                                 <i class="feather-thumbs-up text-white bg-primary me-1 btn-round-xs font-xss btn-like-comment-reply"
-                                   th:attr="data-comment-reply-id=${commentReply.commentReplyId}"></i>
+                                   th:attr="data-comment-reply-id=${commentReply.commentReplyId}, data-author-id=${commentReply.user.userId}, data-post-id=${commentReply.comment.post.postId}"></i>
                             </span>
                     <span th:unless="${commentReply.isLiked}">
                                 <i class="feather-thumbs-up text-grey-900 me-1 btn-round-xs font-xss btn-like-comment-reply"
-                                   th:attr="data-comment-reply-id=${commentReply.commentReplyId}"></i>
+                                   th:attr="data-comment-reply-id=${commentReply.commentReplyId}, data-author-id=${commentReply.user.userId}, data-post-id=${commentReply.comment.post.postId}"></i>
                             </span>
                     <span th:if="${commentReply.likes.size() == 0}" class="like-comment-reply-count"
                           th:attr="data-comment-reply-id=${commentReply.commentReplyId}"></span>

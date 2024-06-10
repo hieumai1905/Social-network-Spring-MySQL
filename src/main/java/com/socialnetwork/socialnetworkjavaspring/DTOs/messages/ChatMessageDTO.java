@@ -15,4 +15,5 @@ public class ChatMessageDTO {
     private UserResponseMessageDTO sender;
     private Date sendAt;
     private Long conversationId;
+    private String type;
 }
