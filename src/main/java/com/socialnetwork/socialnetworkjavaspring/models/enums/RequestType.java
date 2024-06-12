@@ -1,7 +1,7 @@
 package com.socialnetwork.socialnetworkjavaspring.models.enums;
 
 public enum RequestType {
-    REGISTER,
+    ACTIVATE,
     FORGOT,
     CHANGE_EMAIL
 }

@@ -4,7 +4,7 @@ import com.socialnetwork.socialnetworkjavaspring.DTOs.people.SearchPeopleRequest
 import com.socialnetwork.socialnetworkjavaspring.DTOs.people.SearchPeopleResponseDTO;
 import com.socialnetwork.socialnetworkjavaspring.DTOs.users.ChangeStatusOrRoleUserRequestDTO;
 import com.socialnetwork.socialnetworkjavaspring.DTOs.users.FriendResponseDTO;
-import com.socialnetwork.socialnetworkjavaspring.DTOs.users.UserResponseDTO;
+import com.socialnetwork.socialnetworkjavaspring.DTOs.users.UserRegisterDTO;
 import com.socialnetwork.socialnetworkjavaspring.models.CustomUserDetails;
 import com.socialnetwork.socialnetworkjavaspring.models.Relation;
 import com.socialnetwork.socialnetworkjavaspring.models.User;
@@ -13,7 +13,6 @@ import com.socialnetwork.socialnetworkjavaspring.models.enums.RoleUser;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.UserStatus;
 import com.socialnetwork.socialnetworkjavaspring.repositories.IUserRepository;
 import com.socialnetwork.socialnetworkjavaspring.services.relations.IRelationService;
-import com.socialnetwork.socialnetworkjavaspring.utils.Constants;
 import com.socialnetwork.socialnetworkjavaspring.utils.ConvertUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +23,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -47,18 +46,15 @@ public class UserService implements IUserService {
     public Optional<User> delete(User object) {
         try {
             userRepository.delete(object);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(email);
-        if (user.isPresent()) {
-            return new CustomUserDetails(user.get());
-        }
-        return null;
+        return user.map(CustomUserDetails::new).orElse(null);
     }
 
     @Transactional
@@ -68,6 +64,11 @@ public class UserService implements IUserService {
         );
 
         return new CustomUserDetails(user);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     public SearchPeopleResponseDTO findByFullNameLikeIgnoreCaseAndAccents(SearchPeopleRequestDTO request, String userId) {
@@ -140,14 +141,16 @@ public class UserService implements IUserService {
         return userRepository.findBlockedUsers(userId);
     }
 
-    private Boolean isFriendWithCurrentUser(List<Relation> relations, String userId) {
-        if (relations != Constants.NULL_OBJECT && relations.size() > Constants.NUMBER_ZERO) {
-            for (Relation relation : relations) {
-                if (relation.getUserTarget().getUserId().equals(userId)
-                        && relation.getType().equals(RelationType.FRIEND))
-                    return true;
-            }
-        }
-        return false;
+    @Override
+    public User findUserByEmailAndPassword(String email, String password) {
+        return userRepository.findByEmailAndPassword(email, password).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
+    public Optional<User> registerUser(UserRegisterDTO userRegisterDTO) {
+        User user = ConvertUtils.convert(userRegisterDTO, User.class);
+        user.setUserId(UUID.randomUUID().toString());
+        userRepository.save(user);
+        return Optional.of(user);
     }
 }

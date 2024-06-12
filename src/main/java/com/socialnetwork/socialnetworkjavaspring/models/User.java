@@ -115,8 +115,8 @@ public class User {
 
     @PrePersist
     public void prePersist() {
-        this.avatar = "/assets/files-upload/images/default-avatar.png";
-        this.coverPhoto = "/assets/files-upload/images/default-cover-photo.jpg";
+        this.avatar = "/assets/files-upload/profile-2.png";
+        this.coverPhoto = "/assets/files-upload/poster-2.png";
         this.registerAt = new Date();
         this.userRole = RoleUser.ROLE_USER;
         this.status = UserStatus.INACTIVE;
