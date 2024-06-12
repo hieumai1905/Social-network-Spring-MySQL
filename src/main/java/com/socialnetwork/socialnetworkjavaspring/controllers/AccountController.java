@@ -1,5 +1,6 @@
 package com.socialnetwork.socialnetworkjavaspring.controllers;
 
+import com.socialnetwork.socialnetworkjavaspring.DTOs.users.UserPasswordUpdateDTO;
 import com.socialnetwork.socialnetworkjavaspring.DTOs.users.UserRegisterDTO;
 import com.socialnetwork.socialnetworkjavaspring.models.Request;
 import com.socialnetwork.socialnetworkjavaspring.models.User;
@@ -10,7 +11,10 @@ import com.socialnetwork.socialnetworkjavaspring.services.users.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -33,6 +37,111 @@ public class AccountController {
     @GetMapping("/register")
     public String showRegistrationForm() {
         return "accounts/create";
+    }
+
+    @GetMapping("/forgot-password")
+    public String forgotPassword() {
+        return "accounts/forgot-password";
+    }
+
+    @PostMapping("/forgot-password")
+    public ModelAndView getCode(@RequestParam("email") String email) {
+        ModelAndView modelAndView = new ModelAndView("accounts/forgot-password");
+        User userExist = userService.findByEmail(email);
+        if (userExist == null) {
+            modelAndView.addObject("error", "Email is not exist");
+            return modelAndView;
+        }
+        if (userExist.getStatus() == UserStatus.LOCKED) {
+            modelAndView.addObject("error", "Account is locked");
+            return modelAndView;
+        }
+        if (userExist.getStatus() == UserStatus.INACTIVE) {
+            modelAndView.addObject("error", "Account is inactive");
+            return modelAndView;
+        }
+        session.setAttribute("email", email);
+        session.setAttribute(email, RequestType.FORGOT);
+        Optional<Request> request = requestService.findByEmailRequest(email);
+        request = request.isPresent()
+                ? request
+                : Optional.of(new Request(email, RequestType.FORGOT));
+        Optional<Request> savedRequest = requestService.save(request.get());
+        if (savedRequest.isEmpty()) {
+            return new ModelAndView("errors/404", HttpStatus.NOT_FOUND);
+        }
+        boolean sendCodeSuccess = requestService.sendCodeToEmail(email,
+                "CONFIRM FORGOT PASSWORD", savedRequest.get().getRequestCode());
+        if (!sendCodeSuccess) {
+            return new ModelAndView("errors/404", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        modelAndView.setViewName("accounts/activate");
+        modelAndView.addObject("email", email);
+        modelAndView.addObject("urlTarget", "/forgot-password/confirm");
+        return modelAndView;
+    }
+
+    @PostMapping("/forgot-password/confirm")
+    public ModelAndView confirmForgot(@RequestParam("code") String code, @RequestParam("email") String email) {
+        ModelAndView modelAndView = new ModelAndView("accounts/activate");
+        User existingUser = userService.findByEmail(email);
+        if (existingUser == null) {
+            return new ModelAndView("errors/404", HttpStatus.NOT_FOUND);
+        }
+        Optional<Request> request = requestService.findByEmailRequest(email);
+        if (request.isEmpty()) {
+            modelAndView.addObject("error", "Request don't exist");
+            return modelAndView;
+        } else {
+            if (request.get().getRequestType() != RequestType.FORGOT) {
+                modelAndView.addObject("error", "Request don't exist");
+                modelAndView.setViewName("accounts/forgot-password");
+                return modelAndView;
+            }
+            long timeOut = System.currentTimeMillis() - request.get().getRequestAt().getTime();
+            if (timeOut > 60000) {
+                modelAndView.addObject("error", "Request is expired");
+                modelAndView.setViewName("accounts/forgot-password");
+                return modelAndView;
+            }
+            if (!request.get().getRequestCode().equals(code)) {
+                modelAndView.addObject("error", "Code is incorrect");
+                return modelAndView;
+            }
+        }
+        modelAndView.addObject("email", email);
+        session.setAttribute(email, "UPDATE_PASSWORD");
+        modelAndView.setViewName("accounts/update-password");
+        return modelAndView;
+    }
+
+    @PostMapping("/forgot-password/update-password")
+    public ModelAndView updatePassword(@ModelAttribute UserPasswordUpdateDTO userPasswordUpdateDTO) {
+        ModelAndView modelAndView = new ModelAndView("accounts/update-password");
+        String email = (String) session.getAttribute("email");
+        if (email == null) {
+            return new ModelAndView("errors/404", HttpStatus.NOT_FOUND);
+        }
+        if (!session.getAttribute(email).equals("UPDATE_PASSWORD")) {
+            return new ModelAndView("errors/404", HttpStatus.NOT_FOUND);
+        }
+        User user = userService.findByEmail(email);
+        if (user == null) {
+            return new ModelAndView("errors/404", HttpStatus.NOT_FOUND);
+        }
+        if (!userPasswordUpdateDTO.getNewPassword().equals(userPasswordUpdateDTO.getConfirmPassword())) {
+            modelAndView.addObject("error", "Password and confirm password are not the same");
+            return modelAndView;
+        }
+        user.setPassword(userPasswordUpdateDTO.getNewPassword());
+        Optional<User> userUpdate = userService.save(user);
+        if (userUpdate.isEmpty()) {
+            return new ModelAndView("errors/404", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        session.removeAttribute(email);
+        session.removeAttribute("email");
+        modelAndView.addObject("error", "Change password successfully, please login again");
+        return modelAndView;
     }
 
     @PostMapping("/register")

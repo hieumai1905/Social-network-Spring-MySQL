@@ -58,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic().authenticationEntryPoint(new CustomAuthenticationEntryPoint()); // Sử dụng lớp xử lý không xác thực
 
         http.authorizeRequests()
-                .antMatchers("/login", "/register", "/forgot-password", "/assets/**", "/activate")
+                .antMatchers("/login", "/register", "/forgot-password", "/assets/**", "/activate", "/forgot-password/**")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
