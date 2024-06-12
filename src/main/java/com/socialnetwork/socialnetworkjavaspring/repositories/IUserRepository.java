@@ -15,6 +15,8 @@ import java.util.Optional;
 public interface IUserRepository extends JpaRepository<User, String> {
     Optional<User> findByEmail(String email);
 
+    Optional<User> findByEmailAndPassword(String email, String password);
+
     @Query(value = "SELECT * FROM users " +
             "WHERE CONVERT(LOWER(REPLACE(REPLACE(full_name, 'Đ', 'd'), 'Ă', 'a'))," +
             " CHAR) LIKE CONCAT('%', CONVERT(LOWER(REPLACE(REPLACE(:fullName, 'Đ', 'd'), 'Ă', 'a')), CHAR), '%') " +

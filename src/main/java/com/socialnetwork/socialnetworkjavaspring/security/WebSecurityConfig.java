@@ -1,6 +1,7 @@
 package com.socialnetwork.socialnetworkjavaspring.security;
 
 import com.socialnetwork.socialnetworkjavaspring.security.jwt.CustomAccessDeniedHandler;
+import com.socialnetwork.socialnetworkjavaspring.security.jwt.CustomAuthenticationEntryPoint;
 import com.socialnetwork.socialnetworkjavaspring.security.jwt.JwtAuthenticationFilter;
 import com.socialnetwork.socialnetworkjavaspring.security.jwt.RestAuthenticationEntryPoint;
 import com.socialnetwork.socialnetworkjavaspring.services.users.IUserService;
@@ -54,14 +55,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().ignoringAntMatchers("/**");
-        http.httpBasic().authenticationEntryPoint(restAuthenticationEntryPoint());
+        http.httpBasic().authenticationEntryPoint(new CustomAuthenticationEntryPoint()); // Sử dụng lớp xử lý không xác thực
 
         http.authorizeRequests()
-                .antMatchers("/**").permitAll()
+                .antMatchers("/login", "/register", "/forgot-password", "/assets/**", "/activate")
+                .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler())
+                .exceptionHandling()
+                .accessDeniedHandler(new CustomAccessDeniedHandler()) // Sử dụng lớp xử lý không có quyền truy cập
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

@@ -17461,3 +17461,19 @@ select.sort {
 .bg-noseen {
     background-color: #f6efef !important;
 }
+
+.bg-login{
+    background-color: #eab27dba !important;
+}
+
+input:invalid {
+    border-color: #ee9595 !important;
+}
+
+input:valid {
+    border-color: #e8e8e8 !important;
+}
+
+.bg-error{
+    background-color: #f17986 !important;
+}
