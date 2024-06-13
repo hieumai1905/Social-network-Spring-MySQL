@@ -145,7 +145,7 @@ function sendMessageEvent() {
     let inputMessage = $('#input-message');
     let content = inputMessage.val().trim();
     if (content) {
-        if (stompClient) {
+        if (stompClient && room) {
             let chatMessage = {
                 senderId: userCurrentId,
                 content: content,

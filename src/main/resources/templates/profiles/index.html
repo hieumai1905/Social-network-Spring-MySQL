@@ -62,7 +62,7 @@
                             <div class="row m-0">
                                 <div class="col-6 mb-2" th:each="media, iterStat : ${medias}"
                                      th:if="${iterStat.count} &lt;= 4">
-                                    <img th:src="${media.url}" alt="image" class="img-fluid rounded-3 media-profile">
+                                    <img th:src="${media.url}" alt="image" class="img-fluid rounded-3 media-profile" th:if="${media.type.name == 'IMAGE'}">
                                 </div>
                             </div>
                         </div>
