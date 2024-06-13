@@ -1,10 +1,8 @@
 package com.socialnetwork.socialnetworkjavaspring.controllers;
 
-import com.socialnetwork.socialnetworkjavaspring.models.Media;
-import com.socialnetwork.socialnetworkjavaspring.models.Post;
-import com.socialnetwork.socialnetworkjavaspring.models.Relation;
-import com.socialnetwork.socialnetworkjavaspring.models.User;
+import com.socialnetwork.socialnetworkjavaspring.models.*;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.RelationType;
+import com.socialnetwork.socialnetworkjavaspring.services.post_interacts.IPostInteractService;
 import com.socialnetwork.socialnetworkjavaspring.services.posts.IPostService;
 import com.socialnetwork.socialnetworkjavaspring.services.profiles.IProfileService;
 import com.socialnetwork.socialnetworkjavaspring.services.relations.IRelationService;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -36,6 +35,9 @@ public class ProfileController extends ApplicationController {
     @Autowired
     private IProfileService profileService;
 
+    @Autowired
+    private IPostInteractService postInteractService;
+
     @GetMapping
     public ModelAndView index(@RequestParam("user-id") String userId) {
         ModelAndView modelAndView = new ModelAndView("/profiles/index");
@@ -46,6 +48,8 @@ public class ProfileController extends ApplicationController {
             } else {
                 posts = setForProfileOther(modelAndView, userId);
             }
+            List<PostInteract> postInteracts = postInteractService.findAllPostInteractSharedByUserIdProfile(userId);
+            mergeListPostShareAndSort(posts, postInteracts);
             List<User> users = userService.findUsersByRelationType(userId, RelationType.FRIEND);
             Long followers = relationService.countFollower(userId);
             modelAndView.addObject("followers", followers);
@@ -129,5 +133,18 @@ public class ProfileController extends ApplicationController {
             }
             modelAndView.addObject("medias", medias);
         }
+    }
+
+    private void mergeListPostShareAndSort(List<Post> posts, List<PostInteract> postInteracts) {
+        for (PostInteract postInteract : postInteracts) {
+            Post postNew = new Post(postInteract.getPost());
+            postNew.setShareInformation(postInteract);
+            posts.add(postNew);
+        }
+        posts.sort((o1, o2) -> {
+            Date o1SortValue = o1.getShareInformation() != null ? o1.getShareInformation().getInteractAt() : o1.getCreateAt();
+            Date o2SortValue = o2.getShareInformation() != null ? o2.getShareInformation().getInteractAt() : o2.getCreateAt();
+            return o2SortValue.compareTo(o1SortValue);
+        });
     }
 }

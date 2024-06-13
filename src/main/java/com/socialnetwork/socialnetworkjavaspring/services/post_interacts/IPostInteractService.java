@@ -14,4 +14,6 @@ public interface IPostInteractService {
     PostInteract checkExistPostInteract(Post post, InteractType interactType, String userId);
 
     List<PostInteract> findAllPostInteractShareByUserId(String userId);
+
+    List<PostInteract> findAllPostInteractSharedByUserIdProfile(String userId);
 }

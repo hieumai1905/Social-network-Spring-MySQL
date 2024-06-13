@@ -81,4 +81,9 @@ public class PostInteractService implements IPostInteractService {
     public List<PostInteract> findAllPostInteractShareByUserId(String userId) {
         return postInteractRepository.findAllSharedPostInteractsForUserAndFollowing(userId);
     }
+
+    @Override
+    public List<PostInteract> findAllPostInteractSharedByUserIdProfile(String userId) {
+        return postInteractRepository.findAllSharedPostInteractsForUser(userId);
+    }
 }
