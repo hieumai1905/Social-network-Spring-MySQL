@@ -3,7 +3,7 @@
 <body>
 <div class="middle-wrap" th:fragment="fragment-account-info">
     <div class="card w-100 border-0 bg-white shadow-xs p-0 mb-4">
-        <div class="card-body p-4 w-100 bg-current border-0 d-flex rounded-3">
+        <div class="card-body p-4 w-100 bg-primary border-0 d-flex rounded-3">
             <a href="/settings" class="d-inline-block mt-2"><i class="ti-arrow-left font-sm text-white"></i></a>
             <h4 class="font-xs text-white fw-600 ms-4 mb-0 mt-2">Account Details</h4>
         </div>
@@ -17,40 +17,266 @@
                     <h4 class="text-grey-500 fw-500 mb-3 font-xsss mb-4" th:text="${currentUser.email}"></h4>
                 </div>
             </div>
-            <form action="#">
+            <form action="/settings/update-info" method="post">
                 <div class="row">
                     <div class="col-lg-6 mb-3">
                         <div class="form-group">
                             <label class="mont-font fw-600 font-xsss">Full Name</label>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" th:value="${currentUser.fullName}" name="fullName"
+                                   required pattern="[a-zA-Z\sÀ-ỹ]{2,}" title="Please enter at least 2 characters of text">
                         </div>
                     </div>
                     <div class="col-lg-6 mb-3">
                         <div class="form-group">
-                            <label class="mont-font fw-600 font-xsss">Phone</label>
-                            <input type="text" class="form-control">
+                            <label class="mont-font fw-600 font-xsss">Gender</label>
+                            <select class="form-select border-2 custom-border-select pb-2 pt-3" name="gender" required>
+                                <option value="">-- Select gender --</option>
+                                <option value="MALE"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.gender,'MALE')}">
+                                    MALE
+                                </option>
+                                <option value="FEMALE"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.gender,'FEMALE')}">
+                                    FEMALE
+                                </option>
+                                <option value="OTHER"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.gender,'OTHER')}">
+                                    OTHER
+                                </option>
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-6 mb-3">
                         <div class="form-group">
-                            <label class="mont-font fw-600 font-xsss">Email</label>
-                            <input type="text" class="form-control">
+                            <label class="mont-font fw-600 font-xsss">Birthday</label>
+                            <input type="date" name="birthday" class="form-control" th:value="${#dates.format(currentUser.dob, 'yyyy-MM-dd')}"
+                                   required oninvalid="this.setCustomValidity('Please select your birthday')">
                         </div>
                     </div>
                     <div class="col-lg-6 mb-3">
                         <div class="form-group">
                             <label class="mont-font fw-600 font-xsss">Country</label>
-                            <input type="text" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12 mb-3">
-                        <div class="form-group">
-                            <label class="mont-font fw-600 font-xsss">Address</label>
-                            <input type="text" class="form-control">
+                            <select class="form-select border-2 custom-border-select pb-2 pt-3" name="country" required>
+                                <option value="">-- Select Country --</option>
+                                <option value="Afghanistan"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Afghanistan')}">
+                                    Afghanistan
+                                </option>
+                                <option value="Albania"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Albania')}">
+                                    Albania
+                                </option>
+                                <option value="Algeria"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Algeria')}">
+                                    Algeria
+                                </option>
+                                <option value="Argentina"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Argentina')}">
+                                    Argentina
+                                </option>
+                                <option value="Australia"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Australia')}">
+                                    Australia
+                                </option>
+                                <option value="Austria"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Austria')}">
+                                    Austria
+                                </option>
+                                <option value="Bangladesh"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Bangladesh')}">
+                                    Bangladesh
+                                </option>
+                                <option value="Belgium"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Belgium')}">
+                                    Belgium
+                                </option>
+                                <option value="Brazil"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Brazil')}">
+                                    Brazil
+                                </option>
+                                <option value="Canada"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Canada')}">
+                                    Canada
+                                </option>
+                                <option value="China"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'China')}">
+                                    China
+                                </option>
+                                <option value="Colombia"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Colombia')}">
+                                    Colombia
+                                </option>
+                                <option value="Croatia"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Croatia')}">
+                                    Croatia
+                                </option>
+                                <option value="Czech Republic"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Czech Republic')}">
+                                    Czech Republic
+                                </option>
+                                <option value="Denmark"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Denmark')}">
+                                    Denmark
+                                </option>
+                                <option value="Egypt"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Egypt')}">
+                                    Egypt
+                                </option>
+                                <option value="Finland"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Finland')}">
+                                    Finland
+                                </option>
+                                <option value="France"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'France')}">
+                                    France
+                                </option>
+                                <option value="Germany"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Germany')}">
+                                    Germany
+                                </option>
+                                <option value="Greece"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Greece')}">
+                                    Greece
+                                </option>
+                                <option value="Hungary"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Hungary')}">
+                                    Hungary
+                                </option>
+                                <option value="India"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'India')}">
+                                    India
+                                </option>
+                                <option value="Indonesia"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Indonesia')}">
+                                    Indonesia
+                                </option>
+                                <option value="Iran"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Iran')}">
+                                    Iran
+                                </option>
+                                <option value="Ireland"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Ireland')}">
+                                    Ireland
+                                </option>
+                                <option value="Israel"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Israel')}">
+                                    Israel
+                                </option>
+                                <option value="Italy"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Italy')}">
+                                    Italy
+                                </option>
+                                <option value="Japan"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Japan')}">
+                                    Japan
+                                </option>
+                                <option value="South Korea"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'South Korea')}">
+                                    South Korea
+                                </option>
+                                <option value="Malaysia"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Malaysia')}">
+                                    Malaysia
+                                </option>
+                                <option value="Mexico"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Mexico')}">
+                                    Mexico
+                                </option>
+                                <option value="Morocco"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Morocco')}">
+                                    Morocco
+                                </option>
+                                <option value="Netherlands"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Netherlands')}">
+                                    Netherlands
+                                </option>
+                                <option value="New Zealand"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'New Zealand')}">
+                                    New Zealand
+                                </option>
+                                <option value="Norway"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Norway')}">
+                                    Norway
+                                </option>
+                                <option value="Pakistan"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Pakistan')}">
+                                    Pakistan
+                                </option>
+                                <option value="Philippines"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Philippines')}">
+                                    Philippines
+                                </option>
+                                <option value="Poland"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Poland')}">
+                                    Poland
+                                </option>
+                                <option value="Portugal"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Portugal')}">
+                                    Portugal
+                                </option>
+                                <option value="Romania"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Romania')}">
+                                    Romania
+                                </option>
+                                <option value="Russia"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Russia')}">
+                                    Russia
+                                </option>
+                                <option value="Saudi Arabia"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Saudi Arabia')}">
+                                    Saudi Arabia
+                                </option>
+                                <option value="Singapore"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Singapore')}">
+                                    Singapore
+                                </option>
+                                <option value="South Africa"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'South Africa')}">
+                                    South Africa
+                                </option>
+                                <option value="Spain"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Spain')}">
+                                    Spain
+                                </option>
+                                <option value="Sweden"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Sweden')}">
+                                    Sweden
+                                </option>
+                                <option value="Switzerland"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Switzerland')}">
+                                    Switzerland
+                                </option>
+                                <option value="Thailand"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Thailand')}">
+                                    Thailand
+                                </option>
+                                <option value="Turkey"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Turkey')}">
+                                    Turkey
+                                </option>
+                                <option value="Ukraine"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Ukraine')}">
+                                    Ukraine
+                                </option>
+                                <option value="United Arab Emirates"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'United Arab Emirates')}">
+                                    United Arab Emirates
+                                </option>
+                                <option value="United Kingdom"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'United Kingdom')}">
+                                    United Kingdom
+                                </option>
+                                <option value="United States"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'United States')}">
+                                    United States
+                                </option>
+                                <option value="Việt Nam"
+                                        th:selected="${currentUser != null && #strings.equalsIgnoreCase(currentUser.country,'Việt Nam')}">
+                                    Vietnamese
+                                </option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -58,12 +284,14 @@
                     <div class="col-lg-12 mb-3">
                         <label class="mont-font fw-600 font-xsss">Description</label>
                         <textarea class="form-control mb-0 p-3 h100 bg-greylight lh-16" rows="5"
-                                  placeholder="Write your message..." spellcheck="false">
-                        </textarea>
+                                  name="description" placeholder="Write your message..." spellcheck="false"
+                                  th:text="${currentUser.aboutMe}"
+                                  pattern=".*" title="Any character is allowed"></textarea>
                     </div>
                     <div class="col-lg-12">
-                        <a href="#"
-                           class="bg-current text-center text-white font-xsss fw-600 p-3 w175 rounded-3 d-inline-block">Save</a>
+                        <button class="bg-primary border-0 text-center text-white font-xsss fw-600 p-3 w175 rounded-3 d-inline-block">
+                            Save
+                        </button>
                     </div>
                 </div>
             </form>
