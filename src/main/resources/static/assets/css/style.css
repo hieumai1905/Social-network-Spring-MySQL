@@ -8378,6 +8378,10 @@ textarea.form-control-lg {
     border-color: #f7f7f7 !important
 }
 
+.custom-border-select{
+    border-color: #e8e8e8 !important;
+}
+
 .border-dark {
     border-color: #343a40 !important
 }
