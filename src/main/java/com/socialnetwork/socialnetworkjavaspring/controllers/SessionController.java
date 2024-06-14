@@ -58,7 +58,7 @@ public class SessionController {
                 case INACTIVE:
                     return handleStatusInactive(userLogin, modelAndView);
                 default:
-                    return new ModelAndView("errors/404");
+                    return new ModelAndView("errors/server-error");
             }
         } catch (Exception e) {
             modelAndView.addObject("error", "Username or password is incorrect");
@@ -89,11 +89,11 @@ public class SessionController {
         session.setAttribute(userLogin.getEmail(), UserStatus.INACTIVE);
         Optional<Request> requestAdded = requestService.save(request.get());
         if(requestAdded.isEmpty()){
-            return new ModelAndView("errors/404");
+            return new ModelAndView("errors/server-error");
         }
         boolean sendCodeSuccess = requestService.sendCodeToEmail(userLogin.getEmail(), "CONFIRM REGISTER", request.get().getRequestCode());
         if (!sendCodeSuccess) {
-            return new ModelAndView("errors/404");
+            return new ModelAndView("errors/server-error");
         }
         modelAndView.setViewName("accounts/activate");
         modelAndView.addObject("title", "Activate account");

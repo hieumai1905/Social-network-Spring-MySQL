@@ -3,7 +3,6 @@ package com.socialnetwork.socialnetworkjavaspring.controllers;
 import com.socialnetwork.socialnetworkjavaspring.DTOs.people.SearchPeopleRequestDTO;
 import com.socialnetwork.socialnetworkjavaspring.DTOs.people.SearchPeopleResponseDTO;
 import com.socialnetwork.socialnetworkjavaspring.DTOs.posts.SearchPostRequestDTO;
-import com.socialnetwork.socialnetworkjavaspring.DTOs.posts.SearchPostResponseDTO;
 import com.socialnetwork.socialnetworkjavaspring.models.Post;
 import com.socialnetwork.socialnetworkjavaspring.services.posts.IPostService;
 import com.socialnetwork.socialnetworkjavaspring.services.users.IUserService;
@@ -31,7 +30,7 @@ public class SearchController extends ApplicationController{
             return handleSearchPeople(q);
         else if(type.equals(Constants.SEARCH_TYPE_POST))
             return handleSearchPosts(q);
-        return new ModelAndView("/errors/404");
+        return new ModelAndView("errors/server-error");
     }
 
     private ModelAndView handleSearchPosts(String q) {
