@@ -4,6 +4,7 @@ let popupChat = $('#modal-popup-chat')
 let btnCreateConversation = $("#btnCreateConversation");
 let createConversationModal = $("#createConversationModal");
 let friendsConversation = [], searchFriendConversation = [], selectedFriendConversation = [];
+let updateConversationId = null, isManager = true;
 
 async function displayConversations() {
     let htmlPrivate = '';
@@ -44,14 +45,13 @@ function fetchPersonalConversation(conversation) {
 
 function renderConversation(conversationId, conversationName, conversationAvatar, isGroup, userId) {
     const commonHtml = `
-      <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0 d-flex align-items-center"
-      onclick="showMessageConversation(${conversationId})">
+      <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0 d-flex align-items-center">
         <figure class="avatar float-left mb-0 me-2">
           <p class="d-none conversation">${conversationId}</p>
           <img src="${conversationAvatar}" alt="image" class="custom-avatar-50 image-conversation rounded-circle" data-conversation-id="${conversationId}">
         </figure>
         <h3 class="fw-700 mb-0 mt-0">
-          <a class="font-xssss text-grey-600 d-block text-dark model-popup-chat" href="#" data-conversation-id="${conversationId}" 
+          <a onclick="showMessageConversation(${conversationId}, ${isGroup})" class="font-xssss text-grey-600 d-block text-dark model-popup-chat" href="#" data-conversation-id="${conversationId}" 
           data-user-id="${userId}">${conversationName}</a>
         </h3>
         
@@ -67,11 +67,11 @@ function renderConversation(conversationId, conversationName, conversationAvatar
                 <i class="fa fa-sign-out text-grey-500 me-2 fw-600 font-sm"></i>
                 <h4 class="fw-600 text-grey-900 font-xsss mt-1">&ensp;Leave group</h4>
             </div>
-            <div class="card-body p-2 dropdown-item rounded-xxxl d-flex" onclick="deleteConversationGroup(${conversationId})">
+            <div class="card-body p-2 dropdown-item rounded-xxxl d-flex" onclick="showConfirmDeleteConversationModal(${conversationId})">
                 <i class="fa fa fa-trash text-grey-500 me-2 fw-600 font-sm"></i>
                 <h4 class="fw-600 text-grey-900 font-xsss mt-1">&ensp;Delete group</h4>
             </div>
-            <div class="card-body p-2 dropdown-item rounded-xxxl d-flex" onclick="updateConversationGroup(${conversationId})">
+            <div class="card-body p-2 dropdown-item rounded-xxxl d-flex" onclick="loadConversationGroupToModal(${conversationId})">
                 <i class="fa fa-pencil-square-o text-grey-500 me-2 fw-600 font-sm"></i>
                 <h4 class="fw-600 text-grey-900 font-xsss mt-1">&ensp;Update group</h4>
             </div>
@@ -80,7 +80,7 @@ function renderConversation(conversationId, conversationName, conversationAvatar
     `;
     } else {
         return `${commonHtml}
-            <div class="card-body p-2 dropdown-item rounded-xxxl d-flex" onclick="deleteConversationGroup(${conversationId})">
+            <div class="card-body p-2 dropdown-item rounded-xxxl d-flex" onclick="deleteConversation(${conversationId})">
                 <i class="fa fa fa-trash text-grey-500 me-2 fw-600 font-sm"></i>
                 <h4 class="fw-600 text-grey-900 font-xsss mt-1">&ensp;Delete conversation</h4>
             </div>
@@ -97,9 +97,125 @@ function renderConversation(conversationId, conversationName, conversationAvatar
 function updateConversation(conversationId){
 
 }
+function deleteConversation(conversationId){
 
-function updateConversationGroup(conversationId){
+}
+function updateConversationGroup(){
+    let nameConversation = $("#name-conversation").val();
+    if(nameConversation === ''){
+        alert('Please enter name conversation!');
+        return;
+    }
+    let userIds = selectedFriendConversation.map(function(friend) {
+        return friend.userId;
+    });
+    if(userIds.length < 2){
+        alert('Please select two more friends to create a conversation!');
+        return;
+    }
+    userIds.push(currentUserId);
+    let formData = new FormData();
+    formData.append("nameConversation", nameConversation);
+    formData.append("participantIds", userIds);
+    let fileInput = $("#avatar-conversation")[0];
+    if (fileInput.files.length > 0) {
+        formData.append("file", fileInput.files[0]);
+    }
+    $.ajax({
+        url: '/api/conversations/' + updateConversationId,
+        type: 'PUT',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if(response.code === 200){
+                console.log(response);
+                loadConversations();
+                resetDataInConversationModal();
+                createConversationModal.modal('hide');
+            }
+        },
+        error: function(xhr, status, error) {
+            alert('Error: ' + xhr.responseText);
+            console.log(xhr, status, error);
+        }
+    });
+}
 
+function loadConversationGroupToModal(conversationId){
+    $.ajax({
+        url: '/api/conversations/' + conversationId,
+        type: 'GET',
+        success: function(response) {
+            if(response.code === 200){
+                console.log(response);
+                updateConversationId = conversationId;
+                setContentForConversationModal({
+                   title: 'Update conversation',
+                    btnText: 'Update',
+                    action: 'update'
+                });
+                $("#name-conversation").val(response.data.name);
+                isManager = response.data.userId === currentUserId;
+                response.data.members.forEach(member => {
+                    if(member.userId !== currentUserId)
+                        addUserTagToConversation(member);
+                });
+                createBlobFromUrl(response.data.avatar)
+                    .then(blob => {
+                        const fileName = extractFileNameFromUrl(response.data.avatar);
+                        return blobToFile(blob, fileName);
+                    })
+                    .then(avatar => {
+                        const file = new File([avatar], avatar.name, { type: avatar.type });
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(file);
+                        const fileInput = document.getElementById("avatar-conversation");
+                        fileInput.files = dataTransfer.files;
+                    })
+                    .catch(error => {
+                        console.error('Error creating file from URL:', error);
+                    });
+            }
+        },
+        error: function(xhr, status, error) {
+            alert('Error: ' + xhr.responseText);
+            console.log(xhr, status, error);
+        }
+    });
+}
+
+function createBlobFromUrl(url) {
+    return fetch(url)
+        .then(response => response.blob())
+        .then(blob => blob)
+        .catch(error => {
+            console.error('Error creating Blob from URL:', error);
+            throw error;
+        });
+}
+
+function extractFileNameFromUrl(url) {
+    return url.substring(url.lastIndexOf('/') + 1);
+}
+
+function blobToFile(blob, fileName) {
+    return new File([blob], fileName, {
+        type: blob.type,
+        lastModified: Date.now()
+    });
+}
+
+function showConfirmDeleteConversationModal(conversationId) {
+    setContentForConfirmModal(
+        {
+            title: "Delete conversation",
+            body: "Are you sure you want to delete this conversation?",
+            btnText: "Delete"
+        },
+        "deleteConversationGroup",
+        conversationId
+    );
 }
 
 function deleteConversationGroup(conversationId) {
@@ -108,8 +224,9 @@ function deleteConversationGroup(conversationId) {
         type: 'DELETE',
         success: function(response) {
             if(response.code === 200){
-                alert('Delete conversation group successfully!');
                 console.log(response);
+                loadConversations();
+                showMessageConversation(conversationId);
             }
         },
         error: function(xhr, status, error) {
@@ -147,7 +264,7 @@ function displayFriendsViewToConversation() {
 }
 
 function addUserTagToConversation(user) {
-    var isUserAlreadySelected = selectedFriendConversation.some(function(u) {
+    let isUserAlreadySelected = selectedFriendConversation.some(function(u) {
         return u.userId === user.userId;
     });
 
@@ -199,7 +316,10 @@ function addUsersTagDivToConversation(user){
             displayFriendsViewToConversation();
         });
 
-    userTagItemContainer.append(userTagButton, removeButton);
+    if(isManager)
+        userTagItemContainer.append(userTagButton, removeButton);
+    else
+        userTagItemContainer.append(userTagButton);
     $("#members").append(userTagItemContainer);
 }
 function removeUserByIdToConversation(userIdToRemove) {
@@ -238,9 +358,7 @@ function createConversation(){
             if(response.code === 200){
                 console.log(response);
                 loadConversations();
-                resetUsersTagToConversation();
-                $("#name-conversation").val("");
-                $("#avatar-conversation").val("");
+                resetDataInConversationModal();
                 createConversationModal.modal('hide');
             }
         },
@@ -249,4 +367,18 @@ function createConversation(){
             console.log(xhr, status, error);
         }
     });
+}
+
+function resetDataInConversationModal() {
+    resetUsersTagToConversation();
+    $("#name-conversation").val("");
+    $("#avatar-conversation").val("");
+}
+
+function setContentForConversationModal(content){
+    createConversationModal.find("#createConversationModalLabel").text(content.title);
+    createConversationModal.find("#createNewConversation").text(content.btnText);
+    createConversationModal.find("#createNewConversation").attr("action", content.action);
+    resetDataInConversationModal();
+    createConversationModal.modal('show');
 }

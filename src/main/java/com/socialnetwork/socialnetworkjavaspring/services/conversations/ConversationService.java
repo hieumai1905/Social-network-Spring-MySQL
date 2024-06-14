@@ -1,6 +1,8 @@
 package com.socialnetwork.socialnetworkjavaspring.services.conversations;
 
 import com.socialnetwork.socialnetworkjavaspring.DTOs.conversations.ConversationRequestDTO;
+import com.socialnetwork.socialnetworkjavaspring.DTOs.conversations.ConversationResponseDTO;
+import com.socialnetwork.socialnetworkjavaspring.DTOs.users.UserResponseDTO;
 import com.socialnetwork.socialnetworkjavaspring.models.Conversation;
 import com.socialnetwork.socialnetworkjavaspring.models.Participant;
 import com.socialnetwork.socialnetworkjavaspring.models.User;
@@ -11,6 +13,7 @@ import com.socialnetwork.socialnetworkjavaspring.repositories.IConversationRepos
 import com.socialnetwork.socialnetworkjavaspring.repositories.IParticipantRepository;
 import com.socialnetwork.socialnetworkjavaspring.repositories.IUserRepository;
 import com.socialnetwork.socialnetworkjavaspring.utils.Constants;
+import com.socialnetwork.socialnetworkjavaspring.utils.ConvertUtils;
 import com.socialnetwork.socialnetworkjavaspring.utils.DateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,7 +61,7 @@ public class ConversationService implements IConversationService {
 
     @Override
     public List<Conversation> getConversationJoinedByUserId(String userId) {
-        return conversationRepository.findAllByUserIdAndStatusOrderByLatestMessageTime(userId, ParticipantStatus.JOINED.toString());
+        return conversationRepository.findAllByUserId_AndStatusOrderByLatestMessageTime(userId, ParticipantStatus.JOINED.toString());
     }
 
     @Override
@@ -129,6 +132,58 @@ public class ConversationService implements IConversationService {
                 .orElseThrow(() -> new NullPointerException("Participant not found!"));
         participant.setDeletedAt(new Date());
         participantRepository.save(participant);
+    }
+
+    @Override
+    public ConversationResponseDTO getConversationById(User userCurrent, Long conversationId) {
+        Conversation conversation = conversationRepository.findById(conversationId)
+                .orElseThrow(() -> new NullPointerException("Conversation not found!"));
+        ConversationResponseDTO conversationResponseDTO = ConvertUtils.convert(conversation, ConversationResponseDTO.class);
+        List<UserResponseDTO> userResponseDTOs = new ArrayList<>();
+        for (Participant participant : conversation.getParticipants()) {
+            userResponseDTOs.add(ConvertUtils.convert(participant.getUser(), UserResponseDTO.class));
+        }
+        conversationResponseDTO.setMembers(userResponseDTOs);
+        return conversationResponseDTO;
+    }
+
+    @Override
+    public void updateConversation(Long id, ConversationRequestDTO request, MultipartFile file, User user) {
+        String avatar = user.getAvatar();
+        if(file != null){
+            avatar = saveFile(file);
+        }
+        Conversation conversation = conversationRepository.findById(id).orElseThrow(
+                () -> new NullPointerException("Conversation not found!")
+        );
+        conversation.setName(request.getNameConversation());
+        conversation.setAvatar(avatar);
+        conversationRepository.save(conversation);
+        for (Participant participant : conversation.getParticipants()) {
+            if(!request.getParticipantIds().contains(participant.getParticipantId().getUserId())){
+                participantRepository.deleteByUserIdAndConversationId(
+                        participant.getParticipantId().getUserId(),
+                        participant.getConversation().getConversationId()
+                );
+            }else{
+                request.getParticipantIds().removeIf(item -> item.equals(participant.getParticipantId().getUserId()));
+            }
+        }
+        List<Participant> participants = new ArrayList<>();
+        for (String userId : request.getParticipantIds()) {
+            User existingUser = userRepository.findById(userId).orElseThrow(
+                    () -> new NullPointerException("User not found")
+            );
+            Participant participant = new Participant();
+            participant.setParticipantId(new ParticipantId(existingUser.getUserId(), conversation.getConversationId()));
+            participant.setNickname(existingUser.getFullName());
+            participant.setStatus(ParticipantStatus.JOINED);
+            participant.setJoinedAt(new Date());
+            participant.setUser(existingUser);
+            participant.setConversation(conversation);
+            participants.add(participant);
+        }
+        participantRepository.saveAll(participants);
     }
 
     private String saveFile(MultipartFile file){

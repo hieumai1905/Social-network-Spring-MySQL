@@ -47,6 +47,16 @@ public class ApisConversationController extends ApplicationController {
         return ResponseEntity.ok(ConvertUtils.convertList(conversations, ConversationResponseDTO.class));
     }
 
+    @GetMapping("/{conversationId}")
+    public ResponseEntity<ApiResponse> getConversationById(@PathVariable("conversationId") Long conversationId) {
+        try{
+            User userCurrent = sessionService.currentUser();
+            return responseApi(HttpStatus.OK, "get conversation successfully!", conversationService.getConversationById(userCurrent, conversationId));
+        }catch(Exception e){
+            return responseApi(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
     @GetMapping("/target/users")
     public ResponseEntity<ApiResponse> show(@RequestParam("id") String userId) {
         try {
@@ -64,6 +74,17 @@ public class ApisConversationController extends ApplicationController {
                                               @RequestPart(value = "file", required = false) MultipartFile file) {
         try {
             conversationService.createConversation(requestDTO, file, currentUser);
+            return responseApi(HttpStatus.OK, "Create conversation group successfully!");
+        } catch (Exception e) {
+            return responseApi(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> update(@PathVariable("id") Long id, @ModelAttribute ConversationRequestDTO requestDTO,
+                                              @RequestPart(value = "file", required = false) MultipartFile file) {
+        try {
+            conversationService.updateConversation(id, requestDTO, file, currentUser);
             return responseApi(HttpStatus.OK, "Create conversation group successfully!");
         } catch (Exception e) {
             return responseApi(HttpStatus.BAD_REQUEST, e.getMessage());

@@ -1,6 +1,7 @@
 package com.socialnetwork.socialnetworkjavaspring.services.conversations;
 
 import com.socialnetwork.socialnetworkjavaspring.DTOs.conversations.ConversationRequestDTO;
+import com.socialnetwork.socialnetworkjavaspring.DTOs.conversations.ConversationResponseDTO;
 import com.socialnetwork.socialnetworkjavaspring.models.Conversation;
 import com.socialnetwork.socialnetworkjavaspring.models.User;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.ConversationType;
@@ -23,4 +24,8 @@ public interface IConversationService extends IGeneralService<Conversation, Long
     void createConversation(ConversationRequestDTO request, MultipartFile file, User user);
 
     void deleteConversation(Long conversationId, User user);
+
+    ConversationResponseDTO getConversationById(User userCurrent, Long conversationId);
+
+    void updateConversation(Long id, ConversationRequestDTO requestDTO, MultipartFile file, User currentUser);
 }

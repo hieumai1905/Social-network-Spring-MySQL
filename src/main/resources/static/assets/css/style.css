@@ -13,6 +13,17 @@
     overflow: auto;
     -ms-overflow-style: none;
 }
+.custom-overflow100 {
+    max-height: 100px;
+    overflow: auto;
+    -ms-overflow-style: none;
+}
+
+.custom-overflow250 {
+    max-height: 250px;
+    overflow: auto;
+    -ms-overflow-style: none;
+}
 
 .custom-overflow::-webkit-scrollbar {
     width: 0 !important;

@@ -22,7 +22,12 @@ function loadConversations() {
 
 function registerConversationsEvents(){
     btnCreateConversation.on("click", function(){
-        createConversationModal.modal("show");
+        setContentForConversationModal({
+            title: "Create Conversation",
+            btnText: "Create",
+            action: "create"
+        });
+        isManager = true;
     });
     $("#search-friends-conversation").on("input", function () {
         let text = $(this).val().toLowerCase().trim();
@@ -33,7 +38,11 @@ function registerConversationsEvents(){
     });
 
     $("#createNewConversation").on("click", function() {
-        createConversation();
+        let action = $(this).attr("action");
+        if(action === 'create')
+            createConversation();
+        else
+            updateConversationGroup();
     });
 }
 
