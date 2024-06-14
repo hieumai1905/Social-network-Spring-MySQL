@@ -75,12 +75,16 @@ function renderConversation(conversationId, conversationName, conversationAvatar
                 <i class="fa fa-pencil-square-o text-grey-500 me-2 fw-600 font-sm"></i>
                 <h4 class="fw-600 text-grey-900 font-xsss mt-1">&ensp;Update group</h4>
             </div>
+            <div class="card-body p-2 dropdown-item rounded-xxxl d-flex" onclick="loadMembersToModal(${conversationId})">
+                <i class="fa fa-users text-grey-500 me-2 fw-600 font-sm"></i>
+                <h4 class="fw-600 text-grey-900 font-xsss mt-1">&ensp;Members</h4>
+            </div>
         </div>
       </li>
     `;
     } else {
         return `${commonHtml}
-            <div class="card-body p-2 dropdown-item rounded-xxxl d-flex" onclick="deleteConversation(${conversationId})">
+            <div class="card-body p-2 dropdown-item rounded-xxxl d-flex" onclick="showConfirmDeleteConversationModal(${conversationId})">
                 <i class="fa fa fa-trash text-grey-500 me-2 fw-600 font-sm"></i>
                 <h4 class="fw-600 text-grey-900 font-xsss mt-1">&ensp;Delete conversation</h4>
             </div>
@@ -99,6 +103,116 @@ function updateConversation(conversationId){
 }
 function deleteConversation(conversationId){
 
+}
+
+function loadMembersToModal(conversationId){
+    $.ajax({
+        url: '/api/conversations/' + conversationId,
+        type: 'GET',
+        success: function(response) {
+            if(response.code === 200){
+                console.log(response);
+                let body = '<div class="custom-overflow250">';
+                response.data.members.forEach(member => {
+                    body += displayMemberItem(conversationId, member, response.data.userId);
+                });
+                body += '</div>';
+
+                setContentForMembersModal({
+                    title: 'Members in conversation',
+                    body: body,
+                    btnText: 'Save',
+                    isNeedBtnSave: false
+                }, '', null);
+
+            }
+        },
+        error: function(xhr, status, error) {
+            alert('Error: ' + xhr.responseText);
+            console.log(xhr, status, error);
+        }
+    });
+}
+
+function displayMemberItem(conversationId, member, managerId){
+    return `
+        <div class="card-body d-flex pt-4 ps-4 pe-4 pb-0 border-top-xs bor-0" id="conversation-member-card-${member.userId}">
+            <figure class="avatar me-3">
+                <img src="${member.avatar}" alt="image" class="shadow-sm rounded-circle custom-avatar-50">
+            </figure>
+            <h4 class="fw-700 text-grey-900 font-xssss mt-2">${member.fullName}</h4>
+            <a href="#" class="ms-auto" id="dropdownMenuMembers2" data-bs-toggle="dropdown"
+               aria-expanded="false"><i
+                    class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i></a>
+            <div class="dropdown-menu dropdown-menu-end p-2 rounded-xxxl cursor-pointer border-0 shadow-lg"
+                 aria-labelledby="dropdownMenuMembers2">
+                 ${currentUserId === managerId ? `
+                    <div class="set-manager-conversation card-body p-2 dropdown-item rounded-xxxl d-flex"
+                        onclick="updateManager('${conversationId}', '${member.userId}')">
+                        <i class="fa fa-user text-grey-500 me-2 fw-600 font-sm"></i>
+                        <h4 class="fw-600 text-grey-900 font-xsss mt-1">Set Manager</h4>
+                    </div>
+                 ` : ``}
+                 <div class="set-manager-conversation card-body p-2 dropdown-item rounded-xxxl d-flex">
+                        <i class="fa fa-eye text-grey-500 me-2 fw-600 font-sm"></i>
+                        <a href="/profile?user-id=${member.userId}" class="fw-600 text-grey-900 font-xsss">View Profile</a>
+                 </div>
+            </div>
+        </div>
+    `;
+}
+
+function updateManager(conversationId, memberId){
+    $.ajax({
+        url: '/api/conversations/update-manager?conversationId=' + conversationId + "&managerId=" + memberId,
+        type: 'PUT',
+        success: function(response) {
+            if(response.code === 200){
+                console.log(response);
+                _membersModal.modal('hide');
+                setContentForNotifyModal({
+                    title: 'Message',
+                    body: 'Set manager successfully!',
+                    btnText: "Ok"
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            console.log('Error: ' + xhr.responseText);
+            console.log(xhr, status, error);
+        }
+    });
+}
+
+function setContentForMembersModal(content, functionName, ...args) {
+    _membersModal.find(".modal-title").text(content.title);
+    _membersModal.find(".modal-body").html(content.body);
+    let modalFooter = _membersModal.find(".modal-footer");
+    modalFooter.empty();
+    let btnCancel = $('<button>', {
+        id: 'btnCancelModal',
+        type: 'button',
+        class: 'btn btn-dark',
+        'data-bs-dismiss': 'modal',
+        text: 'Cancel'
+    });
+    if(content.isNeedBtnSave){
+        let btnOk = $('<button>', {
+            type: 'button',
+            class: 'btn-ok btn btn-primary text-white',
+            'data-bs-dismiss': 'modal',
+            text: `${content.btnText}`
+        });
+        modalFooter.append(btnCancel, btnOk);
+        btnOk.on('click', function() {
+            if (typeof window[functionName] === 'function') {
+                window[functionName].apply(null, args);
+            }
+        });
+    }else{
+        modalFooter.append(btnCancel);
+    }
+    _membersModal.modal('show');
 }
 function updateConversationGroup(){
     let nameConversation = $("#name-conversation").val();

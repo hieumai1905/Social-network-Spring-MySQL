@@ -186,6 +186,18 @@ public class ConversationService implements IConversationService {
         participantRepository.saveAll(participants);
     }
 
+    @Override
+    public void updateManager(Long id, String managerId, User currentUser) {
+        Conversation conversation = conversationRepository.findById(id).orElseThrow(
+                () -> new NullPointerException("Conversation not found!")
+        );
+        User manager = userRepository.findById(managerId).orElseThrow(
+                () -> new NullPointerException("Manager not found!")
+        );
+        conversation.setUser(manager);
+        conversationRepository.save(conversation);
+    }
+
     private String saveFile(MultipartFile file){
         try {
             String fileName = file.getOriginalFilename();

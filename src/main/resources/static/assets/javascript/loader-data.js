@@ -4,6 +4,7 @@ let currentUserAvatar = null;
 let currentUserId = null;
 let currentUserName = null;
 let _confirmModal = null;
+let _membersModal = null;
 
 function loadConversations() {
     $.ajax({
@@ -117,6 +118,7 @@ function setContentForNotifyModal(content){
 window.onload = () => {
     registerConversationsEvents();
     _confirmModal = $("#_confirmModal");
+    _membersModal = $("#_membersModal");
     if (typeof loadConversations === 'function') {
         loadConversations();
     }

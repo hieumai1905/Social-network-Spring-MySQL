@@ -28,4 +28,6 @@ public interface IConversationService extends IGeneralService<Conversation, Long
     ConversationResponseDTO getConversationById(User userCurrent, Long conversationId);
 
     void updateConversation(Long id, ConversationRequestDTO requestDTO, MultipartFile file, User currentUser);
+
+    void updateManager(Long id, String managerId, User currentUser);
 }
