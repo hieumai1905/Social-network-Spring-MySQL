@@ -62,6 +62,11 @@ public class ApplicationController {
         return setAuthor(modelAndView);
     }
 
+    @GetMapping("/no-access")
+    public String noAccess() {
+        return "errors/no-access";
+    }
+
     private void mergeListPostShareAndSort(List<Post> posts, List<PostInteract> postInteracts) {
         for (PostInteract postInteract : postInteracts) {
             Post postNew = new Post(postInteract.getPost());
