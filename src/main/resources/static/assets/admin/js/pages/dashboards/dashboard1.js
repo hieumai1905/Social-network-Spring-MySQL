@@ -72,7 +72,6 @@ $(function () {
     getStatistics(null);
 
 
-
     var chart = [chart];
 
     var sparklineLogin = function () {

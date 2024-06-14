@@ -19,7 +19,7 @@
             </tr>
             </thead>
             <tbody>
-              <tr th:each="user, index : ${users}">
+              <tr th:each="user, index : ${users}" th:if="${user.userId != currentUser.userId}">
                 <td th:text="${index.index + 1}"></td>
                 <td th:text="${user.fullName}"></td>
                 <td th:text="${user.email}"></td>
