@@ -12,7 +12,12 @@ $(window).on('load', function() {
     reportTable.on('draw.dt', function() {
         btnDeletePost.off('click').on('click', function(){
             postId = $(this).attr('data-postId');
-            deletePost(postId);
+            setContentForConfirmModal("#_confirmModal", {
+                title: 'Delete post',
+                body: `Are you sure to delete this post?`,
+                btnText: 'Delete',
+            }, "deletePost", postId);
+            // deletePost(postId);
         });
         btnViewPost.off('click').on('click', function(){
             postId = $(this).attr('data-postId');
@@ -22,7 +27,12 @@ $(window).on('load', function() {
 
     btnDeletePost.on('click', function(){
        postId = $(this).attr('data-postId');
-       deletePost(postId);
+        setContentForConfirmModal("#_confirmModal", {
+            title: 'Delete post',
+            body: `Are you sure to delete this post?`,
+            btnText: 'Delete',
+        }, "deletePost", postId);
+       // deletePost(postId);
     });
     btnViewPost.on('click', function(){
         postId = $(this).attr('data-postId');

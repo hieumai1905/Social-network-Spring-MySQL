@@ -13,35 +13,65 @@ $(window).on('load', function() {
     userTable.on('draw.dt', function() {
         btnLockUser.off('click').on('click', function() {
             userId = $(this).attr('data-userId');
-            changeUserStatus('locked', $(this));
+            setContentForConfirmModal("#_confirmModal", {
+                title: 'Change user status',
+                body: 'Are you sure to lock this user?',
+                btnText: 'Confirm',
+            }, "changeUserStatus", 'locked', $(this));
+            // changeUserStatus('locked', $(this));
         });
 
         btnActiveUser.off('click').on('click', function() {
             userId = $(this).attr('data-userId');
-            changeUserStatus('active', $(this));
+            setContentForConfirmModal("#_confirmModal", {
+                title: 'Change user status',
+                body: 'Are you sure to active this user?',
+                btnText: 'Confirm',
+            }, "changeUserStatus", 'active', $(this));
+            // changeUserStatus('active', $(this));
         });
 
-        btnChangeRole.on('click', function () {
+        btnChangeRole.off('click').on('click', function () {
             userId = $(this).attr('data-userId');
             let newRole = $(this).text() === 'Admin' ? 'role_user' : 'role_admin';
-            changeUserRole(newRole, $(this));
+            setContentForConfirmModal("#_confirmModal", {
+                title: 'Change user role',
+                body: `Are you sure to set role ${newRole === 'role_user' ? 'user' : 'admin'} for this user?`,
+                btnText: 'Confirm',
+            }, "changeUserRole", newRole, $(this));
+            // changeUserRole(newRole, $(this));
         });
     });
 
     btnLockUser.on('click', function () {
         userId = $(this).attr('data-userId');
-        changeUserStatus( 'locked', $(this));
+        setContentForConfirmModal("#_confirmModal", {
+            title: 'Change user status',
+            body: 'Are you sure to lock this user?',
+            btnText: 'Confirm',
+        }, "changeUserStatus", 'locked', $(this));
+        // changeUserStatus( 'locked', $(this));
     });
 
     btnActiveUser.on('click', function () {
         userId = $(this).attr('data-userId');
-        changeUserStatus('active', $(this));
+        setContentForConfirmModal("#_confirmModal", {
+            title: 'Change user status',
+            body: 'Are you sure to active this user?',
+            btnText: 'Confirm',
+        }, "changeUserStatus", 'active', $(this));
+        // changeUserStatus('active', $(this));
     });
 
     btnChangeRole.on('click', function () {
         userId = $(this).attr('data-userId');
         let newRole = $(this).text() === 'Admin' ? 'role_user' : 'role_admin';
-        changeUserRole(newRole, $(this));
+        setContentForConfirmModal("#_confirmModal", {
+            title: 'Change user role',
+            body: `Are you sure to set role ${newRole === 'role_user' ? 'user' : 'admin'} for this user?`,
+            btnText: 'Confirm',
+        }, "changeUserRole", newRole, $(this));
+        // changeUserRole(newRole, $(this));
     });
 });
 
@@ -101,7 +131,12 @@ function replaceButton(newStatus, element) {
             'text': 'Active',
             'click': function() {
                 userId = $(this).attr('data-userId');
-                changeUserStatus( 'active', $(this));
+                setContentForConfirmModal("#_confirmModal", {
+                    title: 'Change user status',
+                    body: 'Are you sure to active this user?',
+                    btnText: 'Confirm',
+                }, "changeUserStatus", 'active', $(this));
+                // changeUserStatus( 'active', $(this));
             }
         });
         element.replaceWith(newBtn);
@@ -112,7 +147,12 @@ function replaceButton(newStatus, element) {
             'text': 'Lock',
             'click': function() {
                 userId = $(this).attr('data-userId');
-                changeUserStatus('locked', $(this));
+                setContentForConfirmModal("#_confirmModal", {
+                    title: 'Change user status',
+                    body: 'Are you sure to lock this user?',
+                    btnText: 'Confirm',
+                }, "changeUserStatus", 'locked', $(this));
+                // changeUserStatus('locked', $(this));
             }
         });
         element.replaceWith(newBtn);

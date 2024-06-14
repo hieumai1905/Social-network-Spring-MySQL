@@ -33,3 +33,30 @@ $(function() {
     $(window).on("resize", setsidebartype);
 
 });
+
+function setContentForConfirmModal(modalId, content, functionName, ...args){
+    $(modalId).find(".modal-title").text(content.title);
+    $(modalId).find(".modal-body").html(content.body);
+    let modalFooter = $(modalId).find(".modal-footer");
+    modalFooter.empty();
+    let btnCancel = $('<button>', {
+        id: 'btnCancelModal',
+        type: 'button',
+        class: 'btn btn-dark',
+        'data-bs-dismiss': 'modal',
+        text: 'Cancel'
+    });
+    let btnOk = $('<button>', {
+        type: 'button',
+        class: 'btn-ok btn btn-primary text-white',
+        'data-bs-dismiss': 'modal',
+        text: `${content.btnText}`
+    });
+    modalFooter.append(btnCancel, btnOk);
+    btnOk.on('click', function() {
+        if (typeof window[functionName] === 'function') {
+            window[functionName].apply(null, args);
+        }
+    });
+    $(modalId).modal('show');
+}
