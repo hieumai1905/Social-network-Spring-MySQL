@@ -55,16 +55,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().ignoringAntMatchers("/**");
-        http.httpBasic().authenticationEntryPoint(new CustomAuthenticationEntryPoint()); // Sử dụng lớp xử lý không xác thực
+        http.httpBasic().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
 
         http.authorizeRequests()
-                .antMatchers("/login", "/register", "/forgot-password", "/assets/**", "/activate", "/forgot-password/**")
-                .permitAll()
+                .antMatchers("/login", "/register", "/forgot-password", "/assets/**", "/activate", "/forgot-password/**").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")  // Yêu cầu role ADMIN cho /admin/**
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
-                .accessDeniedHandler(new CustomAccessDeniedHandler()) // Sử dụng lớp xử lý không có quyền truy cập
+                .accessDeniedHandler(new CustomAccessDeniedHandler())
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
