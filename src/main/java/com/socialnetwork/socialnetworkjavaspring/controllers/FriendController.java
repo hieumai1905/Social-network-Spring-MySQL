@@ -32,7 +32,7 @@ public class FriendController extends ApplicationController {
     }
 
     private ModelAndView handleException(ModelAndView modelAndView) {
-        modelAndView.setViewName("errors/404");
+        modelAndView.setViewName("errors/server-error");
         return modelAndView;
     }
 }

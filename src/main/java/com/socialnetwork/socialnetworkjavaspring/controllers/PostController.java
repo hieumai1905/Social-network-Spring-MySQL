@@ -47,7 +47,7 @@ public class PostController extends ApplicationController {
             modelAndView.addObject("posts", posts);
             modelAndView.addObject("page_title", "Post Details");
         } catch (Exception e) {
-            return new ModelAndView("errors/404");
+            return new ModelAndView("errors/server-error");
         }
         return setAuthor(modelAndView);
     }

@@ -68,12 +68,12 @@ public class AccountController {
                 : Optional.of(new Request(email, RequestType.FORGOT));
         Optional<Request> savedRequest = requestService.save(request.get());
         if (savedRequest.isEmpty()) {
-            return new ModelAndView("errors/404", HttpStatus.NOT_FOUND);
+            return new ModelAndView("errors/server-error", HttpStatus.NOT_FOUND);
         }
         boolean sendCodeSuccess = requestService.sendCodeToEmail(email,
                 "CONFIRM FORGOT PASSWORD", savedRequest.get().getRequestCode());
         if (!sendCodeSuccess) {
-            return new ModelAndView("errors/404", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ModelAndView("errors/server-error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         modelAndView.setViewName("accounts/activate");
         modelAndView.addObject("email", email);
@@ -86,7 +86,7 @@ public class AccountController {
         ModelAndView modelAndView = new ModelAndView("accounts/activate");
         User existingUser = userService.findByEmail(email);
         if (existingUser == null) {
-            return new ModelAndView("errors/404", HttpStatus.NOT_FOUND);
+            return new ModelAndView("errors/server-error", HttpStatus.NOT_FOUND);
         }
         Optional<Request> request = requestService.findByEmailRequest(email);
         if (request.isEmpty()) {
@@ -120,14 +120,14 @@ public class AccountController {
         ModelAndView modelAndView = new ModelAndView("accounts/update-password");
         String email = (String) session.getAttribute("email");
         if (email == null) {
-            return new ModelAndView("errors/404", HttpStatus.NOT_FOUND);
+            return new ModelAndView("errors/server-error", HttpStatus.NOT_FOUND);
         }
         if (!session.getAttribute(email).equals("UPDATE_PASSWORD")) {
-            return new ModelAndView("errors/404", HttpStatus.NOT_FOUND);
+            return new ModelAndView("errors/server-error", HttpStatus.NOT_FOUND);
         }
         User user = userService.findByEmail(email);
         if (user == null) {
-            return new ModelAndView("errors/404", HttpStatus.NOT_FOUND);
+            return new ModelAndView("errors/server-error", HttpStatus.NOT_FOUND);
         }
         if (!userPasswordUpdateDTO.getNewPassword().equals(userPasswordUpdateDTO.getConfirmPassword())) {
             modelAndView.addObject("error", "Password and confirm password are not the same");
@@ -136,7 +136,7 @@ public class AccountController {
         user.setPassword(userPasswordUpdateDTO.getNewPassword());
         Optional<User> userUpdate = userService.save(user);
         if (userUpdate.isEmpty()) {
-            return new ModelAndView("errors/404", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ModelAndView("errors/server-error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         session.removeAttribute(email);
         session.removeAttribute("email");
@@ -182,13 +182,13 @@ public class AccountController {
 
         Optional<Request> savedRequest = requestService.save(request.get());
         if (savedRequest.isEmpty()) {
-            return new ModelAndView("errors/404", HttpStatus.NOT_FOUND);
+            return new ModelAndView("errors/server-error", HttpStatus.NOT_FOUND);
         }
 
         boolean sendCodeSuccess = requestService.sendCodeToEmail(userRegisterDTO.getEmail(),
                 "CONFIRM REGISTER", savedRequest.get().getRequestCode());
         if (!sendCodeSuccess) {
-            return new ModelAndView("errors/404", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ModelAndView("errors/server-error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         modelAndView.setViewName("accounts/activate");
@@ -215,7 +215,7 @@ public class AccountController {
         Optional<Request> request = requestService.findByEmailRequest(email);
 
         if (isInvalidActivationRequest(userStatus, user, request)) {
-            return new ModelAndView("errors/404", HttpStatus.NOT_FOUND);
+            return new ModelAndView("errors/server-error", HttpStatus.NOT_FOUND);
         }
 
         if (!isValidActivationRequest(request.get(), code)) {
@@ -227,7 +227,7 @@ public class AccountController {
         user.setStatus(UserStatus.ACTIVE);
         Optional<User> userUpdate = userService.save(user);
         if (userUpdate.isEmpty()) {
-            return new ModelAndView("errors/404", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ModelAndView("errors/server-error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         requestService.delete(request.get());

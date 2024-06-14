@@ -55,7 +55,7 @@ public class ProfileController extends ApplicationController {
             modelAndView.addObject("followers", followers);
             modelAndView.addObject("number_of_friends", users.size());
         } catch (Exception e) {
-            modelAndView.setViewName("/errors/404");
+            modelAndView.setViewName("errors/server-error");
             e.printStackTrace();
         }
         modelAndView.addObject("posts", posts);
@@ -90,13 +90,13 @@ public class ProfileController extends ApplicationController {
         boolean isRequest = false;
         boolean isFollow = false;
         if(isBlocked(userId)) {
-            modelAndView.setViewName("/errors/404");
+            modelAndView.setViewName("errors/server-error");
             return false;
         }
         List<Relation> relations = relationService.findByUserIdAndUserTargetId(currentUser.getUserId(), userId);
         for (Relation relation : relations) {
             if (relation.getType() == RelationType.BLOCK) {
-                modelAndView.setViewName("/errors/404");
+                modelAndView.setViewName("errors/server-error");
                 break;
             }
             if (relation.getType() == RelationType.FOLLOW) {

@@ -2,7 +2,6 @@ package com.socialnetwork.socialnetworkjavaspring.controllers;
 
 import com.socialnetwork.socialnetworkjavaspring.models.Post;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.InteractType;
-import com.socialnetwork.socialnetworkjavaspring.services.new_feeds.INewsFeedService;
 import com.socialnetwork.socialnetworkjavaspring.services.posts.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +26,7 @@ public class PostTypeController extends ApplicationController {
         try {
             interactType = InteractType.valueOf(type.toUpperCase());
         } catch (Exception ex) {
-            modelAndView.setViewName("errors/404");
+            modelAndView.setViewName("errors/server-error");
             return modelAndView;
         }
         List<Post> postInteractType = postService.findPostByInteractType(interactType, currentUser.getUserId());
