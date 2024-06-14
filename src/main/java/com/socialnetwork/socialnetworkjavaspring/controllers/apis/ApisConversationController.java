@@ -91,6 +91,17 @@ public class ApisConversationController extends ApplicationController {
         }
     }
 
+    @PutMapping("/update-manager")
+    public ResponseEntity<ApiResponse> updateManager(@RequestParam("conversationId") Long conversationId,
+                                                     @RequestParam("managerId") String managerId) {
+        try {
+            conversationService.updateManager(conversationId, managerId, currentUser);
+            return responseApi(HttpStatus.OK, "Create conversation group successfully!");
+        } catch (Exception e) {
+            return responseApi(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
     @DeleteMapping("{conversationId}")
     public ResponseEntity<ApiResponse> deleteConversation(@PathVariable Long conversationId) {
         try {

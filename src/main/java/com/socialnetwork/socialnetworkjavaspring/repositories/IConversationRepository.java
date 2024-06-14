@@ -19,6 +19,7 @@ public interface IConversationRepository extends JpaRepository<Conversation, Lon
             "           FROM messages " +
             "           GROUP BY conversation_id) m ON c.conversation_id = m.conversation_id " +
             "WHERE p.user_id = :userId AND p.status = :status " +
+            "AND (p.delete_at is null or p.delete_at < m.latest_message_time)" +
             "ORDER BY COALESCE(m.latest_message_time, c.created_at) DESC", nativeQuery = true)
     List<Conversation> findAllByUserId_AndStatusOrderByLatestMessageTime(String userId, String status);
 
