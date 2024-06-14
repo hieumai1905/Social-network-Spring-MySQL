@@ -2,7 +2,9 @@ package com.socialnetwork.socialnetworkjavaspring.services.new_feeds;
 
 import com.socialnetwork.socialnetworkjavaspring.models.Post;
 import com.socialnetwork.socialnetworkjavaspring.models.PostInteract;
+import com.socialnetwork.socialnetworkjavaspring.models.User;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.InteractType;
+import com.socialnetwork.socialnetworkjavaspring.models.enums.RoleUser;
 import com.socialnetwork.socialnetworkjavaspring.repositories.IPostRepository;
 import com.socialnetwork.socialnetworkjavaspring.services.likes.ILikeService;
 import com.socialnetwork.socialnetworkjavaspring.services.post_interacts.IPostInteractService;
@@ -43,14 +45,21 @@ public class NewsFeedService extends PostGeneralService implements INewsFeedServ
     }
 
     @Override
-    public Post findById(String postId, String userId) {
-        Post post = postRepository.findPostByIdAndNotHiddenOrReportedOrBlockedOrPrivate(postId, userId).orElseThrow(() ->
-                new RuntimeException("Post not found"));
-        boolean isLiked = likeService.existsByPostIdAndUserId(post.getPostId(), userId);
-        PostInteract savedPostInteract = postInteractService.checkExistPostInteract(post, InteractType.SAVED, userId);
+    public Post findById(String postId, User user) {
+        Post post;
+        if(user.getUserRole().equals(RoleUser.ROLE_ADMIN)){
+            post = postRepository.findById(postId).orElseThrow(
+                    () -> new RuntimeException("Post not found")
+            );
+        }else {
+            post = postRepository.findPostByIdAndNotHiddenOrReportedOrBlockedOrPrivate(postId, user.getUserId()).orElseThrow(() ->
+                    new RuntimeException("Post not found"));
+        }
+        boolean isLiked = likeService.existsByPostIdAndUserId(post.getPostId(), user.getUserId());
+        PostInteract savedPostInteract = postInteractService.checkExistPostInteract(post, InteractType.SAVED, user.getUserId());
         post.setLiked(isLiked);
         post.setSaved(savedPostInteract != null);
-        setLikedStatusForCommentsAndReplies(post, userId);
+        setLikedStatusForCommentsAndReplies(post, user.getUserId());
         sortCommentsAndReplies(post);
         return post;
     }

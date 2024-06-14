@@ -40,7 +40,7 @@ public class PostController extends ApplicationController {
                 posts.add(postCurrentUser);
                 modelAndView.addObject("author", false);
             } else {
-                Post postOther = newsFeedService.findById(postId, currentUser.getUserId());
+                Post postOther = newsFeedService.findById(postId, currentUser);
                 modelAndView.addObject("author", false);
                 posts.add(postOther);
             }
