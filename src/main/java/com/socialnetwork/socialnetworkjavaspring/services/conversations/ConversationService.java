@@ -58,7 +58,7 @@ public class ConversationService implements IConversationService {
 
     @Override
     public List<Conversation> getConversationJoinedByUserId(String userId) {
-        return conversationRepository.findAllByUserId_AndStatusOrderByLatestMessageTime(userId, ParticipantStatus.JOINED.toString());
+        return conversationRepository.findAllByUserIdAndStatusOrderByLatestMessageTime(userId, ParticipantStatus.JOINED.toString());
     }
 
     @Override

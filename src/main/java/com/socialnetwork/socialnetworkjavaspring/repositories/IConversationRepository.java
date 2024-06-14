@@ -12,15 +12,20 @@ import java.util.Optional;
 @Repository
 public interface IConversationRepository extends JpaRepository<Conversation, Long> {
 
-    @Query(value = "SELECT c.* " +
+    @Query(value = "SELECT DISTINCT c.* " +
             "FROM conversations c " +
             "INNER JOIN participants p ON c.conversation_id = p.conversation_id " +
-            "LEFT JOIN (SELECT conversation_id, MAX(send_at) AS latest_message_time " +
-            "           FROM messages " +
-            "           GROUP BY conversation_id) m ON c.conversation_id = m.conversation_id " +
-            "WHERE p.user_id = :userId AND p.status = :status " +
-            "ORDER BY COALESCE(m.latest_message_time, c.created_at) DESC", nativeQuery = true)
-    List<Conversation> findAllByUserId_AndStatusOrderByLatestMessageTime(String userId, String status);
+            "LEFT JOIN ( " +
+            "    SELECT conversation_id, MAX(send_at) AS latest_message_time " +
+            "    FROM messages " +
+            "    GROUP BY conversation_id " +
+            ") m ON c.conversation_id = m.conversation_id " +
+            "WHERE p.user_id = :userId " +
+            "  AND p.status = :status " +
+            "  AND (p.delete_at IS NULL OR m.latest_message_time > p.delete_at) " +
+            "ORDER BY COALESCE(m.latest_message_time, c.created_at) DESC",
+            nativeQuery = true)
+    List<Conversation> findAllByUserIdAndStatusOrderByLatestMessageTime(String userId, String status);
 
     @Query(value = "SELECT c.* " +
             "FROM conversations c " +
