@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IMessageService{
-    List<Message> findAllByConversationId(Long conversationId);
+    List<Message> findAllByConversationId(Long conversationId, String userId);
 
     Optional<Message> save(Message object);
 

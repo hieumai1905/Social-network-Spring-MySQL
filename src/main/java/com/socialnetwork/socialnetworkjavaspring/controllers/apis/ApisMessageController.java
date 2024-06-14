@@ -21,7 +21,7 @@ public class ApisMessageController extends ApplicationController {
 
     @GetMapping("/conversations/{conversationId}")
     public ResponseEntity<?> getAllMessageByConversationId(@PathVariable("conversationId") Long conversationId) {
-        List<Message> messages = messageService.findAllByConversationId(conversationId);
+        List<Message> messages = messageService.findAllByConversationId(conversationId, currentUser.getUserId());
         List<MessageResponseDTO> messageResponseDTOs = ConvertUtils.convertList(messages, MessageResponseDTO.class);
         for (MessageResponseDTO messageResponseDTO : messageResponseDTOs) {
             if (messageResponseDTO.getUserSender().getUserId().equals(currentUser.getUserId())) {

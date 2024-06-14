@@ -15,8 +15,8 @@ public class MessageService implements IMessageService {
     private IMessageRepository messageRepository;
 
     @Override
-    public List<Message> findAllByConversationId(Long conversationId) {
-        return messageRepository.findAllByConversation_ConversationIdOrderBySendAt(conversationId);
+    public List<Message> findAllByConversationId(Long conversationId, String userId) {
+        return messageRepository.findMessagesAfterDeletionForUser(conversationId, userId);
     }
 
     @Override
