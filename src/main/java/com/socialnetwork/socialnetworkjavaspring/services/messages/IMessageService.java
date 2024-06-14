@@ -10,4 +10,6 @@ public interface IMessageService{
     List<Message> findAllByConversationId(Long conversationId);
 
     Optional<Message> save(Message object);
+
+    void deleteMessage(Long messageId);
 }

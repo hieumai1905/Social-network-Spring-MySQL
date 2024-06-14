@@ -23,4 +23,9 @@ public class MessageService implements IMessageService {
     public Optional<Message> save(Message object) {
         return Optional.of(messageRepository.save(object));
     }
+
+    @Override
+    public void deleteMessage(Long messageId) {
+        messageRepository.deleteById(messageId);
+    }
 }

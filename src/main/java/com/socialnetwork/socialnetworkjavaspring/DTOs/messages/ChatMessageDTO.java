@@ -11,6 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatMessageDTO {
+    private String messageId;
     private String content;
     private UserResponseMessageDTO sender;
     private Date sendAt;

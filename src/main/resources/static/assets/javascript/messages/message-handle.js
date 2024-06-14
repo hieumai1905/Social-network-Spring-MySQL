@@ -7,12 +7,23 @@ let prevMessageTime = null;
 let userTargetId = null;
 
 function setHeaderPopup(conversationId) {
-    let avatar = $('.image-conversation[data-conversation-id=' + conversationId + ']').attr('src');
-    let name = $('.model-popup-chat[data-conversation-id=' + conversationId + ']').text();
-    let conversationImage = $('#conversation-image-chat');
-    let conversationName = $('#conversation-name-chat');
+    const conversation = $(`.model-popup-chat[data-conversation-id="${conversationId}"]`);
+    const avatar = $(`.image-conversation[data-conversation-id="${conversationId}"]`).attr('src');
+    const name = conversation.text();
+    const userId = conversation.attr('data-user-id');
+    const link = `/profile?user-id=${userId}`;
+
+    const conversationImage = $('#conversation-image-chat');
+    const conversationName = $('#conversation-name-chat');
+
     conversationImage.attr('src', avatar);
     conversationName.text(name);
+    conversationName.attr('href', link);
+
+    conversationName.off('click').on('click', function(e) {
+        e.preventDefault();
+        window.location.href = link;
+    });
 }
 
 function showPopupConversation(data, conversationId) {
@@ -41,10 +52,24 @@ function setMessage(messages) {
       `;
         } else {
             if (prevMessageTime === null || (currentMessageTime - prevMessageTime) > 600000) {
-                html += `<div class="text-right date-break font-xsssss lh-24 fw-500 text-grey-500 mt-2 mb-2 me-5">${formatTimeFull(message.sendAt)}</div>`;
+                html += `<div class="text-right date-break font-xsssss lh-24 fw-500 text-grey-500 mt-2 mb-2 me-5 message-time" 
+                data-message-id="${message.messageId}">
+                        ${formatTimeFull(message.sendAt)}
+                        </div>`;
             }
             html += `
-        <div class="message self text-right mt-2">
+        <div class="message self text-right mt-2" data-message-id="${message.messageId}">
+            <a href="#" class="ms-auto" id="dd-message-id-${message.messageId}" data-bs-toggle="dropdown"
+                   aria-expanded="false"><i
+                        class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i>
+           </a>
+           <div class="dropdown-menu dropdown-menu-end p-1 mt-2 rounded-xxxl cursor-pointer border-0 shadow-lg dropup"
+                     aria-labelledby="dd-message-id-${message.messageId}">
+                  <div class="card-body p-0 dropdown-item rounded-xxxl d-flex" data-message-id="${message.messageId}" onclick="deleteMessage(this)">
+                        <i class="fa fa-trash-o text-grey-500 ms-2 fw-600 font-sm"></i>
+                        <h4 class="fw-600 text-grey-900 font-xssss ms-2 mt-1">Delete Message</h4>
+                  </div>
+             </div>
           <div class="message-content font-xssss lh-24 fw-500">${message.content}</div>
           <figure class="avatar mb-0 float-right ms-2">
             <img src="${message.userSender.avatar}" alt="image" class="custom-avatar-35 me-1 rounded-circle">
@@ -60,6 +85,27 @@ function setMessage(messages) {
     }
     messageContainer.html(html);
     invertScrollbar(messageContainer);
+}
+
+function deleteMessage(element) {
+    let messageId = element.getAttribute('data-message-id');
+    $.ajax({
+        url: '/api/messages/' + messageId,
+        type: 'DELETE',
+        success: function (response) {
+            if (response.code === 200) {
+                console.log(response.message);
+                let blockMessage = $('.message[data-message-id=' + messageId + ']');
+                let blockMessageTime = $('.message-time[data-message-id=' + messageId + ']');
+                blockMessage.remove();
+                blockMessageTime.remove();
+            }
+        },
+        error: function (data) {
+            console.log('Error deleting message');
+        }
+    });
+
 }
 
 function showMessageConversation(conversationId) {
@@ -125,10 +171,22 @@ function onMessageReceived(payload) {
       `;
     } else {
         if (prevMessageTime === null || (currentMessageTime - prevMessageTime) > 600000) {
-            html += `<div class="text-right date-break font-xsssss lh-24 fw-500 text-grey-500 mt-2 mb-2 me-5">${formatTimeFull(message.sendAt)}</div>`;
+            html += `<div class="text-right date-break font-xsssss lh-24 fw-500 text-grey-500 mt-2 mb-2 me-5 message-time" 
+                data-message-id="${message.messageId}"></div>`;
         }
         html += `
-        <div class="message self text-right mt-2">
+        <div class="message self text-right mt-2" data-message-id="${message.messageId}">
+            <a href="#" class="ms-auto" id="dd-message-id-${message.messageId}" data-bs-toggle="dropdown"
+                   aria-expanded="false"><i
+                        class="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i>
+            </a>
+           <div class="dropdown-menu dropdown-menu-end p-1 mt-2 rounded-xxxl cursor-pointer border-0 shadow-lg dropup"
+                     aria-labelledby="dd-message-id-${message.messageId}">
+                  <div class="card-body p-0 dropdown-item rounded-xxxl d-flex" data-message-id="${message.messageId}" onclick="deleteMessage(this)">
+                        <i class="fa fa-trash-o text-grey-500 ms-2 fw-600 font-sm"></i>
+                        <h4 class="fw-600 text-grey-900 font-xssss ms-2 mt-1">Delete Message</h4>
+                  </div>
+             </div>
           <div class="message-content font-xssss lh-24 fw-500">${message.content}</div>
           <figure class="avatar mb-0 float-right ms-2">
             <img src="${message.sender.avatar}" alt="image" class="custom-avatar-35 me-1 rounded-circle">

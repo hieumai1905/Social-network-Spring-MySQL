@@ -12,11 +12,11 @@ async function displayConversations() {
     for (let i = 0; i < conversations.length; i++) {
         const conversation = conversations[i];
         if (conversation.type === 'GROUP') {
-            htmlGroup += renderConversation(conversation.conversationId, conversation.name, conversation.avatar, true);
+            htmlGroup += renderConversation(conversation.conversationId, conversation.name, conversation.avatar, true, null);
         } else {
             try {
                 const data = await fetchPersonalConversation(conversation);
-                htmlPrivate += renderConversation(conversation.conversationId, data.nickName, data.avatar, false);
+                htmlPrivate += renderConversation(conversation.conversationId, data.nickName, data.avatar, false, data.userId);
             } catch (error) {
                 console.log('Error loading participants');
             }
@@ -42,7 +42,7 @@ function fetchPersonalConversation(conversation) {
     });
 }
 
-function renderConversation(conversationId, conversationName, conversationAvatar, isGroup) {
+function renderConversation(conversationId, conversationName, conversationAvatar, isGroup, userId) {
     const commonHtml = `
       <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0 d-flex align-items-center"
       onclick="showMessageConversation(${conversationId})">
@@ -51,10 +51,8 @@ function renderConversation(conversationId, conversationName, conversationAvatar
           <img src="${conversationAvatar}" alt="image" class="custom-avatar-50 image-conversation rounded-circle" data-conversation-id="${conversationId}">
         </figure>
         <h3 class="fw-700 mb-0 mt-0">
-          <a class="font-xssss text-grey-600 d-block text-dark model-popup-chat" href="#" data-conversation-id="${conversationId}">
-            ${conversationName}
-<!--               <span class="badge-primary text-white badge-pill fw-500 mt-0"></span>-->
-          </a>
+          <a class="font-xssss text-grey-600 d-block text-dark model-popup-chat" href="#" data-conversation-id="${conversationId}" 
+          data-user-id="${userId}">${conversationName}</a>
         </h3>
         
         <a href="#" class="ms-auto" id="dd-conversation-${conversationId}" data-bs-toggle="dropdown" aria-expanded="false">
