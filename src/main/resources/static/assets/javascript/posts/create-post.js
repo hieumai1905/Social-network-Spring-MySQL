@@ -1,9 +1,10 @@
 let selectedUser = [], searchUserTags = [];
 let userTags = [];
+
 function savePost(postId) {
     let formData = new FormData();
     let content = $('#content').val();
-    if(content.trim() === '' && (files === null || files.length === 0))
+    if (content.trim() === '' && (files === null || files.length === 0))
         return;
 
     formData.append('access', $('#access').val());
@@ -15,20 +16,20 @@ function savePost(postId) {
         formData.append('files', files[i]);
     }
 
-    selectedUser.forEach(function(user) {
+    selectedUser.forEach(function (user) {
         formData.append('userTagIds', user.userId);
     });
 
-    let hagTags = content.split(' ').filter(function(word) {
+    let hagTags = content.split(' ').filter(function (word) {
         return word.startsWith('#');
     });
     hagTags = hagTags || [];
-    hagTags.forEach(function(tag) {
+    hagTags.forEach(function (tag) {
         formData.append('hagTags', tag);
     });
 
     let url = '/api/posts', type = 'POST';
-    if(postId !== ""){
+    if (postId !== "") {
         url += `/${postId}`;
         type = 'PUT';
     }
@@ -39,13 +40,13 @@ function savePost(postId) {
         data: formData,
         processData: false,
         contentType: false,
-        success: function(response) {
+        success: function (response) {
             console.log('Save successfully:', response);
-            if(response.code === 201 && postId === "") {
+            if (response.code === 201 && postId === "") {
                 savePostToUI(response.data, true, false);
-            }else if(response.code === 200 && postId !== ""){
+            } else if (response.code === 200 && postId !== "") {
                 savePostToUI(response.data, false, false);
-            }else if(response.code === 400){
+            } else if (response.code === 400) {
                 setContentForNotifyModal({
                     title: 'Notification',
                     body: `${response.message}`,
@@ -56,7 +57,7 @@ function savePost(postId) {
             }
             clearForm();
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             console.error('Error save post:', error);
         }
     });
@@ -70,22 +71,42 @@ function savePostToUI(post, isNewPost, isSearch) {
     let createAt = formatTime(new Date(post.createAt));
     let mediaHtml = '';
     let accessIcon = `<i class="fa fa-users" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="${post.access}"></i>`;
-    if(post.access === 'PUBLIC')
+    if (post.access === 'PUBLIC')
         accessIcon = `<i class="fa fa-globe" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="${post.access}"></i>`;
-    else if(post.access === 'PRIVATE')
+    else if (post.access === 'PRIVATE')
         accessIcon = `<i class="fa fa-lock" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="${post.access}"></i>`
 
-    post.medias.forEach((image, index) => {
-        if (index < 3) {
+    for (let i = 0; i < post.medias.length; i++) {
+        const image = post.medias[i];
+        if (post.medias.length === 1) {
             mediaHtml += `
-                <div class="col-xs-4 col-sm-4 p-1">
-                    <a href="${image}" data-lightbox="roadtrip" class="${index === 2 && post.medias.length > 3 ? 'position-relative d-block' : ''}">
-                        <img src="${image}" class="rounded-3 w-100" alt="image">
-                        ${index === 2 && post.medias.length > 3 ? `<span class="img-count font-sm text-white ls-3 fw-600"><b>+${post.medias.length - 3}</b></span>` : ''}
-                    </a>
-                </div>`;
+        <div class="col-xs-12 col-sm-12 p-1">
+            <a href="${image}" data-lightbox="roadtrip">
+                ${image.endsWith('.jpg') || image.endsWith('.png') ? `<img src="${image}" class="rounded-3 w-100" alt="image">` :
+                (image.endsWith('.mp4') ? `<video src="${image}" class="rounded-3 w-100" controls></video>` : '')}
+            </a>
+        </div>`;
+        } else if (post.medias.length === 2) {
+            mediaHtml += `
+        <div class="col-xs-6 col-sm-6 p-1">
+            <a href="${image}" data-lightbox="roadtrip">
+                ${image.endsWith('.jpg') || image.endsWith('.png') ? `<img src="${image}" class="rounded-3 w-100" alt="image">` :
+                (image.endsWith('.mp4') ? `<video src="${image}" class="rounded-3 w-100" controls></video>` : '')}
+            </a>
+        </div>`;
+        } else if (post.medias.length >= 3) {
+            if (i < 3) {
+                mediaHtml += `
+            <div class="col-xs-4 col-sm-4 p-1">
+                <a href="${image}" data-lightbox="roadtrip" class="${i === 2 && post.medias.length > 3 ? 'position-relative d-block' : ''}">
+                    ${image.endsWith('.jpg') || image.endsWith('.png') ? `<img src="${image}" class="rounded-3 w-100" alt="image">` :
+                    (image.endsWith('.mp4') ? `<video src="${image}" class="rounded-3 w-100" controls></video>` : '')}
+                    ${i === 2 && post.medias.length > 3 ? `<span class="img-count font-sm text-white ls-3 fw-600"><b>+${post.medias.length - 3}</b></span>` : ''}
+                </a>
+            </div>`;
+            }
         }
-    });
+    }
 
     const postHtml = `
         <div id="post-${post.postId}" class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
@@ -181,35 +202,35 @@ function savePostToUI(post, isNewPost, isSearch) {
             </div>
         </div>`;
     if (isNewPost) {
-        if(isSearch)
+        if (isSearch)
             postContainer.append(postHtml);
         else
             postContainer.prepend(postHtml);
     } else {
         $(`#post-${post.postId}`).replaceWith(postHtml);
     }
-    $(document).on('click', `#delete-post-${post.postId}`, function() {
+    $(document).on('click', `#delete-post-${post.postId}`, function () {
         confirmToDeletePost(post.postId);
     });
-    $(document).on('click', `#update-post-${post.postId}`, function() {
+    $(document).on('click', `#update-post-${post.postId}`, function () {
         findPostById(post.postId);
     });
-    $(document).on('click', `#save-post-${post.postId}`, function() {
+    $(document).on('click', `#save-post-${post.postId}`, function () {
         updatePostInteract('saved', post.postId, $(this));
     });
-    $(document).on('click', `#hide-post-${post.postId}`, function() {
+    $(document).on('click', `#hide-post-${post.postId}`, function () {
         updatePostInteract('hidden', post.postId, $(this));
     });
     $('.btn-share-post').off('click');
     $(".btn-share-post").on("click", function () {
         updatePostInteract('shared', post.postId, $(this));
     });
-    if(!isSearch)
+    if (!isSearch)
         loadComment();
     registerLikePostEvents();
 }
 
-function clearForm(){
+function clearForm() {
     $('#content').val('');
     $('#access').val('PUBLIC');
     files = [];
@@ -225,8 +246,8 @@ function getFriends() {
         url: "/api/users/friends",
         success: function (response) {
             console.log("API Response:", response);
-            if(response.code === 200){
-                userTags = response.data.map(function(user) {
+            if (response.code === 200) {
+                userTags = response.data.map(function (user) {
                     return {
                         userId: user.userId,
                         fullName: user.fullName,
@@ -252,10 +273,10 @@ function displayFriendsView() {
     listFriends.empty();
 
     searchUserTags.forEach((user) => {
-        if(user.isSelected === true){
+        if (user.isSelected === true) {
             const cardBody = $("<div>").addClass("card-body d-flex pt-4 ps-4 pe-4 pb-0 border-top-xs bor-0")
                 .attr("id", "user-card-" + user.userId)
-                .click(function() {
+                .click(function () {
                     addUserTag(user);
                 });
 
@@ -275,7 +296,7 @@ function displayFriendsView() {
 }
 
 function addUserTag(user) {
-    var isUserAlreadySelected = selectedUser.some(function(u) {
+    var isUserAlreadySelected = selectedUser.some(function (u) {
         return u.userId === user.userId;
     });
 
@@ -295,8 +316,8 @@ function resetUsersTag() {
     selectedUser = [];
 }
 
-function changeStatusUserTag(userId, status){
-    userTags = userTags.map(function(u) {
+function changeStatusUserTag(userId, status) {
+    userTags = userTags.map(function (u) {
         if (u.userId === userId) {
             u.isSelected = status;
         }
@@ -304,7 +325,7 @@ function changeStatusUserTag(userId, status){
     });
 }
 
-function addUsersTagDiv(user){
+function addUsersTagDiv(user) {
     var userTagItemContainer = $("<div>")
         .addClass("btn-group m-1")
         .attr("id", "user-tag-item-" + user.userId)
@@ -319,7 +340,7 @@ function addUsersTagDiv(user){
         .addClass("btn btn-dark remove-user-tag")
         .attr("type", "button")
         .attr("data-userId", user.userId)
-        .text("x").click(function() {
+        .text("x").click(function () {
             var removeUserId = $(this).data('userid');
             $('#user-tag-item-' + removeUserId).remove();
             removeUserById(removeUserId);
@@ -330,13 +351,14 @@ function addUsersTagDiv(user){
     userTagItemContainer.append(userTagButton, removeButton);
     $("#users-tag").append(userTagItemContainer);
 }
+
 function removeUserById(userIdToRemove) {
-    selectedUser = selectedUser.filter(function(user) {
+    selectedUser = selectedUser.filter(function (user) {
         return user.userId !== userIdToRemove;
     });
 }
 
-function initCreatePost(){
+function initCreatePost() {
     getFriends();
 
     $("#search-friends").on("input", function () {
@@ -347,7 +369,7 @@ function initCreatePost(){
         displayFriendsView();
     });
     $(".delete-post").on("click", function () {
-       let postId = $(this).data("postid");
+        let postId = $(this).data("postid");
         confirmToDeletePost(postId);
     });
 }

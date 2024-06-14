@@ -74,8 +74,9 @@ public class PostService extends PostGeneralService implements IPostService {
         return postRepository.findByContentAndHashtags(request.getContent(), request.getHashtags(),
                 user.getUserId(), PageRequest.of(request.getPageIndex(), request.getPageSize()));
     }
+
     @Override
-    public SearchPostResponseDTO convertPostsToSearchPostResponseDTO(Page<Post> posts, SearchPostRequestDTO request){
+    public SearchPostResponseDTO convertPostsToSearchPostResponseDTO(Page<Post> posts, SearchPostRequestDTO request) {
         SearchPostResponseDTO searchPostResponseDTO = new SearchPostResponseDTO();
         List<PostResponseDTO> postResponseDTOS = new ArrayList<>();
         for (Post post : posts) {
@@ -92,11 +93,14 @@ public class PostService extends PostGeneralService implements IPostService {
 
     @Override
     public Boolean checkValidContent(String content) {
-        if(content != null && !content.isEmpty()){
+        if (content != null && !content.isEmpty()) {
             List<SensitiveWord> sensitiveWords = sensitiveWordRepository.findAll();
             for (SensitiveWord sensitiveWord : sensitiveWords) {
-                if(content.contains(sensitiveWord.getValue()))
+                String lowercaseContent = content.toLowerCase();
+                String lowercaseSensitiveWord = sensitiveWord.getValue().toLowerCase();
+                if (lowercaseContent.contains(lowercaseSensitiveWord)) {
                     return false;
+                }
             }
         }
         return true;
@@ -137,7 +141,7 @@ public class PostService extends PostGeneralService implements IPostService {
         List<Comment> comments = new ArrayList<>();
         List<Like> likes = new ArrayList<>();
         List<PostInteract> postInteracts = new ArrayList<>();
-        if(postId != null) {
+        if (postId != null) {
             post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found!"));
             comments = post.getComments();
             likes = post.getLikes();
@@ -170,13 +174,12 @@ public class PostService extends PostGeneralService implements IPostService {
     }
 
     private void changeUserPhoto(PostRequestDTO request, User user, List<String> medias) {
-        if(request.getPostType() != null && !request.getPostType().equals(PostType.POST)){
+        if (request.getPostType() != null && !request.getPostType().equals(PostType.POST)) {
             User existingUser = userRepository.findById(user.getUserId()).orElseThrow(() -> new NullPointerException("User not found!"));
-            if(request.getPostType().equals(PostType.CHANGE_AVATAR)) {
+            if (request.getPostType().equals(PostType.CHANGE_AVATAR)) {
                 existingUser.setAvatar(medias.get(0));
                 user.setAvatar(medias.get(0));
-            }
-            else if(request.getPostType().equals(PostType.CHANGE_COVER)) {
+            } else if (request.getPostType().equals(PostType.CHANGE_COVER)) {
                 existingUser.setCoverPhoto(medias.get(0));
                 user.setCoverPhoto(medias.get(0));
             }
@@ -195,7 +198,7 @@ public class PostService extends PostGeneralService implements IPostService {
         List<UserTag> userTags = new ArrayList<>();
         List<UserResponseDTO> userResponseDTOS = new ArrayList<>();
 
-        if(userTagIds == null)
+        if (userTagIds == null)
             return userResponseDTOS;
 
         for (String userId : userTagIds) {
@@ -214,13 +217,13 @@ public class PostService extends PostGeneralService implements IPostService {
 
     private void setPostHagTags(Post post, List<String> hashTags) {
         post.setPostHashtags(new ArrayList<>());
-        if(hashTags == null)
+        if (hashTags == null)
             return;
 
         for (String hashtag : hashTags) {
             Hashtag existHashtag = hashtagRepository.findByHashtag(hashtag)
                     .orElse(null);
-            if(existHashtag == null){
+            if (existHashtag == null) {
                 existHashtag = new Hashtag(hashtag);
                 hashtagRepository.save(existHashtag);
             }
@@ -247,7 +250,7 @@ public class PostService extends PostGeneralService implements IPostService {
     @Override
     public String delete(String postId, User user) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new NullPointerException("Post not found!"));
-        if(!post.getUser().getUserId().equals(user.getUserId()) && !user.getUserRole().equals(RoleUser.ROLE_ADMIN))
+        if (!post.getUser().getUserId().equals(user.getUserId()) && !user.getUserRole().equals(RoleUser.ROLE_ADMIN))
             throw new RuntimeException("This post is not your!");
         postRepository.delete(post);
         return postId;
