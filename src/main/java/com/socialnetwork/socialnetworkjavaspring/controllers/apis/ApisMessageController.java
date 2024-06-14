@@ -5,13 +5,11 @@ import com.socialnetwork.socialnetworkjavaspring.controllers.ApplicationControll
 import com.socialnetwork.socialnetworkjavaspring.models.Message;
 import com.socialnetwork.socialnetworkjavaspring.services.messages.IMessageService;
 import com.socialnetwork.socialnetworkjavaspring.utils.ConvertUtils;
+import com.socialnetwork.socialnetworkjavaspring.utils.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +30,11 @@ public class ApisMessageController extends ApplicationController {
         }
         return responseApi(HttpStatus.OK, String.format("Get messages for conversation %s", conversationId),
                 messageResponseDTOs);
+    }
+
+    @DeleteMapping("/{messageId}")
+    public ResponseEntity<ApiResponse> deleteMessage(@PathVariable("messageId") Long messageId) {
+        messageService.deleteMessage(messageId);
+        return responseApi(HttpStatus.OK, String.format("Delete message %s", messageId), null);
     }
 }
