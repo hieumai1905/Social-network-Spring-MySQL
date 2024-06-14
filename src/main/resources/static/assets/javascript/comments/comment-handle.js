@@ -269,7 +269,7 @@ function handleCreateReplyCommentSuccess(data, commentId) {
                                     <img src="${currentUserAvatar}" alt="image" class="shadow-sm rounded-circle custom-avatar-50">
                                 </figure>
                                 <div class="bg-comment rounded-xxxl px-2">
-                                    <h4 class="fw-700 text-grey-900 font-xssss mt-1">${currentUserName}</h4>
+                                    <a href="profile?user-id=${data.userId}" class="fw-700 text-grey-900 font-xssss mt-1">${currentUserName}</a>
                                     <p class="content-comment-reply">${data.content}</p>
                                 </div>
                                 <a href="#" class="ms-2" id="'dd-comment-reply-' + ${data.commentReplyId}" data-bs-toggle="dropdown"
@@ -486,7 +486,7 @@ function handleCreateCommentSuccess(data, index, postId) {
             <figure class="avatar me-3">
                 <img src="${currentUserAvatar}" alt="image" class="shadow-sm rounded-circle custom-avatar-50"></figure>
             <div class="bg-comment rounded-xxxl px-2">
-                <h4 class="fw-700 text-grey-900 font-xssss mt-2">${currentUserName}</h4>
+                <a href="profile?user-id=${data.userId}" class="fw-700 text-grey-900 font-xssss mt-2">${currentUserName}</a>
                 <p class="content-comment" data-comment-id="${data.commentId}">${data.content}</p>
             </div>
             <a href="#" class="ms-2" id="dd-comment-${data.commentId}" data-bs-toggle="dropdown"
