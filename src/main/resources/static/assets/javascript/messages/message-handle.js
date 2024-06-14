@@ -6,7 +6,7 @@ let room = null;
 let prevMessageTime = null;
 let userTargetId = null;
 
-function setHeaderPopup(conversationId) {
+function setHeaderPopup(conversationId, isGroup) {
     const conversation = $(`.model-popup-chat[data-conversation-id="${conversationId}"]`);
     const avatar = $(`.image-conversation[data-conversation-id="${conversationId}"]`).attr('src');
     const name = conversation.text();
@@ -18,16 +18,17 @@ function setHeaderPopup(conversationId) {
 
     conversationImage.attr('src', avatar);
     conversationName.text(name);
-    conversationName.attr('href', link);
-
-    conversationName.off('click').on('click', function(e) {
-        e.preventDefault();
-        window.location.href = link;
-    });
+    if(!isGroup){
+        conversationName.attr('href', link);
+        conversationName.off('click').on('click', function(e) {
+            e.preventDefault();
+            window.location.href = link;
+        });
+    }
 }
 
-function showPopupConversation(data, conversationId) {
-    setHeaderPopup(conversationId);
+function showPopupConversation(data, conversationId, isGroup) {
+    setHeaderPopup(conversationId, isGroup);
     setMessage(data);
     popupChat.addClass('d-block');
 }
@@ -108,7 +109,10 @@ function deleteMessage(element) {
 
 }
 
-function showMessageConversation(conversationId) {
+function showMessageConversation(conversationId, isGroup) {
+    if(room === conversationId){
+        return;
+    }
     room = conversationId;
     connectChatSocket();
     $.ajax({
@@ -117,7 +121,7 @@ function showMessageConversation(conversationId) {
         success: function (response) {
             if (response.code === 200) {
                 console.log(response.message);
-                showPopupConversation(response.data, conversationId);
+                showPopupConversation(response.data, conversationId, isGroup);
             }
         },
         error: function (data) {
@@ -255,7 +259,7 @@ function showConversationInProfile(element) {
         success: function (response) {
             if (response.code === 200) {
                 console.log(response.message);
-                showMessageConversation(response.data.conversationId);
+                showMessageConversation(response.data.conversationId, false);
             } else if (response.code === 404) {
                 handleForConversationNotFound(userId);
             }
