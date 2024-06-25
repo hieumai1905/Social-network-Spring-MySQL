@@ -2,6 +2,7 @@ package com.socialnetwork.socialnetworkjavaspring.controllers;
 
 import com.socialnetwork.socialnetworkjavaspring.DTOs.users.UserPasswordUpdateDTO;
 import com.socialnetwork.socialnetworkjavaspring.DTOs.users.UserRegisterDTO;
+import com.socialnetwork.socialnetworkjavaspring.encries.AESEncrypt;
 import com.socialnetwork.socialnetworkjavaspring.models.Request;
 import com.socialnetwork.socialnetworkjavaspring.models.User;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.RequestType;
@@ -24,6 +25,9 @@ import java.util.Optional;
 public class AccountController {
 
     private static final long REQUEST_TIMEOUT_MILLIS = 60000;
+
+    @Autowired
+    protected AESEncrypt aesEncrypt;
 
     @Autowired
     private HttpSession session;
@@ -133,7 +137,7 @@ public class AccountController {
             modelAndView.addObject("error", "Password and confirm password are not the same");
             return modelAndView;
         }
-        user.setPassword(userPasswordUpdateDTO.getNewPassword());
+        user.setPassword(aesEncrypt.encryptText(userPasswordUpdateDTO.getNewPassword()));
         Optional<User> userUpdate = userService.save(user);
         if (userUpdate.isEmpty()) {
             return new ModelAndView("errors/server-error", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -199,6 +203,7 @@ public class AccountController {
     }
 
     private ModelAndView registerNewUser(UserRegisterDTO userRegisterDTO, ModelAndView modelAndView) {
+        userRegisterDTO.setPassword(aesEncrypt.encryptText(userRegisterDTO.getPassword()));
         Optional<User> registeredUser = userService.registerUser(userRegisterDTO);
         if (registeredUser.isPresent()) {
             return handleInactiveUser(userRegisterDTO, modelAndView);

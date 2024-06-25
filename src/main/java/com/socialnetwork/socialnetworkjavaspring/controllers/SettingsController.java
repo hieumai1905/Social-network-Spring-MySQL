@@ -2,6 +2,7 @@ package com.socialnetwork.socialnetworkjavaspring.controllers;
 
 import com.socialnetwork.socialnetworkjavaspring.DTOs.users.UserInfoUpdateDTO;
 import com.socialnetwork.socialnetworkjavaspring.DTOs.users.UserPasswordUpdateDTO;
+import com.socialnetwork.socialnetworkjavaspring.encries.AESEncrypt;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.Gender;
 import com.socialnetwork.socialnetworkjavaspring.services.users.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class SettingsController extends ApplicationController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private AESEncrypt aesEncrypt;
 
     @GetMapping
     public ModelAndView index(@RequestParam(value = "tab", required = false) String tab) {
@@ -48,12 +52,12 @@ public class SettingsController extends ApplicationController {
     public ModelAndView updatePassword(@ModelAttribute UserPasswordUpdateDTO userPasswordUpdateDTO) {
         ModelAndView modelAndView = new ModelAndView("settings/index");
         modelAndView.addObject("password", true);
-        if (!currentUser.getPassword().equals(userPasswordUpdateDTO.getNewPassword())) {
+        if (!aesEncrypt.decryptText(currentUser.getPassword()).equals(userPasswordUpdateDTO.getNewPassword())) {
             modelAndView.addObject("error", "Current password is incorrect!");
         } else if (userPasswordUpdateDTO.getNewPassword().equals(userPasswordUpdateDTO.getConfirmPassword())) {
             modelAndView.addObject("error", "Old password and new password are the same!");
         } else {
-            currentUser.setPassword(userPasswordUpdateDTO.getConfirmPassword());
+            currentUser.setPassword(aesEncrypt.encryptText(userPasswordUpdateDTO.getConfirmPassword()));
             userService.save(currentUser);
             modelAndView.addObject("error", "Update password successfully!");
         }

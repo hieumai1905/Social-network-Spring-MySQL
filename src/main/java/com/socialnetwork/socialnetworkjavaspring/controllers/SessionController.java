@@ -1,6 +1,7 @@
 package com.socialnetwork.socialnetworkjavaspring.controllers;
 
 import com.socialnetwork.socialnetworkjavaspring.DTOs.users.UserLoginDTO;
+import com.socialnetwork.socialnetworkjavaspring.encries.AESEncrypt;
 import com.socialnetwork.socialnetworkjavaspring.models.Request;
 import com.socialnetwork.socialnetworkjavaspring.models.User;
 import com.socialnetwork.socialnetworkjavaspring.models.enums.RequestType;
@@ -28,6 +29,9 @@ public class SessionController {
     AuthenticationManager authenticationManager;
 
     @Autowired
+    protected AESEncrypt aesEncrypt;
+
+    @Autowired
     private SessionService sessionService;
 
     @Autowired
@@ -48,6 +52,7 @@ public class SessionController {
     public ModelAndView create(@ModelAttribute UserLoginDTO userLoginDTO) {
         ModelAndView modelAndView = new ModelAndView("/sessions/new");
         try {
+            userLoginDTO.setPassword(aesEncrypt.encryptText(userLoginDTO.getPassword()));
             User userLogin = userService.findUserByEmailAndPassword(userLoginDTO.getEmail(), userLoginDTO.getPassword());
             switch (userLogin.getStatus()) {
                 case ACTIVE:
@@ -88,7 +93,7 @@ public class SessionController {
         session.setAttribute("email", userLogin.getEmail());
         session.setAttribute(userLogin.getEmail(), UserStatus.INACTIVE);
         Optional<Request> requestAdded = requestService.save(request.get());
-        if(requestAdded.isEmpty()){
+        if (requestAdded.isEmpty()) {
             return new ModelAndView("errors/server-error");
         }
         boolean sendCodeSuccess = requestService.sendCodeToEmail(userLogin.getEmail(), "CONFIRM REGISTER", request.get().getRequestCode());
